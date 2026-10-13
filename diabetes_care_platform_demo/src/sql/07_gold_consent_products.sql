@@ -1,0 +1,3 @@
+USE CATALOG dcp_synth;
+CREATE OR REPLACE VIEW `03_gold`.dp10_patient_consent_current AS SELECT patient_id,consent_scope,purpose,recipient,new_state current_state,event_time effective_at,consent_event_id,source_id,ingested_at,_run_id FROM `02_silver`.consent_events WHERE state_rank=1;
+CREATE OR REPLACE VIEW `03_gold`.dp11_consent_propagation_status AS SELECT consent_event_id,patient_id,target_system,target_status,CAST(submitted_at AS TIMESTAMP) submitted_at,CAST(acknowledged_at AS TIMESTAMP) acknowledged_at,failure_reason,correlation_id,source_id,CAST(ingested_at AS TIMESTAMP) ingested_at,_run_id FROM `01_bronze`.consent_propagation;

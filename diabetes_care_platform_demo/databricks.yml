@@ -1,0 +1,34 @@
+bundle:
+  name: diabetes_care_platform_demo
+
+include:
+  - resources/*.yml
+  - resources/*/*.yml
+
+variables:
+  sql_warehouse_id:
+    description: SQL Warehouse ID used by SQL tasks
+    default: "14a44df798367483"
+
+  catalog_name:
+    description: Unity Catalog catalog name
+    default: dcp_synth
+
+targets:
+
+  dev:
+    mode: development
+    default: true
+
+    workspace:
+      host: https://dbc-963397db-4198.cloud.databricks.com
+
+  prod:
+    mode: production
+
+    workspace:
+      host: https://dbc-963397db-4198.cloud.databricks.com
+      root_path: /Users/d.m.wouamba@gmail.com/.bundle/${bundle.name}/${bundle.target}
+
+    run_as:
+      user_name: d.m.wouamba@gmail.com

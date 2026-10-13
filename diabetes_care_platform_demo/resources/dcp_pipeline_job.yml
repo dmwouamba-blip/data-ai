@@ -1,0 +1,119 @@
+resources:
+  jobs:
+
+    dcp_lakeflow_deployment:
+      name: ${bundle.target}-dcp-lakeflow-deployment
+
+      max_concurrent_runs: 1
+
+      queue:
+        enabled: true
+
+      tasks:
+
+        # ==========================================================
+        # Generate synthetic data
+        # ==========================================================
+
+        - task_key: generate_dashboard_data
+
+          environment_key: serverless_env
+
+          notebook_task:
+            notebook_path: ../src/notebooks/08_generate_complete_dashboard_data_notebook.py
+
+        # ==========================================================
+        # Bronze
+        # ==========================================================
+
+        - task_key: bronze_pipeline
+
+          depends_on:
+            - task_key: generate_dashboard_data
+
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.dcp_bronze_pipeline.id}
+            full_refresh: false
+
+        # ==========================================================
+        # Silver
+        # ==========================================================
+
+        - task_key: silver_pipeline
+
+          depends_on:
+            - task_key: bronze_pipeline
+
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.dcp_silver_pipeline.id}
+            full_refresh: false
+
+        # ==========================================================
+        # Gold
+        # ==========================================================
+
+        - task_key: gold_pipeline
+
+          depends_on:
+            - task_key: silver_pipeline
+
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.dcp_gold_pipeline.id}
+            full_refresh: false
+
+        # ==========================================================
+        # Dashboard V2
+        # ==========================================================
+
+        - task_key: dashboard_pipeline
+
+          depends_on:
+            - task_key: gold_pipeline
+
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.dcp_dashboard_pipeline_v2.id}
+            full_refresh: false
+
+        # ==========================================================
+        # Data Quality Views
+        # ==========================================================
+
+        - task_key: quality_views
+
+          depends_on:
+            - task_key: dashboard_pipeline
+
+          sql_task:
+
+            warehouse_id: ${var.sql_warehouse_id}
+
+            file:
+              path: ../src/sql/11_create_data_quality_validation_views.sql
+
+        # ==========================================================
+        # Validation
+        # ==========================================================
+
+        - task_key: validate
+
+          depends_on:
+            - task_key: quality_views
+
+          environment_key: serverless_env
+
+          notebook_task:
+            notebook_path: ../src/notebooks/10_validate_deployment_notebook.py
+
+      environments:
+
+        - environment_key: serverless_env
+
+          spec:
+            client: "1"
+
+      tags:
+        project: dcp
+        platform: databricks
+        architecture: lakeflow
+        environment: ${bundle.target}
+        data_class: synthetic

@@ -1,0 +1,20 @@
+-- Register dashboard-support landing data as managed Delta tables.
+USE CATALOG dcp_synth;
+CREATE SCHEMA IF NOT EXISTS `04_presentation`;
+CREATE OR REPLACE TABLE `01_bronze`.platform_sla_metrics USING DELTA AS SELECT * FROM parquet.`/Volumes/dcp_synth/00_config/00_landing/SRC-20/platform_sla_metrics`;
+CREATE OR REPLACE TABLE `01_bronze`.control_posture USING DELTA AS SELECT * FROM json.`/Volumes/dcp_synth/00_config/00_landing/SRC-20/control_posture`;
+CREATE OR REPLACE TABLE `01_bronze`.platform_resources USING DELTA AS SELECT * FROM json.`/Volumes/dcp_synth/00_config/00_landing/SRC-20/platform_resources`;
+CREATE OR REPLACE TABLE `01_bronze`.dashboard_adoption USING DELTA AS SELECT * FROM json.`/Volumes/dcp_synth/00_config/00_landing/SRC-20/dashboard_adoption`;
+CREATE OR REPLACE TABLE `01_bronze`.release_readiness USING DELTA AS SELECT * FROM json.`/Volumes/dcp_synth/00_config/00_landing/SRC-20/release_readiness`;
+CREATE OR REPLACE TABLE `01_bronze`.platform_incidents USING DELTA AS SELECT * FROM json.`/Volumes/dcp_synth/00_config/00_landing/SRC-20/platform_incidents`;
+CREATE OR REPLACE TABLE `01_bronze`.source_health USING DELTA AS SELECT * FROM json.`/Volumes/dcp_synth/00_config/00_landing/SRC-20/source_health`;
+CREATE OR REPLACE TABLE `01_bronze`.pipeline_runs USING DELTA AS SELECT * FROM parquet.`/Volumes/dcp_synth/00_config/00_landing/SRC-20/pipeline_runs`;
+CREATE OR REPLACE TABLE `01_bronze`.platform_exceptions USING DELTA AS SELECT * FROM json.`/Volumes/dcp_synth/00_config/00_landing/SRC-20/platform_exceptions`;
+CREATE OR REPLACE TABLE `01_bronze`.access_audit USING DELTA AS SELECT * FROM json.`/Volumes/dcp_synth/00_config/00_landing/SRC-20/access_audit`;
+CREATE OR REPLACE TABLE `01_bronze`.recovery_state USING DELTA AS SELECT * FROM json.`/Volumes/dcp_synth/00_config/00_landing/SRC-20/recovery_state`;
+CREATE OR REPLACE TABLE `01_bronze`.submission_readiness USING DELTA AS SELECT * FROM json.`/Volumes/dcp_synth/00_config/00_landing/SRC-21/submission_readiness`;
+CREATE OR REPLACE TABLE `06_regulatory`.dashboard_authority_interactions USING DELTA AS SELECT * FROM json.`/Volumes/dcp_synth/00_config/00_landing/SRC-24/dashboard_authority_interactions`;
+CREATE OR REPLACE TABLE `05_compliance`.evidence USING DELTA AS SELECT * FROM json.`/Volumes/dcp_synth/00_config/00_landing/SRC-25/compliance_evidence`;
+CREATE OR REPLACE TABLE `01_bronze`.mydiabete_events USING DELTA AS SELECT * FROM json.`/Volumes/dcp_synth/00_config/00_landing/SRC-07/mydiabete_events`;
+CREATE OR REPLACE TABLE `01_bronze`.patient_alerts USING DELTA AS SELECT * FROM json.`/Volumes/dcp_synth/00_config/00_landing/SRC-17/patient_alerts`;
+CREATE OR REPLACE TABLE `01_bronze`.report_sharing USING DELTA AS SELECT * FROM json.`/Volumes/dcp_synth/00_config/00_landing/SRC-07/report_sharing`;

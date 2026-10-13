@@ -1,0 +1,80 @@
+resources:
+  pipelines:
+
+    dcp_bronze_pipeline:
+      name: ${bundle.target}-dcp-bronze
+
+      catalog: dcp_synth
+      target: "01_bronze"
+
+      serverless: true
+      continuous: false
+      channel: CURRENT
+
+      libraries:
+        - notebook:
+            path: ../src/pipelines/bronze_pipeline.py
+
+      tags:
+        project: dcp
+        layer: bronze
+        environment: ${bundle.target}
+        data_class: synthetic
+
+    dcp_silver_pipeline:
+      name: ${bundle.target}-dcp-silver
+
+      catalog: dcp_synth
+      target: "02_silver"
+
+      serverless: true
+      continuous: false
+      channel: CURRENT
+
+      libraries:
+        - notebook:
+            path: ../src/pipelines/silver_pipeline.py
+
+      tags:
+        project: dcp
+        layer: silver
+        environment: ${bundle.target}
+
+    dcp_gold_pipeline:
+      name: ${bundle.target}-dcp-gold
+
+      catalog: dcp_synth
+      target: "03_gold"
+
+      serverless: true
+      continuous: false
+      channel: CURRENT
+
+      libraries:
+        - notebook:
+            path: ../src/pipelines/gold_pipeline.py
+
+      tags:
+        project: dcp
+        layer: gold
+        environment: ${bundle.target}
+
+    dcp_dashboard_pipeline_v2:
+      name: ${bundle.target}-dcp-dashboard-v2
+
+      catalog: dcp_synth
+      target: "04_marketplace"
+
+      serverless: true
+      continuous: false
+      channel: CURRENT
+
+      libraries:
+        - notebook:
+            path: ../src/pipelines/dashboard_pipeline.py
+
+      tags:
+        project: dcp
+        layer: dashboard
+        version: v2
+        environment: ${bundle.target}
