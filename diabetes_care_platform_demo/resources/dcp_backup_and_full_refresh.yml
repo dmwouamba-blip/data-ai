@@ -1,0 +1,90 @@
+resources:
+  jobs:
+    dcp_backup_and_full_refresh:
+      name: ${bundle.target}-dcp-backup-and-full-refresh
+
+      max_concurrent_runs: 1
+
+      queue:
+        enabled: true
+
+      tasks:
+        # =====================================================
+        # 1. Create and validate backup
+        # =====================================================
+        - task_key: create_backup
+          environment_key: serverless_env
+
+          notebook_task:
+            notebook_path: ../src/notebooks/backup/create_validate_backup.py
+
+            base_parameters:
+              environment: ${bundle.target}
+              refresh_type: FULL_REFRESH
+              requested_by: guarded-full-refresh
+              request_reason: Guarded Full Refresh
+              backup_catalog: dcp_synth_backup
+              admin_schema: admin
+
+        # =====================================================
+        # 2. Execute existing DCP Full Refresh deployment
+        # =====================================================
+        - task_key: full_refresh
+
+          depends_on:
+            - task_key: create_backup
+
+          run_job_task:
+            job_id: ${resources.jobs.dcp_lakeflow_deployment.id}
+
+        # =====================================================
+        # 3. Validate Full Refresh against the recovery point
+        # =====================================================
+        - task_key: validate_refresh
+
+          depends_on:
+            - task_key: full_refresh
+
+          environment_key: serverless_env
+
+          notebook_task:
+            notebook_path: ../src/notebooks/backup/validate_full_refresh.py
+
+            base_parameters:
+              environment: ${bundle.target}
+              backup_catalog: dcp_synth_backup
+              admin_schema: admin
+              backup_set_id: '{{tasks.create_backup.values.backup_set_id}}'
+              require_non_empty: "true"
+              validate_schema: "true"
+
+        # =====================================================
+        # 4. Apply retention to the same backup run
+        # =====================================================
+        - task_key: retention
+
+          depends_on:
+            - task_key: validate_refresh
+
+          environment_key: serverless_env
+
+          notebook_task:
+            notebook_path: ../src/notebooks/backup/apply_retention.py
+
+            base_parameters:
+              environment: ${bundle.target}
+              backup_catalog: dcp_synth_backup
+              admin_schema: admin
+              backup_set_id: '{{tasks.create_backup.values.backup_set_id}}'
+
+      environments:
+        - environment_key: serverless_env
+
+          spec:
+            client: "1"
+
+      tags:
+        project: dcp
+        platform: databricks
+        architecture: guarded-refresh
+        environment: ${bundle.target}

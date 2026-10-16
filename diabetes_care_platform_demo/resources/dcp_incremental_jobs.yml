@@ -1,0 +1,64 @@
+resources:
+  jobs:
+    dcp_incremental_foundation:
+      name: ${bundle.target}-DCP-Incremental-Foundation
+      tasks:
+        - task_key: foundation
+          sql_task:
+            warehouse_id: ${var.sql_warehouse_id}
+            file:
+              path: ../src/sql/incremental/00_incremental_foundation.sql
+        - task_key: monitoring
+          depends_on: [{task_key: foundation}]
+          sql_task:
+            warehouse_id: ${var.sql_warehouse_id}
+            file:
+              path: ../src/sql/incremental/01_monitoring_views.sql
+    dcp_incremental_deployment:
+      name: ${bundle.target}-DCP-Incremental-Deployment
+      max_concurrent_runs: 1
+      queue: {enabled: true}
+      tasks:
+        - task_key: preflight
+          environment_key: serverless_env
+          notebook_task:
+            notebook_path: ../tests/incremental/00_preflight.py
+        - task_key: generate
+          depends_on: [{task_key: preflight}]
+          environment_key: serverless_env
+          notebook_task:
+            notebook_path: ../src/notebooks/incremental/generate_incremental_data.py
+        - task_key: bronze
+          depends_on: [{task_key: generate}]
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.dcp_bronze_incremental_pipeline.id}
+            full_refresh: false
+        - task_key: silver
+          depends_on: [{task_key: bronze}]
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.dcp_silver_incremental_pipeline.id}
+            full_refresh: false
+        - task_key: gold
+          depends_on: [{task_key: silver}]
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.dcp_gold_incremental_pipeline.id}
+            full_refresh: false
+        - task_key: assert_run
+          depends_on: [{task_key: gold}]
+          environment_key: serverless_env
+          notebook_task:
+            notebook_path: ../tests/incremental/01_assert_run.py
+            base_parameters:
+              run_id: "{{tasks.generate.values.run_id}}"
+        - task_key: assert_pipeline
+          depends_on: [{task_key: assert_run}]
+          environment_key: serverless_env
+          notebook_task:
+            notebook_path: ../tests/incremental/02_assert_pipeline.py
+      environments:
+        - environment_key: serverless_env
+          spec: {client: "1"}
+      tags:
+        project: dcp
+        mode: incremental
+        data_class: synthetic

@@ -1,0 +1,34 @@
+resources:
+  jobs:
+    dcp_backup_foundation:
+      name: ${bundle.target}-DCP-Backup-Foundation
+
+      description: >
+        Initializes and updates the DCP backup control plane by creating the
+        backup foundation, registering protected objects, and creating backup
+        monitoring and recovery views.
+
+      max_concurrent_runs: 1
+
+      tasks:
+        - task_key: backup_foundation
+          sql_task:
+            file:
+              path: ../src/sql/backup/00_backup_foundation.sql
+            warehouse_id: ${var.sql_warehouse_id}
+
+        - task_key: backup_object_config
+          depends_on:
+            - task_key: backup_foundation
+          sql_task:
+            file:
+              path: ../src/sql/backup/01_backup_object_config.sql
+            warehouse_id: ${var.sql_warehouse_id}
+
+        - task_key: backup_views
+          depends_on:
+            - task_key: backup_object_config
+          sql_task:
+            file:
+              path: ../src/sql/backup/02_backup_views.sql
+            warehouse_id: ${var.sql_warehouse_id}

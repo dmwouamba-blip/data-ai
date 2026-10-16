@@ -1,0 +1,32 @@
+resources:
+  pipelines:
+    dcp_bronze_incremental_pipeline:
+      name: ${bundle.target}-dcp-bronze-incremental
+      catalog: dcp_synth
+      target: 01_bronze_incremental
+      serverless: true
+      continuous: false
+      channel: CURRENT
+      libraries:
+        - notebook:
+            path: ../src/pipelines/incremental/bronze_incremental_pipeline.py
+    dcp_silver_incremental_pipeline:
+      name: ${bundle.target}-dcp-silver-incremental
+      catalog: dcp_synth
+      target: 02_silver_incremental
+      serverless: true
+      continuous: false
+      channel: CURRENT
+      libraries:
+        - notebook:
+            path: ../src/pipelines/incremental/silver_incremental_pipeline.py
+    dcp_gold_incremental_pipeline:
+      name: ${bundle.target}-dcp-gold-incremental
+      catalog: dcp_synth
+      target: 03_gold_incremental
+      serverless: true
+      continuous: false
+      channel: CURRENT
+      libraries:
+        - notebook:
+            path: ../src/pipelines/incremental/gold_incremental_pipeline.py

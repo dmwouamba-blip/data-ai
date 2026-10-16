@@ -1,0 +1,106 @@
+resources:
+  jobs:
+    dcp_incremental_test_suite:
+      name: ${bundle.target}-DCP-Incremental-Test-Suite
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+
+      tasks:
+        - task_key: preflight_and_baseline
+          environment_key: serverless_env
+          notebook_task:
+            notebook_path: ../tests/incremental/00_preflight_and_baseline.py
+
+        - task_key: run_incremental_deployment
+          depends_on:
+            - task_key: preflight_and_baseline
+          run_job_task:
+            job_id: ${resources.jobs.dcp_incremental_deployment.id}
+
+        - task_key: resolve_and_assert_run
+          depends_on:
+            - task_key: run_incremental_deployment
+          environment_key: serverless_env
+          notebook_task:
+            notebook_path: ../tests/incremental/01_resolve_and_assert_run.py
+            base_parameters:
+              test_started_at: "{{tasks.preflight_and_baseline.values.test_started_at}}"
+
+        - task_key: manifest_to_bronze
+          depends_on:
+            - task_key: resolve_and_assert_run
+          environment_key: serverless_env
+          notebook_task:
+            notebook_path: ../tests/incremental/02_assert_manifest_to_bronze.py
+            base_parameters:
+              run_id: "{{tasks.resolve_and_assert_run.values.run_id}}"
+
+        - task_key: data_contracts
+          depends_on:
+            - task_key: manifest_to_bronze
+          environment_key: serverless_env
+          notebook_task:
+            notebook_path: ../tests/incremental/03_assert_data_contracts.py
+
+        - task_key: capture_no_data_baseline
+          depends_on:
+            - task_key: data_contracts
+          environment_key: serverless_env
+          notebook_task:
+            notebook_path: ../tests/incremental/04_capture_no_data_baseline.py
+
+        - task_key: bronze_no_data_rerun
+          depends_on:
+            - task_key: capture_no_data_baseline
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.dcp_bronze_incremental_pipeline.id}
+            full_refresh: false
+
+        - task_key: silver_no_data_rerun
+          depends_on:
+            - task_key: bronze_no_data_rerun
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.dcp_silver_incremental_pipeline.id}
+            full_refresh: false
+
+        - task_key: gold_no_data_rerun
+          depends_on:
+            - task_key: silver_no_data_rerun
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.dcp_gold_incremental_pipeline.id}
+            full_refresh: false
+
+        - task_key: assert_no_data_idempotency
+          depends_on:
+            - task_key: gold_no_data_rerun
+          environment_key: serverless_env
+          notebook_task:
+            notebook_path: ../tests/incremental/05_assert_no_data_idempotency.py
+            base_parameters:
+              baseline_counts: "{{tasks.capture_no_data_baseline.values.no_data_baseline}}"
+
+        - task_key: registry_integrity
+          depends_on:
+            - task_key: assert_no_data_idempotency
+          environment_key: serverless_env
+          notebook_task:
+            notebook_path: ../tests/incremental/06_assert_registry_integrity.py
+
+        - task_key: optional_reconciliation_report
+          depends_on:
+            - task_key: registry_integrity
+          sql_task:
+            warehouse_id: ${var.sql_warehouse_id}
+            file:
+              path: ../tests/incremental/07_optional_full_reconciliation.sql
+
+      environments:
+        - environment_key: serverless_env
+          spec:
+            client: "1"
+
+      tags:
+        project: dcp
+        purpose: incremental-integration-test
+        data_class: synthetic

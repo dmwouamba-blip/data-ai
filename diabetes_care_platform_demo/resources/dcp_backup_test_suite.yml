@@ -1,0 +1,64 @@
+resources:
+  jobs:
+    dcp_backup_notebook_test_suite:
+      name: ${bundle.target}-DCP-Backup-Notebook-Test-Suite
+      max_concurrent_runs: 1
+
+      tasks:
+        - task_key: preflight
+          environment_key: serverless_env
+          notebook_task:
+            notebook_path: ../tests/backup/00_preflight.py
+
+        - task_key: create_backup_under_test
+          depends_on:
+            - task_key: preflight
+          environment_key: serverless_env
+          notebook_task:
+            notebook_path: ../src/notebooks/backup/create_validate_backup.py
+            base_parameters:
+              environment: ${bundle.target}
+              requested_by: backup-test-suite
+              request_reason: integration test
+
+        - task_key: assert_created_backup
+          depends_on:
+            - task_key: create_backup_under_test
+          environment_key: serverless_env
+          notebook_task:
+            notebook_path: ../tests/backup/01_assert_created_backup.py
+            base_parameters:
+              backup_set_id: "{{tasks.create_backup_under_test.values.backup_set_id}}"
+
+        - task_key: validate_full_refresh_notebook
+          depends_on:
+            - task_key: assert_created_backup
+          environment_key: serverless_env
+          notebook_task:
+            notebook_path: ../src/notebooks/backup/validate_full_refresh.py
+
+        - task_key: assert_full_refresh_contract
+          depends_on:
+            - task_key: validate_full_refresh_notebook
+          environment_key: serverless_env
+          notebook_task:
+            notebook_path: ../tests/backup/02_assert_full_refresh_contract.py
+
+        - task_key: assert_retention_and_registry
+          depends_on:
+            - task_key: assert_full_refresh_contract
+          environment_key: serverless_env
+          notebook_task:
+            notebook_path: ../tests/backup/03_assert_retention_and_registry.py
+            base_parameters:
+              environment: ${bundle.target}
+
+      environments:
+        - environment_key: serverless_env
+          spec:
+            client: "1"
+
+      tags:
+        project: dcp
+        purpose: backup-integration-test
+        data_class: synthetic
