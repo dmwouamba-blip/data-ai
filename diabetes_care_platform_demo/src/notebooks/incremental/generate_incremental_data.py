@@ -2,6 +2,7 @@
 """Generate one immutable DCP incremental landing run for eight known sources."""
 
 # COMMAND ----------
+
 from datetime import datetime, timezone, timedelta
 from uuid import uuid4
 from pyspark.sql import functions as F
@@ -18,6 +19,7 @@ spark.createDataFrame([(run_id, started, None, "RUNNING", None)],
  "run_id string, started_at timestamp, completed_at timestamp, status string, error_message string").write.mode("append").saveAsTable(RUN_TABLE)
 
 # COMMAND ----------
+
 def get_state(source_id: str) -> int:
     rows = spark.table(STATE_TABLE).where(F.col("source_id") == source_id).limit(1).collect()
     return int(rows[0]["last_sequence"]) if rows else 0
@@ -25,7 +27,7 @@ def get_state(source_id: str) -> int:
 def write_dataset(df, source_id: str, dataset: str, fmt: str, event_col: str):
     path = f"{ROOT}/{source_id}/{dataset}/run_id={run_id}"
     out = df.withColumn("_run_id", F.lit(run_id)).withColumn("_generation_ts", F.current_timestamp())
-    writer = out.write.mode("errorifexists")
+    writer = out.write.mode("error")
     if fmt == "csv": writer.option("header", "true").csv(path)
     elif fmt == "parquet": writer.parquet(path)
     elif fmt == "json": writer.json(path)
@@ -43,6 +45,7 @@ def update_state(source_id: str, sequence: int, event_time):
       WHEN MATCHED THEN UPDATE SET * WHEN NOT MATCHED THEN INSERT *""")
 
 # COMMAND ----------
+
 try:
     pseq=get_state("SRC-11")
     patients=spark.range(pseq+1,pseq+6).select(
