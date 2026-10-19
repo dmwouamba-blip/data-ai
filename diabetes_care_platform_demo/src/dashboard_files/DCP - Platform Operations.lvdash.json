@@ -1,0 +1,885 @@
+{
+  "datasets": [
+    {
+      "name": "9fbaf3a4",
+      "displayName": "Source Health dataset",
+      "queryLines": [
+        "SELECT source_id, source_name, domain, freshness_minutes, freshness_status, lifecycle_status\r\n",
+        "FROM dcp_synth.`04_presentation`.vw_platform_source_health;"
+      ]
+    },
+    {
+      "name": "6af678d4",
+      "displayName": "Pipeline Runs",
+      "queryLines": [
+        "SELECT pipeline_run_id, source_id, started_at, duration_seconds, status\r\n",
+        "FROM dcp_synth.`04_presentation`.vw_platform_pipeline_runs;"
+      ]
+    },
+    {
+      "name": "7e3dddfc",
+      "displayName": "Platform Exceptions",
+      "queryLines": [
+        "SELECT exception_id, source_id, exception_type, severity, status, owner, next_action, opened_at\r\n",
+        "FROM dcp_synth.`04_presentation`.vw_platform_exception_queue;"
+      ]
+    },
+    {
+      "name": "0405f026",
+      "displayName": "Recovery dataset",
+      "queryLines": [
+        "SELECT layer, recovery_state, rto_hours, rpo_hours, tested_at\n",
+        "FROM dcp_synth.`04_presentation`.vw_platform_recovery;"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "cac26703",
+      "displayName": "Source Health",
+      "layout": [
+        {
+          "widget": {
+            "name": "source_health_table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "9fbaf3a4",
+                  "fields": [
+                    {
+                      "name": "source_id",
+                      "expression": "`source_id`"
+                    },
+                    {
+                      "name": "source_name",
+                      "expression": "`source_name`"
+                    },
+                    {
+                      "name": "domain",
+                      "expression": "`domain`"
+                    },
+                    {
+                      "name": "freshness_minutes",
+                      "expression": "`freshness_minutes`"
+                    },
+                    {
+                      "name": "freshness_status",
+                      "expression": "`freshness_status`"
+                    },
+                    {
+                      "name": "lifecycle_status",
+                      "expression": "`lifecycle_status`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Source Health"
+              },
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "source_id"
+                  },
+                  {
+                    "fieldName": "source_name"
+                  },
+                  {
+                    "fieldName": "domain"
+                  },
+                  {
+                    "fieldName": "freshness_minutes"
+                  },
+                  {
+                    "fieldName": "freshness_status"
+                  },
+                  {
+                    "fieldName": "lifecycle_status"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "filter_domain",
+            "queries": [
+              {
+                "name": "dashboards/01f1cbccc7df17219ddf2e03d863022e/datasets/01f1cbcce8f3108cb4729fbba8a27d11_domain",
+                "query": {
+                  "datasetName": "9fbaf3a4",
+                  "fields": [
+                    {
+                      "name": "domain",
+                      "expression": "`domain`"
+                    },
+                    {
+                      "name": "domain_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Domain"
+              },
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "domain",
+                    "queryName": "dashboards/01f1cbccc7df17219ddf2e03d863022e/datasets/01f1cbcce8f3108cb4729fbba8a27d11_domain"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 4,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "filter_freshness_status",
+            "queries": [
+              {
+                "name": "dashboards/01f1cbccc7df17219ddf2e03d863022e/datasets/01f1cbcce8f3108cb4729fbba8a27d11_freshness_status",
+                "query": {
+                  "datasetName": "9fbaf3a4",
+                  "fields": [
+                    {
+                      "name": "freshness_status",
+                      "expression": "`freshness_status`"
+                    },
+                    {
+                      "name": "freshness_status_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Freshness Status"
+              },
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "freshness_status",
+                    "queryName": "dashboards/01f1cbccc7df17219ddf2e03d863022e/datasets/01f1cbcce8f3108cb4729fbba8a27d11_freshness_status"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 8,
+            "width": 4,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "filter_lifecycle_status",
+            "queries": [
+              {
+                "name": "dashboards/01f1cbccc7df17219ddf2e03d863022e/datasets/01f1cbcce8f3108cb4729fbba8a27d11_lifecycle_status",
+                "query": {
+                  "datasetName": "9fbaf3a4",
+                  "fields": [
+                    {
+                      "name": "lifecycle_status",
+                      "expression": "`lifecycle_status`"
+                    },
+                    {
+                      "name": "lifecycle_status_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Lifecycle Status"
+              },
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "lifecycle_status",
+                    "queryName": "dashboards/01f1cbccc7df17219ddf2e03d863022e/datasets/01f1cbcce8f3108cb4729fbba8a27d11_lifecycle_status"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 8,
+            "width": 4,
+            "height": 2
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "24544cfb",
+      "displayName": "Pipeline Runs",
+      "layout": [
+        {
+          "widget": {
+            "name": "pipeline_status",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "6af678d4",
+                  "fields": [
+                    {
+                      "name": "status",
+                      "expression": "`status`"
+                    },
+                    {
+                      "name": "count(pipeline_run_id)",
+                      "expression": "COUNT(`pipeline_run_id`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Pipeline Status",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "status",
+                  "displayName": "status",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "count(pipeline_run_id)",
+                  "displayName": "count",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "status",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 6,
+            "height": 7
+          }
+        },
+        {
+          "widget": {
+            "name": "filter_source_id",
+            "queries": [
+              {
+                "name": "dashboards/01f1cbccc7df17219ddf2e03d863022e/datasets/01f1cbcd38f116df9b43f722b351678d_source_id",
+                "query": {
+                  "datasetName": "6af678d4",
+                  "fields": [
+                    {
+                      "name": "source_id",
+                      "expression": "`source_id`"
+                    },
+                    {
+                      "name": "source_id_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Source ID"
+              },
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "source_id",
+                    "queryName": "dashboards/01f1cbccc7df17219ddf2e03d863022e/datasets/01f1cbcd38f116df9b43f722b351678d_source_id"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 0,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "pipeline_duration",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "6af678d4",
+                  "fields": [
+                    {
+                      "name": "started_at",
+                      "expression": "`started_at`"
+                    },
+                    {
+                      "name": "avg(duration_seconds)",
+                      "expression": "AVG(`duration_seconds`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Pipeline Duration",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "started_at",
+                  "format": {
+                    "type": "date-time",
+                    "date": "locale-short-month",
+                    "time": "none"
+                  },
+                  "displayName": "started_at",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "avg(duration_seconds)",
+                  "displayName": "duration_seconds",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 2,
+            "width": 6,
+            "height": 7
+          }
+        },
+        {
+          "widget": {
+            "name": "filter_status",
+            "queries": [
+              {
+                "name": "dashboards/01f1cbccc7df17219ddf2e03d863022e/datasets/01f1cbcd38f116df9b43f722b351678d_status",
+                "query": {
+                  "datasetName": "6af678d4",
+                  "fields": [
+                    {
+                      "name": "status",
+                      "expression": "`status`"
+                    },
+                    {
+                      "name": "status_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Status"
+              },
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "status",
+                    "queryName": "dashboards/01f1cbccc7df17219ddf2e03d863022e/datasets/01f1cbcd38f116df9b43f722b351678d_status"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 2,
+            "height": 2
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "28c8772a",
+      "displayName": "Platform Exceptions dataset",
+      "layout": [
+        {
+          "widget": {
+            "name": "exception_queue_table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "7e3dddfc",
+                  "fields": [
+                    {
+                      "name": "exception_id",
+                      "expression": "`exception_id`"
+                    },
+                    {
+                      "name": "source_id",
+                      "expression": "`source_id`"
+                    },
+                    {
+                      "name": "exception_type",
+                      "expression": "`exception_type`"
+                    },
+                    {
+                      "name": "severity",
+                      "expression": "`severity`"
+                    },
+                    {
+                      "name": "status",
+                      "expression": "`status`"
+                    },
+                    {
+                      "name": "owner",
+                      "expression": "`owner`"
+                    },
+                    {
+                      "name": "next_action",
+                      "expression": "`next_action`"
+                    },
+                    {
+                      "name": "opened_at",
+                      "expression": "`opened_at`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Exception Queue"
+              },
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "exception_id"
+                  },
+                  {
+                    "fieldName": "source_id"
+                  },
+                  {
+                    "fieldName": "exception_type"
+                  },
+                  {
+                    "fieldName": "severity"
+                  },
+                  {
+                    "fieldName": "status"
+                  },
+                  {
+                    "fieldName": "owner"
+                  },
+                  {
+                    "fieldName": "next_action"
+                  },
+                  {
+                    "fieldName": "opened_at"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 8
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "b7107c29",
+      "displayName": "Recovery",
+      "layout": [
+        {
+          "widget": {
+            "name": "avg_rto_kpi",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "0405f026",
+                  "fields": [
+                    {
+                      "name": "avg(rto_hours)",
+                      "expression": "AVG(`rto_hours`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Avg RTO (hrs)",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(rto_hours)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 4,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "avg_rpo_kpi",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "0405f026",
+                  "fields": [
+                    {
+                      "name": "avg(rpo_hours)",
+                      "expression": "AVG(`rpo_hours`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Avg RPO (hrs)"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(rpo_hours)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 0,
+            "width": 4,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "recovery_layers_kpi",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "0405f026",
+                  "fields": [
+                    {
+                      "name": "countdistinct(layer)",
+                      "expression": "COUNT(DISTINCT `layer`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Recovery Layers"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "countdistinct(layer)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 0,
+            "width": 4,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "rto_rpo_bar",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "0405f026",
+                  "fields": [
+                    {
+                      "name": "layer",
+                      "expression": "`layer`"
+                    },
+                    {
+                      "name": "avg(rto_hours)",
+                      "expression": "AVG(`rto_hours`)"
+                    },
+                    {
+                      "name": "avg(rpo_hours)",
+                      "expression": "AVG(`rpo_hours`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "RTO vs RPO by Layer"
+              },
+              "version": 3,
+              "mark": {
+                "layout": "group"
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "layer",
+                  "displayName": "layer",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fields": [
+                    {
+                      "fieldName": "avg(rto_hours)",
+                      "displayName": "RTO (hrs)"
+                    },
+                    {
+                      "fieldName": "avg(rpo_hours)",
+                      "displayName": "RPO (hrs)"
+                    }
+                  ],
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 12,
+            "height": 7
+          }
+        },
+        {
+          "widget": {
+            "name": "recovery_table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "0405f026",
+                  "fields": [
+                    {
+                      "name": "layer",
+                      "expression": "`layer`"
+                    },
+                    {
+                      "name": "recovery_state",
+                      "expression": "`recovery_state`"
+                    },
+                    {
+                      "name": "rto_hours",
+                      "expression": "`rto_hours`"
+                    },
+                    {
+                      "name": "rpo_hours",
+                      "expression": "`rpo_hours`"
+                    },
+                    {
+                      "name": "tested_at",
+                      "expression": "`tested_at`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Recovery Posture"
+              },
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "layer"
+                  },
+                  {
+                    "fieldName": "recovery_state"
+                  },
+                  {
+                    "fieldName": "rto_hours"
+                  },
+                  {
+                    "fieldName": "rpo_hours"
+                  },
+                  {
+                    "fieldName": "tested_at"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 10,
+            "width": 12,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "CENTER"
+    },
+    "applyModeEnabled": false
+  }
+}

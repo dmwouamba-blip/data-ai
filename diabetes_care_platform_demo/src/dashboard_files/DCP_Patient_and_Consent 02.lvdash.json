@@ -1,0 +1,393 @@
+{
+  "datasets": [
+    {
+      "name": "patient_alerts",
+      "displayName": "Patient Alerts",
+      "queryLines": [
+        "SELECT  alert_type,  status,  COUNT(*) AS alert_count\r\n",
+        "FROM dcp_synth.`04_presentation`.vw_patient_alerts\r\n",
+        "GROUP BY alert_type, status"
+      ]
+    },
+    {
+      "name": "report_sharing",
+      "displayName": "Report Sharing",
+      "queryLines": [
+        "SELECT  recipient_type,  sharing_status,  COUNT(*) AS sharing_count\r\n",
+        "FROM dcp_synth.`04_presentation`.vw_patient_report_sharing\r\n",
+        "GROUP BY recipient_type, sharing_status"
+      ]
+    },
+    {
+      "name": "consent_current",
+      "displayName": "Consent Current State",
+      "queryLines": [
+        "SELECT  consent_scope,  purpose,  recipient,  current_state,  patient_scope_count,  latest_effective_at\r\n",
+        "FROM dcp_synth.`04_presentation`.vw_consent_current_summary"
+      ]
+    },
+    {
+      "name": "consent_propagation",
+      "displayName": "Consent Propagation",
+      "queryLines": [
+        "SELECT  target_system,  target_status,  propagation_count,  refreshed_at\r\n",
+        "FROM dcp_synth.`04_presentation`.vw_consent_propagation_summary"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "7597cd1c",
+      "displayName": "Patient and Consent",
+      "layout": [
+        {
+          "widget": {
+            "name": "2c28567f",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "patient_alerts",
+                  "fields": [
+                    {
+                      "name": "alert_type",
+                      "expression": "`alert_type`"
+                    },
+                    {
+                      "name": "status",
+                      "expression": "`status`"
+                    },
+                    {
+                      "name": "alert_count",
+                      "expression": "SUM(`alert_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "alert_type",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Alert Type"
+                },
+                "y": {
+                  "fieldName": "alert_count",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Alert Count"
+                },
+                "color": {
+                  "fieldName": "status",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Status"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Patient Alerts"
+              },
+              "mark": {
+                "layout": "stack"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "42c30e87",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "report_sharing",
+                  "fields": [
+                    {
+                      "name": "recipient_type",
+                      "expression": "`recipient_type`"
+                    },
+                    {
+                      "name": "sharing_status",
+                      "expression": "`sharing_status`"
+                    },
+                    {
+                      "name": "sharing_count",
+                      "expression": "SUM(`sharing_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "recipient_type",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Recipient Type"
+                },
+                "y": {
+                  "fieldName": "sharing_count",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Sharing Count"
+                },
+                "color": {
+                  "fieldName": "sharing_status",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Sharing Status"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Report Sharing"
+              },
+              "mark": {
+                "layout": "stack"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 0,
+            "width": 6,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "bdfff6a5",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "consent_current",
+                  "fields": [
+                    {
+                      "name": "consent_scope",
+                      "expression": "`consent_scope`"
+                    },
+                    {
+                      "name": "current_state",
+                      "expression": "`current_state`"
+                    },
+                    {
+                      "name": "patient_scope_count",
+                      "expression": "SUM(`patient_scope_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "consent_scope",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Consent Scope"
+                },
+                "y": {
+                  "fieldName": "patient_scope_count",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Patient Scope Count"
+                },
+                "color": {
+                  "fieldName": "current_state",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Current State"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Consent Current State"
+              },
+              "mark": {
+                "layout": "stack"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 4,
+            "width": 6,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "6deb66a1",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "consent_propagation",
+                  "fields": [
+                    {
+                      "name": "target_system",
+                      "expression": "`target_system`"
+                    },
+                    {
+                      "name": "target_status",
+                      "expression": "`target_status`"
+                    },
+                    {
+                      "name": "propagation_count",
+                      "expression": "SUM(`propagation_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "target_system",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Target System"
+                },
+                "y": {
+                  "fieldName": "propagation_count",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Propagation Count"
+                },
+                "color": {
+                  "fieldName": "target_status",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Target Status"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Consent Propagation"
+              },
+              "mark": {
+                "layout": "stack"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 4,
+            "width": 6,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "d2123479",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "consent_propagation",
+                  "fields": [
+                    {
+                      "name": "target_status",
+                      "expression": "`target_status`"
+                    },
+                    {
+                      "name": "target_system",
+                      "expression": "`target_system`"
+                    },
+                    {
+                      "name": "sum(propagation_count)",
+                      "expression": "SUM(`propagation_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Consent Propagation Summary"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "target_system",
+                  "displayName": "Target System",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(propagation_count)",
+                  "displayName": "Propagation Count",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "target_status",
+                  "displayName": "Target Status",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 12,
+            "height": 4
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}

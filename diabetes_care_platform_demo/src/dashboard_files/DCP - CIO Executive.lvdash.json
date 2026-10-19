@@ -1,0 +1,450 @@
+{
+  "datasets": [
+    {
+      "name": "015f81b9",
+      "displayName": "IO Service dataset",
+      "queryLines": [
+        "SELECT metric_date, metric_name, metric_value, target_value, status\r\n",
+        "FROM dcp_synth.`04_presentation`.vw_cio_service_trend;"
+      ]
+    },
+    {
+      "name": "a23d415d",
+      "displayName": "CIO Controls dataset",
+      "queryLines": [
+        "SELECT control_domain, score_pct, assessed_at\r\n",
+        "FROM dcp_synth.`04_presentation`.vw_cio_control_posture;"
+      ]
+    },
+    {
+      "name": "2e5672f1",
+      "displayName": "CIO Adoption dataset",
+      "queryLines": [
+        "SELECT experience, eligible_users, active_users, adoption_pct, metric_date\r\n",
+        "FROM dcp_synth.`04_presentation`.vw_cio_adoption;"
+      ]
+    },
+    {
+      "name": "032a0d58",
+      "displayName": "Release Readiness dataset",
+      "queryLines": [
+        "SELECT product_id, maturity, readiness_status, owner, next_action\r\n",
+        "FROM dcp_synth.`04_presentation`.vw_cio_release_readiness;"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "f912131c",
+      "displayName": "Dashboard",
+      "layout": [
+        {
+          "widget": {
+            "name": "service_performance_trend",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "015f81b9",
+                  "fields": [
+                    {
+                      "name": "metric_name",
+                      "expression": "`metric_name`"
+                    },
+                    {
+                      "name": "avg(target_value)",
+                      "expression": "AVG(`target_value`)"
+                    },
+                    {
+                      "name": "metric_date",
+                      "expression": "`metric_date`"
+                    },
+                    {
+                      "name": "avg(metric_value)",
+                      "expression": "AVG(`metric_value`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Service Performance Trend"
+              },
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "metric_date",
+                  "displayName": "metric_date",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "avg(metric_value)",
+                  "displayName": "metric_value",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "metric_name",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "extra": [
+                  {
+                    "fieldName": "avg(target_value)"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 12,
+            "height": 7
+          }
+        },
+        {
+          "widget": {
+            "name": "control_posture",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a23d415d",
+                  "fields": [
+                    {
+                      "name": "control_domain",
+                      "expression": "`control_domain`"
+                    },
+                    {
+                      "name": "avg(score_pct)",
+                      "expression": "AVG(`score_pct`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Control Posture",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "avg(score_pct)",
+                  "displayName": "score_pct",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "control_domain",
+                  "displayName": "control_domain",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "color": {
+                  "fieldName": "control_domain",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 9,
+            "width": 12,
+            "height": 7
+          }
+        },
+        {
+          "widget": {
+            "name": "release_readiness_table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "032a0d58",
+                  "fields": [
+                    {
+                      "name": "product_id",
+                      "expression": "`product_id`"
+                    },
+                    {
+                      "name": "maturity",
+                      "expression": "`maturity`"
+                    },
+                    {
+                      "name": "readiness_status",
+                      "expression": "`readiness_status`"
+                    },
+                    {
+                      "name": "owner",
+                      "expression": "`owner`"
+                    },
+                    {
+                      "name": "next_action",
+                      "expression": "`next_action`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Release Readiness"
+              },
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "product_id"
+                  },
+                  {
+                    "fieldName": "maturity"
+                  },
+                  {
+                    "fieldName": "readiness_status"
+                  },
+                  {
+                    "fieldName": "owner"
+                  },
+                  {
+                    "fieldName": "next_action"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 16,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "filter_metric_date",
+            "queries": [
+              {
+                "name": "dashboards/01f1cbcae2071f318744eb18d8051f50/datasets/01f1cbcb1ba415e5ae640d010df9d2a7_metric_date",
+                "query": {
+                  "datasetName": "015f81b9",
+                  "fields": [
+                    {
+                      "name": "metric_date",
+                      "expression": "`metric_date`"
+                    },
+                    {
+                      "name": "metric_date_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Metric Date"
+              },
+              "widgetType": "filter-date-range-picker",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "metric_date",
+                    "queryName": "dashboards/01f1cbcae2071f318744eb18d8051f50/datasets/01f1cbcb1ba415e5ae640d010df9d2a7_metric_date"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "filter_metric_name",
+            "queries": [
+              {
+                "name": "dashboards/01f1cbcae2071f318744eb18d8051f50/datasets/01f1cbcb1ba415e5ae640d010df9d2a7_metric_name",
+                "query": {
+                  "datasetName": "015f81b9",
+                  "fields": [
+                    {
+                      "name": "metric_name",
+                      "expression": "`metric_name`"
+                    },
+                    {
+                      "name": "metric_name_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Metric Name"
+              },
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "metric_name",
+                    "queryName": "dashboards/01f1cbcae2071f318744eb18d8051f50/datasets/01f1cbcb1ba415e5ae640d010df9d2a7_metric_name"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "filter_readiness_status",
+            "queries": [
+              {
+                "name": "dashboards/01f1cbcae2071f318744eb18d8051f50/datasets/01f1cbcb844b103c918ce8606671b4e7_readiness_status",
+                "query": {
+                  "datasetName": "032a0d58",
+                  "fields": [
+                    {
+                      "name": "readiness_status",
+                      "expression": "`readiness_status`"
+                    },
+                    {
+                      "name": "readiness_status_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Readiness Status"
+              },
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "readiness_status",
+                    "queryName": "dashboards/01f1cbcae2071f318744eb18d8051f50/datasets/01f1cbcb844b103c918ce8606671b4e7_readiness_status"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "filter_product_id",
+            "queries": [
+              {
+                "name": "dashboards/01f1cbcae2071f318744eb18d8051f50/datasets/01f1cbcb844b103c918ce8606671b4e7_product_id",
+                "query": {
+                  "datasetName": "032a0d58",
+                  "fields": [
+                    {
+                      "name": "product_id",
+                      "expression": "`product_id`"
+                    },
+                    {
+                      "name": "product_id_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Product ID"
+              },
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "product_id",
+                    "queryName": "dashboards/01f1cbcae2071f318744eb18d8051f50/datasets/01f1cbcb844b103c918ce8606671b4e7_product_id"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}

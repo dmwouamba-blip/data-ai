@@ -1,0 +1,629 @@
+{
+  "datasets": [
+    {
+      "name": "0e3d232f",
+      "displayName": "Glucose Timeline",
+      "queryLines": [
+        "SELECT\r\n",
+        "    patient_id,\r\n",
+        "    event_time,\r\n",
+        "    glucose_mmol_l,\r\n",
+        "    source_id\r\n",
+        "FROM dcp_synth.`04_presentation`.vw_glucose_timeline;"
+      ]
+    },
+    {
+      "name": "ea83eafe",
+      "displayName": "Glucose Daily Summary",
+      "queryLines": [
+        "SELECT\r\n",
+        "    patient_id,\r\n",
+        "    measure_date,\r\n",
+        "    mean_glucose_mmol_l,\r\n",
+        "    tir_pct,\r\n",
+        "    tbr_pct,\r\n",
+        "    tar_pct,\r\n",
+        "    reading_count,\r\n",
+        "    refreshed_at\r\n",
+        "FROM dcp_synth.`04_presentation`.vw_glucose_daily_summary\n",
+        "ORDER BY measure_date DESC;"
+      ]
+    },
+    {
+      "name": "2d262e71",
+      "displayName": "Glucose Range Distribution",
+      "queryLines": [
+        "SELECT patient_id, measure_date, 'TIR' AS range_category, tir_pct AS percentage\r\n",
+        "FROM dcp_synth.`04_presentation`.vw_glucose_daily_summary\r\n",
+        "UNION ALL\r\n",
+        "SELECT patient_id, measure_date, 'TBR', tbr_pct\r\n",
+        "FROM dcp_synth.`04_presentation`.vw_glucose_daily_summary\r\n",
+        "UNION ALL\r\n",
+        "SELECT patient_id, measure_date, 'TAR', tar_pct\r\n",
+        "FROM dcp_synth.`04_presentation`.vw_glucose_daily_summary;"
+      ]
+    }
+  ],
+  "relationshipGraphs": [
+    {
+      "sources": [
+        {
+          "name": "Glucose_Timeline",
+          "datasetName": "0e3d232f"
+        },
+        {
+          "name": "Glucose_Daily_Summary",
+          "datasetName": "ea83eafe"
+        },
+        {
+          "name": "Untitled_dataset",
+          "datasetName": "2d262e71"
+        }
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "f1612436",
+      "displayName": "Dashboard",
+      "layout": [
+        {
+          "widget": {
+            "name": "glucose_trend_over_time",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "0e3d232f",
+                  "fields": [
+                    {
+                      "name": "countdistinct(source_id)",
+                      "expression": "COUNT(DISTINCT `source_id`)"
+                    },
+                    {
+                      "name": "daily(event_time)",
+                      "expression": "DATE_TRUNC(\"DAY\", `event_time`)"
+                    },
+                    {
+                      "name": "sum(glucose_mmol_l)",
+                      "expression": "SUM(`glucose_mmol_l`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Glucose Trend Over Time",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "daily(event_time)",
+                  "displayName": "Date",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(glucose_mmol_l)",
+                  "displayName": "glucose_mmol_l",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "extra": [
+                  {
+                    "fieldName": "countdistinct(source_id)"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 1,
+            "y": 3,
+            "width": 7,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "mean_glucose_kpi",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "avg(Glucose_Daily_Summary__mean_glucose_mmol_l)",
+                      "expression": "AVG(`Glucose_Daily_Summary`.`mean_glucose_mmol_l`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Mean Glucose (mmol/L)"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(Glucose_Daily_Summary__mean_glucose_mmol_l)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 1,
+            "y": 0,
+            "width": 4,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "tir_kpi",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "avg(Glucose_Daily_Summary__tir_pct)",
+                      "expression": "AVG(`Glucose_Daily_Summary`.`tir_pct`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "TIR (%)"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(Glucose_Daily_Summary__tir_pct)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 5,
+            "y": 0,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "tbr_kpi",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "avg(Glucose_Daily_Summary__tbr_pct)",
+                      "expression": "AVG(`Glucose_Daily_Summary`.`tbr_pct`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "TBR (%)"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(Glucose_Daily_Summary__tbr_pct)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 0,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "tar_kpi",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "avg(Glucose_Daily_Summary__tar_pct)",
+                      "expression": "AVG(`Glucose_Daily_Summary`.`tar_pct`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "TAR (%)"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(Glucose_Daily_Summary__tar_pct)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 3,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "reading_count_kpi",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "sum(Glucose_Daily_Summary__reading_count)",
+                      "expression": "SUM(`Glucose_Daily_Summary`.`reading_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Reading Count"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(Glucose_Daily_Summary__reading_count)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 6,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "daily_mean_glucose",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "sum(Glucose_Daily_Summary__reading_count)",
+                      "expression": "SUM(`Glucose_Daily_Summary`.`reading_count`)"
+                    },
+                    {
+                      "name": "max(Glucose_Daily_Summary__refreshed_at)",
+                      "expression": "MAX(`Glucose_Daily_Summary`.`refreshed_at`)"
+                    },
+                    {
+                      "name": "Glucose_Daily_Summary__measure_date",
+                      "expression": "`Glucose_Daily_Summary`.`measure_date`"
+                    },
+                    {
+                      "name": "avg(Glucose_Daily_Summary__mean_glucose_mmol_l)",
+                      "expression": "AVG(`Glucose_Daily_Summary`.`mean_glucose_mmol_l`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Daily Mean Glucose"
+              },
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "Glucose_Daily_Summary__measure_date",
+                  "displayName": "measure_date",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "avg(Glucose_Daily_Summary__mean_glucose_mmol_l)",
+                  "displayName": "mean_glucose_mmol_l",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "extra": [
+                  {
+                    "fieldName": "sum(Glucose_Daily_Summary__reading_count)"
+                  },
+                  {
+                    "fieldName": "max(Glucose_Daily_Summary__refreshed_at)"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 1,
+            "y": 8,
+            "width": 10,
+            "height": 5
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "0c96d4dc",
+      "displayName": "Global Filters",
+      "layout": [
+        {
+          "widget": {
+            "name": "10ca99ac",
+            "queries": [
+              {
+                "name": "dashboards/01f1cbc4211c178d869b87d8ded5823f/datasets/01f1cbc4366416688d0479e5d35c22f2_patient_id",
+                "query": {
+                  "datasetName": "0e3d232f",
+                  "fields": [
+                    {
+                      "name": "patient_id",
+                      "expression": "`patient_id`"
+                    },
+                    {
+                      "name": "patient_id_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true
+              },
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "patient_id",
+                    "queryName": "dashboards/01f1cbc4211c178d869b87d8ded5823f/datasets/01f1cbc4366416688d0479e5d35c22f2_patient_id"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "1fdd81d0",
+            "queries": [
+              {
+                "name": "dashboards/01f1cbc4211c178d869b87d8ded5823f/datasets/01f1cbc4366416688d0479e5d35c22f2_event_time",
+                "query": {
+                  "datasetName": "0e3d232f",
+                  "fields": [
+                    {
+                      "name": "event_time",
+                      "expression": "`event_time`"
+                    },
+                    {
+                      "name": "event_time_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true
+              },
+              "widgetType": "filter-date-range-picker",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "event_time",
+                    "queryName": "dashboards/01f1cbc4211c178d869b87d8ded5823f/datasets/01f1cbc4366416688d0479e5d35c22f2_event_time"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 1,
+            "height": 2
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_GLOBAL_FILTERS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "canvasBackgroundColor": {
+        "light": "#E6E9EA",
+        "dark": "#1E2931"
+      },
+      "widgetBackgroundColor": {
+        "light": "#FFFFFF",
+        "dark": "#15181C"
+      },
+      "widgetBorderColor": {
+        "light": "#F3F5F6",
+        "dark": "#21292F"
+      },
+      "fontColor": {
+        "light": "#1A2127",
+        "dark": "#EEF0F2"
+      },
+      "selectionColor": {
+        "light": "#0E7AB9",
+        "dark": "#41ADEC"
+      },
+      "visualizationColors": [
+        "#1A73E8",
+        "#0FB5B5",
+        "#7C4DFF",
+        "#FF9800",
+        "#607D8B",
+        "#E91E63"
+      ],
+      "widgetHeaderAlignment": "LEFT",
+      "fontFamily": "Inter",
+      "widgetPadding": 8,
+      "widgetMargin": 4,
+      "widgetCornerRadius": 4,
+      "widgetShadow": 0,
+      "continuousGradient": {
+        "lightMode": {
+          "fromCategoricalIndex": 0
+        },
+        "darkMode": {
+          "fromCategoricalIndex": 0
+        }
+      },
+      "fontSettings": {
+        "base": {
+          "fontFamily": "Inter",
+          "fontColor": {
+            "light": "#1A2127",
+            "dark": "#EEF0F2"
+          },
+          "fontSize": 12,
+          "fontWeight": 400
+        },
+        "widgetTitle": {
+          "fontSize": 14,
+          "fontWeight": 500
+        },
+        "widgetDescription": {
+          "fontSize": 12,
+          "fontWeight": 400
+        },
+        "fieldTitle": {
+          "textCase": "TEXT_CASE_UPPERCASE",
+          "fontColor": {
+            "light": "#31373D",
+            "dark": "#D6D8DA"
+          },
+          "fontSize": 11,
+          "fontWeight": 400
+        },
+        "fieldValue": {
+          "fontColor": {
+            "light": "#31373D",
+            "dark": "#D6D8DA"
+          },
+          "fontSize": 11,
+          "fontWeight": 400
+        }
+      },
+      "gridLineColor": {
+        "light": "#D6D7D8",
+        "dark": "#3C3E42"
+      },
+      "axisLineColor": {
+        "light": "#B0B4B6",
+        "dark": "#555E64"
+      },
+      "visualizationColorMappings": [
+        {
+          "value": "TIR",
+          "color": "#4CAF50"
+        },
+        {
+          "value": "TBR",
+          "color": "#E53935"
+        },
+        {
+          "value": "TAR",
+          "color": "#FB8C00"
+        }
+      ]
+    },
+    "applyModeEnabled": false
+  }
+}
