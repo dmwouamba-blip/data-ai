@@ -1,0 +1,3202 @@
+[
+  {
+    "event_id": "C000000",
+    "timestamp": "2025-07-01T10:58:45.871298Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000001",
+    "timestamp": "2025-06-22T09:58:45.871335Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000002",
+    "timestamp": "2025-05-13T05:58:45.871341Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Trade threshold exceeded",
+    "status": "open"
+  },
+  {
+    "event_id": "C000003",
+    "timestamp": "2025-04-28T11:58:45.871346Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000004",
+    "timestamp": "2025-07-27T18:58:45.871352Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000005",
+    "timestamp": "2025-04-19T00:58:45.871356Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000006",
+    "timestamp": "2025-04-16T03:58:45.871359Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000007",
+    "timestamp": "2025-04-29T03:58:45.871363Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000008",
+    "timestamp": "2025-03-25T09:58:45.871368Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "open"
+  },
+  {
+    "event_id": "C000009",
+    "timestamp": "2025-08-25T05:58:45.871372Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000010",
+    "timestamp": "2025-06-09T19:58:45.871375Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000011",
+    "timestamp": "2025-05-25T01:58:45.871378Z",
+    "severity": "high",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000012",
+    "timestamp": "2025-07-06T18:58:45.871381Z",
+    "severity": "high",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000013",
+    "timestamp": "2025-06-04T05:58:45.871384Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000014",
+    "timestamp": "2025-05-28T00:58:45.871387Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000015",
+    "timestamp": "2025-05-20T17:58:45.871390Z",
+    "severity": "high",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000016",
+    "timestamp": "2025-09-13T17:58:45.871393Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000017",
+    "timestamp": "2025-07-02T14:58:45.871396Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "open"
+  },
+  {
+    "event_id": "C000018",
+    "timestamp": "2025-03-31T05:58:45.871399Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000019",
+    "timestamp": "2025-07-24T21:58:45.871403Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000020",
+    "timestamp": "2025-08-02T08:58:45.871406Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000021",
+    "timestamp": "2025-03-23T18:58:45.871409Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000022",
+    "timestamp": "2025-08-07T08:58:45.871412Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000023",
+    "timestamp": "2025-09-02T11:58:45.871415Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000024",
+    "timestamp": "2025-09-08T16:58:45.871419Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000025",
+    "timestamp": "2025-04-02T22:58:45.871422Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000026",
+    "timestamp": "2025-08-08T09:58:45.871425Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "open"
+  },
+  {
+    "event_id": "C000027",
+    "timestamp": "2025-06-24T16:58:45.871429Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000028",
+    "timestamp": "2025-08-03T00:58:45.871432Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000029",
+    "timestamp": "2025-07-17T21:58:45.871435Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000030",
+    "timestamp": "2025-08-14T05:58:45.871437Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000031",
+    "timestamp": "2025-08-13T10:58:45.871441Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000032",
+    "timestamp": "2025-06-07T23:58:45.871444Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000033",
+    "timestamp": "2025-08-10T18:58:45.871447Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000034",
+    "timestamp": "2025-08-13T02:58:45.871450Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Trade threshold exceeded",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000035",
+    "timestamp": "2025-05-27T06:58:45.871453Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000036",
+    "timestamp": "2025-06-24T13:58:45.871456Z",
+    "severity": "high",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000037",
+    "timestamp": "2025-08-09T02:58:45.871459Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000038",
+    "timestamp": "2025-05-04T06:58:45.871463Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000039",
+    "timestamp": "2025-06-24T06:58:45.871466Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000040",
+    "timestamp": "2025-06-15T10:58:45.871469Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000041",
+    "timestamp": "2025-06-21T16:58:45.871472Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Trade threshold exceeded",
+    "status": "open"
+  },
+  {
+    "event_id": "C000042",
+    "timestamp": "2025-04-23T12:58:45.871475Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000043",
+    "timestamp": "2025-04-13T11:58:45.871478Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000044",
+    "timestamp": "2025-06-19T23:58:45.871481Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000045",
+    "timestamp": "2025-07-22T12:58:45.871484Z",
+    "severity": "high",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000046",
+    "timestamp": "2025-08-15T04:58:45.871488Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000047",
+    "timestamp": "2025-07-29T22:58:45.871491Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000048",
+    "timestamp": "2025-05-08T09:58:45.871494Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000049",
+    "timestamp": "2025-08-29T19:58:45.871497Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000050",
+    "timestamp": "2025-04-10T05:58:45.871500Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000051",
+    "timestamp": "2025-07-14T17:58:45.871503Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000052",
+    "timestamp": "2025-06-20T11:58:45.871507Z",
+    "severity": "high",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000053",
+    "timestamp": "2025-08-04T07:58:45.871510Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000054",
+    "timestamp": "2025-05-01T14:58:45.871513Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000055",
+    "timestamp": "2025-09-09T16:58:45.871516Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000056",
+    "timestamp": "2025-05-29T02:58:45.871519Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000057",
+    "timestamp": "2025-09-10T20:58:45.871522Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Trade threshold exceeded",
+    "status": "open"
+  },
+  {
+    "event_id": "C000058",
+    "timestamp": "2025-07-06T12:58:45.871525Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000059",
+    "timestamp": "2025-07-13T23:58:45.871528Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000060",
+    "timestamp": "2025-06-07T13:58:45.871531Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000061",
+    "timestamp": "2025-08-16T15:58:45.871534Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000062",
+    "timestamp": "2025-06-25T00:58:45.871537Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000063",
+    "timestamp": "2025-06-18T08:58:45.871540Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000064",
+    "timestamp": "2025-05-03T22:58:45.871543Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000065",
+    "timestamp": "2025-03-26T12:58:45.871550Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000066",
+    "timestamp": "2025-07-29T17:58:45.871553Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000067",
+    "timestamp": "2025-06-05T20:58:45.871556Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000068",
+    "timestamp": "2025-07-06T15:58:45.871559Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000069",
+    "timestamp": "2025-06-04T00:58:45.871562Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000070",
+    "timestamp": "2025-06-04T07:58:45.871565Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000071",
+    "timestamp": "2025-05-05T07:58:45.871568Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000072",
+    "timestamp": "2025-09-12T13:58:45.871572Z",
+    "severity": "high",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000073",
+    "timestamp": "2025-04-18T10:58:45.871575Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000074",
+    "timestamp": "2025-04-18T15:58:45.871578Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000075",
+    "timestamp": "2025-03-26T03:58:45.871581Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000076",
+    "timestamp": "2025-09-05T10:58:45.871584Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000077",
+    "timestamp": "2025-03-25T19:58:45.871591Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000078",
+    "timestamp": "2025-03-31T04:58:45.871594Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000079",
+    "timestamp": "2025-03-27T18:58:45.871597Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000080",
+    "timestamp": "2025-05-11T22:58:45.871600Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000081",
+    "timestamp": "2025-08-18T20:58:45.871603Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000082",
+    "timestamp": "2025-04-19T09:58:45.871606Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000083",
+    "timestamp": "2025-08-29T00:58:45.871609Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000084",
+    "timestamp": "2025-06-26T12:58:45.871612Z",
+    "severity": "high",
+    "category": "limits",
+    "message": "Trade threshold exceeded",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000085",
+    "timestamp": "2025-06-11T23:58:45.871615Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000086",
+    "timestamp": "2025-09-01T03:58:45.871618Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000087",
+    "timestamp": "2025-06-15T05:58:45.871621Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000088",
+    "timestamp": "2025-04-14T06:58:45.871624Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000089",
+    "timestamp": "2025-08-03T21:58:45.871627Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Order outside risk limits",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000090",
+    "timestamp": "2025-04-16T22:58:45.871630Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000091",
+    "timestamp": "2025-09-01T10:58:45.871633Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000092",
+    "timestamp": "2025-04-16T05:58:45.871636Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000093",
+    "timestamp": "2025-08-02T11:58:45.871639Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000094",
+    "timestamp": "2025-04-10T09:58:45.871642Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000095",
+    "timestamp": "2025-06-20T05:58:45.871645Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000096",
+    "timestamp": "2025-03-24T17:58:45.871648Z",
+    "severity": "high",
+    "category": "policy",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000097",
+    "timestamp": "2025-04-04T12:58:45.871651Z",
+    "severity": "high",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000098",
+    "timestamp": "2025-04-18T22:58:45.871654Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000099",
+    "timestamp": "2025-04-05T20:58:45.871657Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000100",
+    "timestamp": "2025-04-16T13:58:45.871660Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000101",
+    "timestamp": "2025-05-04T23:58:45.871663Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000102",
+    "timestamp": "2025-08-29T12:58:45.871666Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000103",
+    "timestamp": "2025-03-30T18:58:45.871669Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000104",
+    "timestamp": "2025-08-28T03:58:45.871672Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000105",
+    "timestamp": "2025-07-19T03:58:45.871675Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000106",
+    "timestamp": "2025-07-23T04:58:45.871678Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "open"
+  },
+  {
+    "event_id": "C000107",
+    "timestamp": "2025-03-28T09:58:45.871681Z",
+    "severity": "high",
+    "category": "limits",
+    "message": "Trade threshold exceeded",
+    "status": "open"
+  },
+  {
+    "event_id": "C000108",
+    "timestamp": "2025-06-14T16:58:45.871684Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000109",
+    "timestamp": "2025-07-12T08:58:45.871687Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000110",
+    "timestamp": "2025-05-06T03:58:45.871691Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000111",
+    "timestamp": "2025-05-31T13:58:45.871693Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000112",
+    "timestamp": "2025-05-30T18:58:45.871697Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000113",
+    "timestamp": "2025-04-03T16:58:45.871699Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000114",
+    "timestamp": "2025-09-14T11:58:45.871702Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Trade threshold exceeded",
+    "status": "open"
+  },
+  {
+    "event_id": "C000115",
+    "timestamp": "2025-06-03T05:58:45.871705Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000116",
+    "timestamp": "2025-04-21T16:58:45.871708Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000117",
+    "timestamp": "2025-06-15T06:58:45.871711Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "open"
+  },
+  {
+    "event_id": "C000118",
+    "timestamp": "2025-08-13T17:58:45.871714Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000119",
+    "timestamp": "2025-04-10T05:58:45.871717Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000120",
+    "timestamp": "2025-05-29T03:58:45.871720Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000121",
+    "timestamp": "2025-05-03T20:58:45.871723Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000122",
+    "timestamp": "2025-08-05T04:58:45.871726Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000123",
+    "timestamp": "2025-04-21T16:58:45.871729Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000124",
+    "timestamp": "2025-05-28T03:58:45.871732Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000125",
+    "timestamp": "2025-05-11T14:58:45.871735Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000126",
+    "timestamp": "2025-03-31T10:58:45.871738Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000127",
+    "timestamp": "2025-07-31T07:58:45.871741Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000128",
+    "timestamp": "2025-07-19T03:58:45.871744Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000129",
+    "timestamp": "2025-04-09T21:58:45.871747Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000130",
+    "timestamp": "2025-04-28T03:58:45.871751Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000131",
+    "timestamp": "2025-04-06T12:58:45.871753Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000132",
+    "timestamp": "2025-04-03T07:58:45.871757Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000133",
+    "timestamp": "2025-07-02T02:58:45.871759Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000134",
+    "timestamp": "2025-07-23T13:58:45.871762Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000135",
+    "timestamp": "2025-08-19T14:58:45.871765Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Trade threshold exceeded",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000136",
+    "timestamp": "2025-05-02T20:58:45.871768Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000137",
+    "timestamp": "2025-04-21T21:58:45.871771Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000138",
+    "timestamp": "2025-08-26T18:58:45.871774Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000139",
+    "timestamp": "2025-07-20T08:58:45.871777Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "open"
+  },
+  {
+    "event_id": "C000140",
+    "timestamp": "2025-04-19T11:58:45.871780Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000141",
+    "timestamp": "2025-08-23T17:58:45.871783Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000142",
+    "timestamp": "2025-05-03T11:58:45.871786Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000143",
+    "timestamp": "2025-07-12T02:58:45.871789Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000144",
+    "timestamp": "2025-04-15T01:58:45.871792Z",
+    "severity": "high",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000145",
+    "timestamp": "2025-04-11T11:58:45.871795Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000146",
+    "timestamp": "2025-07-09T01:58:45.871798Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000147",
+    "timestamp": "2025-08-15T15:58:45.871801Z",
+    "severity": "high",
+    "category": "kyc",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000148",
+    "timestamp": "2025-06-24T16:58:45.871804Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000149",
+    "timestamp": "2025-07-26T07:58:45.871808Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000150",
+    "timestamp": "2025-06-05T13:58:45.871811Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000151",
+    "timestamp": "2025-06-21T11:58:45.871814Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000152",
+    "timestamp": "2025-04-02T18:58:45.871816Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000153",
+    "timestamp": "2025-03-30T08:58:45.871819Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000154",
+    "timestamp": "2025-08-03T10:58:45.871822Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000155",
+    "timestamp": "2025-08-30T18:58:45.871825Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000156",
+    "timestamp": "2025-05-25T15:58:45.871828Z",
+    "severity": "high",
+    "category": "trade_surveillance",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000157",
+    "timestamp": "2025-05-11T11:58:45.871831Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000158",
+    "timestamp": "2025-06-16T10:58:45.871834Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000159",
+    "timestamp": "2025-07-28T14:58:45.871837Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Trade threshold exceeded",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000160",
+    "timestamp": "2025-04-02T23:58:45.871840Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000161",
+    "timestamp": "2025-06-05T03:58:45.871843Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "open"
+  },
+  {
+    "event_id": "C000162",
+    "timestamp": "2025-07-14T19:58:45.871846Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000163",
+    "timestamp": "2025-07-26T23:58:45.871849Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000164",
+    "timestamp": "2025-03-31T11:58:45.871852Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000165",
+    "timestamp": "2025-06-30T03:58:45.871855Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000166",
+    "timestamp": "2025-05-22T22:58:45.871858Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000167",
+    "timestamp": "2025-04-19T04:58:45.871861Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000168",
+    "timestamp": "2025-06-19T11:58:45.871864Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000169",
+    "timestamp": "2025-03-28T23:58:45.871867Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000170",
+    "timestamp": "2025-07-09T03:58:45.871870Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000171",
+    "timestamp": "2025-06-26T01:58:45.871873Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000172",
+    "timestamp": "2025-06-16T09:58:45.871876Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000173",
+    "timestamp": "2025-04-03T03:58:45.871879Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000174",
+    "timestamp": "2025-06-19T00:58:45.871882Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000175",
+    "timestamp": "2025-07-14T06:58:45.871885Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000176",
+    "timestamp": "2025-09-06T11:58:45.871888Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000177",
+    "timestamp": "2025-08-21T13:58:45.871892Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000178",
+    "timestamp": "2025-04-21T18:58:45.871895Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000179",
+    "timestamp": "2025-03-21T16:58:45.871898Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000180",
+    "timestamp": "2025-09-11T20:58:45.871901Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000181",
+    "timestamp": "2025-04-30T11:58:45.871904Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000182",
+    "timestamp": "2025-07-28T01:58:45.871907Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000183",
+    "timestamp": "2025-04-26T08:58:45.871910Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000184",
+    "timestamp": "2025-07-12T05:58:45.871913Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000185",
+    "timestamp": "2025-03-27T12:58:45.871916Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000186",
+    "timestamp": "2025-05-03T20:58:45.871919Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000187",
+    "timestamp": "2025-05-23T05:58:45.871922Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Trade threshold exceeded",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000188",
+    "timestamp": "2025-06-21T17:58:45.871925Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000189",
+    "timestamp": "2025-07-06T10:58:45.871928Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000190",
+    "timestamp": "2025-05-13T21:58:45.871931Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Order outside risk limits",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000191",
+    "timestamp": "2025-03-24T06:58:45.871934Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000192",
+    "timestamp": "2025-08-07T14:58:45.871937Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000193",
+    "timestamp": "2025-03-25T08:58:45.871940Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000194",
+    "timestamp": "2025-03-26T13:58:45.871943Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000195",
+    "timestamp": "2025-09-13T07:58:45.871946Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000196",
+    "timestamp": "2025-08-20T09:58:45.871949Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000197",
+    "timestamp": "2025-08-01T07:58:45.871952Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000198",
+    "timestamp": "2025-09-15T09:58:45.871956Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Trade threshold exceeded",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000199",
+    "timestamp": "2025-05-16T21:58:45.871958Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000200",
+    "timestamp": "2025-06-23T16:58:45.871961Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Trade threshold exceeded",
+    "status": "open"
+  },
+  {
+    "event_id": "C000201",
+    "timestamp": "2025-09-03T02:58:45.871965Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000202",
+    "timestamp": "2025-06-10T19:58:45.871968Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000203",
+    "timestamp": "2025-07-11T03:58:45.871970Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000204",
+    "timestamp": "2025-08-06T12:58:45.871973Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Order outside risk limits",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000205",
+    "timestamp": "2025-04-20T14:58:45.871976Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000206",
+    "timestamp": "2025-08-26T10:58:45.871980Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Order outside risk limits",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000207",
+    "timestamp": "2025-05-15T08:58:45.871983Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000208",
+    "timestamp": "2025-08-20T05:58:45.871986Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000209",
+    "timestamp": "2025-06-11T22:58:45.871989Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000210",
+    "timestamp": "2025-06-11T06:58:45.871991Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000211",
+    "timestamp": "2025-05-06T15:58:45.871994Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000212",
+    "timestamp": "2025-05-27T10:58:45.871997Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000213",
+    "timestamp": "2025-04-03T23:58:45.872000Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000214",
+    "timestamp": "2025-07-20T16:58:45.872004Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000215",
+    "timestamp": "2025-06-04T20:58:45.872007Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000216",
+    "timestamp": "2025-06-17T08:58:45.872010Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000217",
+    "timestamp": "2025-04-26T00:58:45.872013Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000218",
+    "timestamp": "2025-07-28T13:58:45.872017Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000219",
+    "timestamp": "2025-08-21T20:58:45.872019Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000220",
+    "timestamp": "2025-08-20T12:58:45.872022Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Order outside risk limits",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000221",
+    "timestamp": "2025-07-07T22:58:45.872025Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000222",
+    "timestamp": "2025-07-28T20:58:45.872029Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000223",
+    "timestamp": "2025-04-06T09:58:45.872032Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000224",
+    "timestamp": "2025-06-25T02:58:45.872035Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000225",
+    "timestamp": "2025-04-04T00:58:45.872038Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000226",
+    "timestamp": "2025-04-01T17:58:45.872040Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000227",
+    "timestamp": "2025-04-22T00:58:45.872044Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000228",
+    "timestamp": "2025-08-18T14:58:45.872047Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000229",
+    "timestamp": "2025-06-04T04:58:45.872050Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000230",
+    "timestamp": "2025-08-24T16:58:45.872053Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000231",
+    "timestamp": "2025-05-01T07:58:45.872056Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000232",
+    "timestamp": "2025-06-06T07:58:45.872059Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000233",
+    "timestamp": "2025-09-15T22:58:45.872062Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000234",
+    "timestamp": "2025-04-28T00:58:45.872065Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000235",
+    "timestamp": "2025-07-03T04:58:45.872068Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000236",
+    "timestamp": "2025-08-11T11:58:45.872071Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000237",
+    "timestamp": "2025-05-23T23:58:45.872074Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "open"
+  },
+  {
+    "event_id": "C000238",
+    "timestamp": "2025-04-30T22:58:45.872077Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000239",
+    "timestamp": "2025-04-16T05:58:45.872080Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000240",
+    "timestamp": "2025-08-24T17:58:45.872083Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000241",
+    "timestamp": "2025-05-10T19:58:45.872085Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000242",
+    "timestamp": "2025-04-02T15:58:45.872088Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000243",
+    "timestamp": "2025-04-26T06:58:45.872091Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000244",
+    "timestamp": "2025-05-28T01:58:45.872094Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000245",
+    "timestamp": "2025-04-20T13:58:45.872097Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000246",
+    "timestamp": "2025-04-03T22:58:45.872100Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000247",
+    "timestamp": "2025-08-20T01:58:45.872103Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000248",
+    "timestamp": "2025-05-05T18:58:45.872106Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000249",
+    "timestamp": "2025-08-02T08:58:45.872109Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000250",
+    "timestamp": "2025-06-10T14:58:45.872112Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000251",
+    "timestamp": "2025-06-06T16:58:45.872115Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000252",
+    "timestamp": "2025-03-22T18:58:45.872118Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000253",
+    "timestamp": "2025-08-13T22:58:45.872121Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000254",
+    "timestamp": "2025-07-18T21:58:45.872124Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000255",
+    "timestamp": "2025-05-15T00:58:45.872128Z",
+    "severity": "high",
+    "category": "kyc",
+    "message": "Trade threshold exceeded",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000256",
+    "timestamp": "2025-07-03T23:58:45.872131Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000257",
+    "timestamp": "2025-07-02T19:58:45.872134Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000258",
+    "timestamp": "2025-08-01T03:58:45.872137Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000259",
+    "timestamp": "2025-08-07T05:58:45.872140Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000260",
+    "timestamp": "2025-06-08T20:58:45.872143Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000261",
+    "timestamp": "2025-09-09T21:58:45.872145Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000262",
+    "timestamp": "2025-05-16T02:58:45.872148Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000263",
+    "timestamp": "2025-09-08T23:58:45.872151Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000264",
+    "timestamp": "2025-08-30T17:58:45.872154Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000265",
+    "timestamp": "2025-05-18T07:58:45.872157Z",
+    "severity": "high",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000266",
+    "timestamp": "2025-05-30T14:58:45.872160Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000267",
+    "timestamp": "2025-07-15T04:58:45.872163Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000268",
+    "timestamp": "2025-04-24T09:58:45.872166Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000269",
+    "timestamp": "2025-09-02T18:58:45.872169Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Trade threshold exceeded",
+    "status": "open"
+  },
+  {
+    "event_id": "C000270",
+    "timestamp": "2025-05-31T17:58:45.872172Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000271",
+    "timestamp": "2025-07-08T06:58:45.872175Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000272",
+    "timestamp": "2025-07-16T18:58:45.872178Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "open"
+  },
+  {
+    "event_id": "C000273",
+    "timestamp": "2025-06-21T21:58:45.872181Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000274",
+    "timestamp": "2025-07-25T08:58:45.872184Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000275",
+    "timestamp": "2025-06-30T13:58:45.872187Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000276",
+    "timestamp": "2025-07-03T20:58:45.872190Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000277",
+    "timestamp": "2025-04-28T22:58:45.872193Z",
+    "severity": "high",
+    "category": "policy",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000278",
+    "timestamp": "2025-05-21T13:58:45.872196Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000279",
+    "timestamp": "2025-05-06T01:58:45.872199Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000280",
+    "timestamp": "2025-04-20T19:58:45.872202Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000281",
+    "timestamp": "2025-08-08T04:58:45.872205Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000282",
+    "timestamp": "2025-08-05T01:58:45.872208Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000283",
+    "timestamp": "2025-03-20T22:58:45.872211Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000284",
+    "timestamp": "2025-04-18T02:58:45.872214Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000285",
+    "timestamp": "2025-03-23T01:58:45.872217Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000286",
+    "timestamp": "2025-05-23T20:58:45.872220Z",
+    "severity": "high",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000287",
+    "timestamp": "2025-06-14T10:58:45.872223Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000288",
+    "timestamp": "2025-04-30T07:58:45.872226Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000289",
+    "timestamp": "2025-03-26T20:58:45.872229Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000290",
+    "timestamp": "2025-08-12T22:58:45.872232Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000291",
+    "timestamp": "2025-05-14T15:58:45.872234Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Order outside risk limits",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000292",
+    "timestamp": "2025-05-16T17:58:45.872237Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Order outside risk limits",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000293",
+    "timestamp": "2025-04-28T01:58:45.872241Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000294",
+    "timestamp": "2025-03-25T18:58:45.872243Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000295",
+    "timestamp": "2025-06-30T03:58:45.872246Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000296",
+    "timestamp": "2025-06-07T12:58:45.872249Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000297",
+    "timestamp": "2025-08-13T04:58:45.872252Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Order outside risk limits",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000298",
+    "timestamp": "2025-06-04T13:58:45.872255Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000299",
+    "timestamp": "2025-04-08T12:58:45.872258Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000300",
+    "timestamp": "2025-07-16T05:58:45.872261Z",
+    "severity": "high",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000301",
+    "timestamp": "2025-08-28T12:58:45.872264Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000302",
+    "timestamp": "2025-04-06T17:58:45.872267Z",
+    "severity": "high",
+    "category": "kyc",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000303",
+    "timestamp": "2025-06-24T21:58:45.872270Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000304",
+    "timestamp": "2025-04-03T22:58:45.872273Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000305",
+    "timestamp": "2025-07-02T10:58:45.872276Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000306",
+    "timestamp": "2025-06-26T01:58:45.872279Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000307",
+    "timestamp": "2025-09-14T03:58:45.872282Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000308",
+    "timestamp": "2025-09-01T22:58:45.872285Z",
+    "severity": "high",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000309",
+    "timestamp": "2025-09-12T14:58:45.872288Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Trade threshold exceeded",
+    "status": "open"
+  },
+  {
+    "event_id": "C000310",
+    "timestamp": "2025-03-28T20:58:45.872291Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000311",
+    "timestamp": "2025-05-27T10:58:45.872294Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000312",
+    "timestamp": "2025-05-14T21:58:45.872297Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000313",
+    "timestamp": "2025-09-02T10:58:45.872300Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000314",
+    "timestamp": "2025-04-22T08:58:45.872303Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000315",
+    "timestamp": "2025-04-22T12:58:45.872306Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000316",
+    "timestamp": "2025-05-08T19:58:45.872309Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000317",
+    "timestamp": "2025-04-15T11:58:45.872312Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000318",
+    "timestamp": "2025-09-11T18:58:45.872315Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000319",
+    "timestamp": "2025-09-01T22:58:45.872318Z",
+    "severity": "high",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000320",
+    "timestamp": "2025-05-26T04:58:45.872321Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000321",
+    "timestamp": "2025-08-30T05:58:45.872324Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000322",
+    "timestamp": "2025-04-11T09:58:45.872327Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000323",
+    "timestamp": "2025-06-24T21:58:45.872330Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000324",
+    "timestamp": "2025-08-11T14:58:45.872333Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000325",
+    "timestamp": "2025-08-16T10:58:45.872336Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000326",
+    "timestamp": "2025-06-17T22:58:45.872339Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000327",
+    "timestamp": "2025-07-29T11:58:45.872342Z",
+    "severity": "high",
+    "category": "policy",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000328",
+    "timestamp": "2025-05-11T22:58:45.872345Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Trade threshold exceeded",
+    "status": "open"
+  },
+  {
+    "event_id": "C000329",
+    "timestamp": "2025-05-17T20:58:45.872348Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000330",
+    "timestamp": "2025-09-03T23:58:45.872351Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000331",
+    "timestamp": "2025-07-20T22:58:45.872354Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000332",
+    "timestamp": "2025-06-03T14:58:45.872357Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000333",
+    "timestamp": "2025-09-03T13:58:45.872360Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000334",
+    "timestamp": "2025-06-15T17:58:45.872363Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000335",
+    "timestamp": "2025-04-09T08:58:45.872365Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000336",
+    "timestamp": "2025-08-14T23:58:45.872369Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000337",
+    "timestamp": "2025-04-16T09:58:45.872372Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000338",
+    "timestamp": "2025-05-22T03:58:45.872374Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000339",
+    "timestamp": "2025-08-29T02:58:45.872377Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000340",
+    "timestamp": "2025-03-29T05:58:45.872380Z",
+    "severity": "high",
+    "category": "policy",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000341",
+    "timestamp": "2025-03-20T22:58:45.872383Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000342",
+    "timestamp": "2025-09-10T14:58:45.872386Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000343",
+    "timestamp": "2025-04-14T05:58:45.872389Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000344",
+    "timestamp": "2025-06-27T06:58:45.872392Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000345",
+    "timestamp": "2025-07-09T02:58:45.872395Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000346",
+    "timestamp": "2025-05-14T21:58:45.872399Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000347",
+    "timestamp": "2025-04-05T05:58:45.872402Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000348",
+    "timestamp": "2025-05-31T19:58:45.872405Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000349",
+    "timestamp": "2025-05-10T08:58:45.872408Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000350",
+    "timestamp": "2025-03-28T23:58:45.872411Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000351",
+    "timestamp": "2025-07-13T17:58:45.872414Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000352",
+    "timestamp": "2025-08-08T23:58:45.872417Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000353",
+    "timestamp": "2025-07-08T22:58:45.872428Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000354",
+    "timestamp": "2025-07-21T13:58:45.872432Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000355",
+    "timestamp": "2025-04-22T16:58:45.872435Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000356",
+    "timestamp": "2025-04-22T00:58:45.872438Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000357",
+    "timestamp": "2025-08-31T21:58:45.872441Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000358",
+    "timestamp": "2025-08-25T22:58:45.872444Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000359",
+    "timestamp": "2025-04-02T00:58:45.872447Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000360",
+    "timestamp": "2025-08-05T08:58:45.872450Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000361",
+    "timestamp": "2025-06-25T23:58:45.872453Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Trade threshold exceeded",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000362",
+    "timestamp": "2025-07-29T06:58:45.872456Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000363",
+    "timestamp": "2025-04-20T03:58:45.872459Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Trade threshold exceeded",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000364",
+    "timestamp": "2025-08-12T18:58:45.872462Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000365",
+    "timestamp": "2025-09-03T02:58:45.872465Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000366",
+    "timestamp": "2025-04-18T08:58:45.872468Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000367",
+    "timestamp": "2025-08-04T07:58:45.872471Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000368",
+    "timestamp": "2025-04-22T00:58:45.872474Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Trade threshold exceeded",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000369",
+    "timestamp": "2025-04-05T19:58:45.872477Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000370",
+    "timestamp": "2025-04-27T07:58:45.872480Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000371",
+    "timestamp": "2025-04-02T02:58:45.872483Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000372",
+    "timestamp": "2025-07-12T19:58:45.872486Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000373",
+    "timestamp": "2025-08-19T03:58:45.872489Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000374",
+    "timestamp": "2025-04-09T07:58:45.872492Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000375",
+    "timestamp": "2025-06-11T22:58:45.872495Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000376",
+    "timestamp": "2025-04-18T13:58:45.872498Z",
+    "severity": "high",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "open"
+  },
+  {
+    "event_id": "C000377",
+    "timestamp": "2025-08-16T15:58:45.872501Z",
+    "severity": "high",
+    "category": "trade_surveillance",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000378",
+    "timestamp": "2025-09-05T11:58:45.872504Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000379",
+    "timestamp": "2025-07-30T21:58:45.872507Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Order outside risk limits",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000380",
+    "timestamp": "2025-03-21T05:58:45.872510Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Order outside risk limits",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000381",
+    "timestamp": "2025-04-22T00:58:45.872513Z",
+    "severity": "medium",
+    "category": "kyc",
+    "message": "Missing KYC document",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000382",
+    "timestamp": "2025-08-26T21:58:45.872516Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000383",
+    "timestamp": "2025-06-14T10:58:45.872518Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "open"
+  },
+  {
+    "event_id": "C000384",
+    "timestamp": "2025-04-21T23:58:45.872521Z",
+    "severity": "low",
+    "category": "kyc",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000385",
+    "timestamp": "2025-06-28T15:58:45.872524Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Policy exception detected",
+    "status": "open"
+  },
+  {
+    "event_id": "C000386",
+    "timestamp": "2025-08-03T16:58:45.872527Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000387",
+    "timestamp": "2025-06-29T18:58:45.872530Z",
+    "severity": "high",
+    "category": "kyc",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000388",
+    "timestamp": "2025-05-19T19:58:45.872533Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000389",
+    "timestamp": "2025-07-25T17:58:45.872536Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000390",
+    "timestamp": "2025-08-30T10:58:45.872539Z",
+    "severity": "high",
+    "category": "limits",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000391",
+    "timestamp": "2025-05-18T16:58:45.872542Z",
+    "severity": "low",
+    "category": "policy",
+    "message": "Order outside risk limits",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000392",
+    "timestamp": "2025-06-20T14:58:45.872545Z",
+    "severity": "low",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000393",
+    "timestamp": "2025-08-23T02:58:45.872548Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Policy exception detected",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000394",
+    "timestamp": "2025-07-11T05:58:45.872551Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Policy exception detected",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000395",
+    "timestamp": "2025-04-19T21:58:45.872554Z",
+    "severity": "low",
+    "category": "trade_surveillance",
+    "message": "Missing KYC document",
+    "status": "closed"
+  },
+  {
+    "event_id": "C000396",
+    "timestamp": "2025-09-07T07:58:45.872557Z",
+    "severity": "medium",
+    "category": "policy",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000397",
+    "timestamp": "2025-07-24T21:58:45.872560Z",
+    "severity": "medium",
+    "category": "trade_surveillance",
+    "message": "Trade threshold exceeded",
+    "status": "investigating"
+  },
+  {
+    "event_id": "C000398",
+    "timestamp": "2025-09-02T22:58:45.872563Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Order outside risk limits",
+    "status": "open"
+  },
+  {
+    "event_id": "C000399",
+    "timestamp": "2025-08-11T08:58:45.872566Z",
+    "severity": "medium",
+    "category": "limits",
+    "message": "Policy exception detected",
+    "status": "open"
+  }
+]

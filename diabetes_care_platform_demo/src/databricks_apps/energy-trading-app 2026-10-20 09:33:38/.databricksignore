@@ -1,0 +1,40 @@
+# Node modules
+node_modules/
+frontend/node_modules/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments  
+.venv/
+venv/
+backend/venv/
+
+# Environment files
+.env
+.env.*
+backend/.env
+
+# OS files
+.DS_Store
+.git/
+
+# Logs
+*.log
+
+# IDE files
+.vscode/
+.idea/
+
+# Build artifacts (we want to include frontend/dist/)
+# But exclude these temporary build files
+frontend/node_modules/.vite/
+frontend/.vite/
+frontend/tsconfig.tsbuildinfo
+
+# Documentation (optional)
+# *.md
+# instructions/

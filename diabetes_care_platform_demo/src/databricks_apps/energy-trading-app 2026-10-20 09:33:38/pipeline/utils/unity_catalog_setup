@@ -1,0 +1,359 @@
+# Databricks notebook source
+# MAGIC %md
+# MAGIC # Unity Catalog Setup for TotalEnergies Energy Market Intelligence
+# MAGIC 
+# MAGIC This notebook sets up the Unity Catalog structure for the TotalEnergies energy market intelligence platform.
+# MAGIC 
+# MAGIC ## Setup Components
+# MAGIC - Create Unity Catalog
+# MAGIC - Create Schema for energy market intelligence
+# MAGIC - Create Volumes for data storage
+# MAGIC - Set up AWS S3 external connections
+# MAGIC - Configure permissions and governance
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Unity Catalog Configuration
+
+# COMMAND ----------
+
+import os
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import *
+
+# Unity Catalog configuration
+catalog_name = "totalenergies"
+schema_name = "energy_market_intelligence"
+volume_name = "market_data"
+
+# AWS S3 configuration
+s3_bucket = "totalenergies-energy-data"
+aws_region = "us-east-1"
+
+print(f"Unity Catalog Setup Configuration:")
+print(f"  Catalog: {catalog_name}")
+print(f"  Schema: {schema_name}")
+print(f"  Volume: {volume_name}")
+print(f"  S3 Bucket: {s3_bucket}")
+print(f"  AWS Region: {aws_region}")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Create Unity Catalog Structure
+
+# COMMAND ----------
+
+# Create catalog
+try:
+    spark.sql(f"""
+        CREATE CATALOG IF NOT EXISTS {catalog_name}
+        COMMENT 'TotalEnergies Energy Market Intelligence Data Catalog'
+    """)
+    print(f"✅ Catalog '{catalog_name}' created/verified")
+except Exception as e:
+    print(f"❌ Error creating catalog: {e}")
+
+# Set current catalog
+spark.sql(f"USE CATALOG {catalog_name}")
+
+# Create schema
+try:
+    spark.sql(f"""
+        CREATE SCHEMA IF NOT EXISTS {catalog_name}.{schema_name}
+        COMMENT 'Schema for energy market data, analytics, and ML models'
+    """)
+    print(f"✅ Schema '{catalog_name}.{schema_name}' created/verified")
+except Exception as e:
+    print(f"❌ Error creating schema: {e}")
+
+# Set current schema
+spark.sql(f"USE SCHEMA {schema_name}")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Create Volumes for Data Storage
+
+# COMMAND ----------
+
+# Create main data volume
+try:
+    spark.sql(f"""
+        CREATE VOLUME IF NOT EXISTS {catalog_name}.{schema_name}.{volume_name}
+        COMMENT 'Main volume for energy market data storage including raw, processed, and model artifacts'
+    """)
+    print(f"✅ Volume '{catalog_name}.{schema_name}.{volume_name}' created/verified")
+except Exception as e:
+    print(f"❌ Error creating volume: {e}")
+
+# Create additional volumes for specific use cases
+volumes_config = [
+    ("demo_data", "Volume for synthetic demo data"),
+    ("ml_models", "Volume for ML model artifacts and experiments"),
+    ("logs", "Volume for application and pipeline logs"),
+    ("external_feeds", "Volume for external data feeds and API responses")
+]
+
+for vol_name, description in volumes_config:
+    try:
+        spark.sql(f"""
+            CREATE VOLUME IF NOT EXISTS {catalog_name}.{schema_name}.{vol_name}
+            COMMENT '{description}'
+        """)
+        print(f"✅ Volume '{catalog_name}.{schema_name}.{vol_name}' created/verified")
+    except Exception as e:
+        print(f"❌ Error creating volume {vol_name}: {e}")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Create Directory Structure in Volumes
+
+# COMMAND ----------
+
+# Create directory structure in main volume
+volume_base_path = f"/Volumes/{catalog_name}/{schema_name}/{volume_name}"
+
+directories = [
+    "raw/market_prices",
+    "raw/arbitrage_opportunities", 
+    "raw/communications",
+    "raw/trading_positions",
+    "processed/silver",
+    "processed/gold",
+    "checkpoints/streaming",
+    "models/arbitrage_detection",
+    "models/price_forecasting",
+    "models/sentiment_analysis",
+    "models/anomaly_detection"
+]
+
+print(f"Creating directory structure in volume: {volume_base_path}")
+
+for directory in directories:
+    full_path = f"{volume_base_path}/{directory}"
+    try:
+        # Create directory by writing a placeholder file and then removing it
+        dbutils.fs.mkdirs(full_path)
+        print(f"✅ Created directory: {directory}")
+    except Exception as e:
+        print(f"❌ Error creating directory {directory}: {e}")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## AWS S3 External Location Setup
+
+# COMMAND ----------
+
+# Note: This requires appropriate IAM roles and policies to be set up
+# Create external location for S3 integration (if needed)
+
+external_location_name = f"{catalog_name}_s3_location"
+s3_path = f"s3://{s3_bucket}/"
+
+try:
+    spark.sql(f"""
+        CREATE EXTERNAL LOCATION IF NOT EXISTS {external_location_name}
+        URL '{s3_path}'
+        WITH (CREDENTIAL `databricks-s3-credential`)
+        COMMENT 'External location for TotalEnergies S3 bucket'
+    """)
+    print(f"✅ External location '{external_location_name}' created/verified")
+except Exception as e:
+    print(f"❌ Error creating external location (may require admin privileges): {e}")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Grant Permissions and Set Up Governance
+
+# COMMAND ----------
+
+# Grant permissions to users and groups
+# Note: Adjust these based on your organization's user/group structure
+
+permissions_config = [
+    ("account users", "USE CATALOG", catalog_name),
+    ("account users", "USE SCHEMA", f"{catalog_name}.{schema_name}"),
+    ("account users", "READ VOLUME", f"{catalog_name}.{schema_name}.{volume_name}"),
+    ("account users", "SELECT", f"{catalog_name}.{schema_name}.*")
+]
+
+print("Setting up permissions (may require admin privileges):")
+
+for principal, privilege, object_name in permissions_config:
+    try:
+        spark.sql(f"""
+            GRANT {privilege} ON {object_name} TO `{principal}`
+        """)
+        print(f"✅ Granted {privilege} on {object_name} to {principal}")
+    except Exception as e:
+        print(f"❌ Error granting {privilege} on {object_name} to {principal}: {e}")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Create Data Upload Helper Functions
+
+# COMMAND ----------
+
+def upload_demo_data_to_volume():
+    """Upload demo data from DBFS to Unity Catalog Volume"""
+    
+    source_path = "/FileStore/shared_uploads/totalenergies/demo_data/"
+    target_path = f"/Volumes/{catalog_name}/{schema_name}/demo_data/"
+    
+    try:
+        # List files in source
+        files = dbutils.fs.ls(source_path)
+        
+        for file_info in files:
+            if file_info.name.endswith('.csv'):
+                source_file = file_info.path
+                target_file = f"{target_path}{file_info.name}"
+                
+                # Copy file
+                dbutils.fs.cp(source_file, target_file)
+                print(f"✅ Uploaded {file_info.name} to volume")
+                
+    except Exception as e:
+        print(f"❌ Error uploading demo data: {e}")
+        print("Please ensure demo data is available in DBFS first")
+
+def create_sample_data_in_volume():
+    """Create sample data directly in volume for testing"""
+    
+    import pandas as pd
+    from datetime import datetime, timedelta
+    
+    # Create sample market data
+    sample_data = {
+        'timestamp': [datetime.now() - timedelta(hours=i) for i in range(24)],
+        'market': ['epex_spot'] * 24,
+        'price': [50 + i * 0.5 for i in range(24)],
+        'volume': [1000 + i * 10 for i in range(24)],
+        'currency': ['EUR'] * 24
+    }
+    
+    df = spark.createDataFrame(pd.DataFrame(sample_data))
+    
+    # Write to volume
+    sample_path = f"/Volumes/{catalog_name}/{schema_name}/demo_data/sample_market_data.parquet"
+    
+    try:
+        df.write.mode("overwrite").parquet(sample_path)
+        print(f"✅ Created sample data at {sample_path}")
+    except Exception as e:
+        print(f"❌ Error creating sample data: {e}")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Validation and Testing
+
+# COMMAND ----------
+
+def validate_unity_catalog_setup():
+    """Validate the Unity Catalog setup"""
+    
+    print("=== Unity Catalog Setup Validation ===")
+    
+    # Check catalog
+    try:
+        catalogs = spark.sql("SHOW CATALOGS").collect()
+        catalog_names = [row['catalog'] for row in catalogs]
+        
+        if catalog_name in catalog_names:
+            print(f"✅ Catalog '{catalog_name}' exists")
+        else:
+            print(f"❌ Catalog '{catalog_name}' not found")
+    except Exception as e:
+        print(f"❌ Error checking catalog: {e}")
+    
+    # Check schema
+    try:
+        schemas = spark.sql(f"SHOW SCHEMAS IN {catalog_name}").collect()
+        schema_names = [row['databaseName'] for row in schemas]
+        
+        if schema_name in schema_names:
+            print(f"✅ Schema '{schema_name}' exists")
+        else:
+            print(f"❌ Schema '{schema_name}' not found")
+    except Exception as e:
+        print(f"❌ Error checking schema: {e}")
+    
+    # Check volumes
+    try:
+        volumes = spark.sql(f"SHOW VOLUMES IN {catalog_name}.{schema_name}").collect()
+        volume_names = [row['volume_name'] for row in volumes]
+        
+        if volume_name in volume_names:
+            print(f"✅ Volume '{volume_name}' exists")
+        else:
+            print(f"❌ Volume '{volume_name}' not found")
+            
+        print(f"📁 Available volumes: {', '.join(volume_names)}")
+    except Exception as e:
+        print(f"❌ Error checking volumes: {e}")
+    
+    # Check volume accessibility
+    try:
+        volume_path = f"/Volumes/{catalog_name}/{schema_name}/{volume_name}"
+        contents = dbutils.fs.ls(volume_path)
+        print(f"✅ Volume '{volume_name}' is accessible")
+        print(f"📂 Volume contents: {len(contents)} items")
+    except Exception as e:
+        print(f"❌ Error accessing volume: {e}")
+
+# Run validation
+validate_unity_catalog_setup()
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Summary and Next Steps
+
+# COMMAND ----------
+
+print("=== Unity Catalog Setup Summary ===")
+print(f"\n✅ Unity Catalog Structure Created:")
+print(f"  📁 Catalog: {catalog_name}")
+print(f"  📁 Schema: {catalog_name}.{schema_name}")
+print(f"  📁 Main Volume: {catalog_name}.{schema_name}.{volume_name}")
+print(f"  📁 Additional Volumes: demo_data, ml_models, logs, external_feeds")
+
+print(f"\n📂 Volume Paths:")
+print(f"  Main Volume: /Volumes/{catalog_name}/{schema_name}/{volume_name}")
+print(f"  Demo Data: /Volumes/{catalog_name}/{schema_name}/demo_data")
+print(f"  ML Models: /Volumes/{catalog_name}/{schema_name}/ml_models")
+
+print(f"\n🔄 Next Steps:")
+print("  1. Upload demo data to volumes using: upload_demo_data_to_volume()")
+print("  2. Run data ingestion notebooks with Unity Catalog references")
+print("  3. Set up appropriate IAM roles for S3 access (if using external location)")
+print("  4. Configure user permissions based on your organization's needs")
+print("  5. Test data pipeline with Unity Catalog tables")
+
+print(f"\n📋 Configuration for Other Notebooks:")
+print(f"  catalog_name = '{catalog_name}'")
+print(f"  schema_name = '{schema_name}'")
+print(f"  volume_name = '{volume_name}'")
+print(f"  volume_base_path = '/Volumes/{catalog_name}/{schema_name}/{volume_name}'")
+
+print(f"\n✅ Unity Catalog setup completed!")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Optional: Upload Demo Data
+
+# COMMAND ----------
+
+# Uncomment and run to upload demo data to volume
+# upload_demo_data_to_volume()
+
+# Or create sample data for testing
+# create_sample_data_in_volume()

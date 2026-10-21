@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>DCP Data 360</title>
+
+  <link
+    rel="stylesheet"
+    href="/assets/app.css"
+  >
+</head>
+
+<body>
+
+<header class="topbar">
+
+  <div class="brand">
+    <b>DCP DATA 360</b>
+    <small>Diabetes Care Platform</small>
+  </div>
+
+  <div class="selectors">
+
+    <label>
+      <span>Patient</span>
+
+      <select id="patient">
+        <option value="">
+          All Patients
+        </option>
+      </select>
+    </label>
+
+    <label>
+      <span>City</span>
+
+      <select id="city">
+        <option value="">
+          All Cities
+        </option>
+      </select>
+    </label>
+
+  </div>
+
+  <div class="actions">
+
+    <span
+      id="apiStatus"
+      class="status"
+    >
+      Connecting
+    </span>
+
+    <button
+      id="info"
+      type="button"
+      aria-label="About DCP Data 360"
+    >
+      i
+    </button>
+
+    <button
+      id="theme"
+      type="button"
+      aria-label="Toggle theme"
+    >
+      ☀
+    </button>
+
+  </div>
+
+</header>
+
+
+<div class="layout">
+
+  <nav id="nav">
+
+    <button
+      type="button"
+      class="nav-item active"
+      data-view="home"
+    >
+      Overview
+    </button>
+
+    <button
+      type="button"
+      class="nav-item"
+      data-view="glucose"
+    >
+      Glucose
+    </button>
+
+    <button
+      type="button"
+      class="nav-item"
+      data-view="nutrition"
+    >
+      Nutrition
+    </button>
+
+    <button
+      type="button"
+      class="nav-item"
+      data-view="sources"
+    >
+      Source Health
+    </button>
+
+  </nav>
+
+
+  <main>
+
+    <div class="page-heading">
+
+      <div>
+        <h1 id="title">
+          Patient 360
+        </h1>
+
+        <p id="sub">
+          Governed glucose, residence and
+          nutrition context
+        </p>
+      </div>
+
+      <span class="environment">
+        DEV · SYNTHETIC
+      </span>
+
+    </div>
+
+
+    <section class="kpis">
+
+      <article>
+        <small>Patients</small>
+
+        <b id="patientCount">
+          –
+        </b>
+      </article>
+
+      <article>
+        <small>Cities</small>
+
+        <b id="cityCount">
+          –
+        </b>
+      </article>
+
+      <article>
+        <small>Glucose readings</small>
+
+        <b id="glucoseCount">
+          –
+        </b>
+      </article>
+
+      <article>
+        <small>Nutrition groups</small>
+
+        <b id="nutritionCount">
+          –
+        </b>
+      </article>
+
+    </section>
+
+
+    <section class="grid">
+
+      <article class="panel">
+
+        <div class="panel-header">
+
+          <div>
+            <h2>
+              Glucose timeline
+            </h2>
+
+            <p>
+              Governed patient glucose context
+            </p>
+          </div>
+
+        </div>
+
+        <div
+          id="glucoseChart"
+          class="chart"
+        >
+          Select a patient to load glucose data.
+        </div>
+
+      </article>
+
+
+      <article class="panel">
+
+        <h2>
+          Patient context
+        </h2>
+
+        <div
+          id="content"
+          class="content"
+          aria-live="polite"
+        >
+          Select a patient to view residence,
+          glucose and nutrition context.
+        </div>
+
+      </article>
+
+    </section>
+
+
+    <section class="panel source-panel">
+
+      <div class="panel-header">
+
+        <div>
+          <h2>
+            Source health
+          </h2>
+
+          <p>
+            Bronze ingestion health exposed
+            through the governed Serving layer
+          </p>
+        </div>
+
+        <button
+          id="refresh"
+          type="button"
+          class="secondary"
+        >
+          Refresh
+        </button>
+
+      </div>
+
+      <div
+        id="sourceHealth"
+        class="source-health"
+        aria-live="polite"
+      >
+        Loading source health…
+      </div>
+
+    </section>
+
+
+    <p class="notice">
+      DEV data is synthetic.
+      Self-reported nutrition is not clinically verified.
+      No autonomous clinical decisions.
+    </p>
+
+  </main>
+
+</div>
+
+
+<dialog id="help">
+
+  <h2>
+    About DCP Data 360
+  </h2>
+
+  <p>
+    DCP Data 360 combines governed glucose,
+    residence and self-reported nutrition context
+    through Databricks Serving views.
+  </p>
+
+  <p>
+    Development data is synthetic.
+    This application does not diagnose,
+    prescribe, change therapy or infer causality.
+  </p>
+
+  <button
+    id="closeHelp"
+    type="button"
+  >
+    Close
+  </button>
+
+</dialog>
+
+
+<script src="/assets/app.js"></script>
+
+</body>
+</html>

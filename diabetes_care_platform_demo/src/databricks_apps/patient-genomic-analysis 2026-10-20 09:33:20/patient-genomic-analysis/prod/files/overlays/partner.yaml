@@ -1,0 +1,61 @@
+host: https://dbc-b964587f-dd18.cloud.databricks.com
+name: patient-genomic-analysis
+root_path: /Workspace/Shared/.bundles/patient-genomic-analysis/prod
+variables:
+  default_warehouse:
+    default: 11901928b04a6ab4
+    description: Default warehouse
+resources:
+  catalogs:
+    # If you are not able to create a catalog,
+    # change create to false for demos_genie and use the default one for all child resources;
+    # change all catalog_ref: demos_genie to catalog_ref: default.
+
+    demos_genie:
+      name: demos_genie
+      create: true
+  schemas:
+    genie_tcga_genetics:
+      name: genie_tcga_genetics
+      catalog_ref: demos_genie
+      create: true
+  apps: {}
+  dashboards:
+    '[demos]_HLS___The_Cancer_Genome_Atlas_(TCGA)_Data_Exploration':
+      display_name: '[Demos] Hls   The Cancer Genome Atlas (Tcga) Data Exploration'
+      file_path: src/dashboards/[demos] HLS - The Cancer Genome Atlas (TCGA) Data Exploration/dashboard.lvdash.json
+      warehouse_ref: default_warehouse
+      template_map:
+        catalog_1: demos_genie
+        schema_1: genie_tcga_genetics
+        table_1: demographics
+        table_2: diagnoses
+        table_3: expression_profiles_umap
+      name: '[demos] HLS - The Cancer Genome Atlas (TCGA) Data Exploration'
+  tables:
+    table_one:
+      name: demographics
+      catalog_ref: demos_genie
+      schema_ref: genie_tcga_genetics
+      comment: Table created by bundle
+      create: true
+      data_map: []
+    table_two:
+      name: diagnoses
+      catalog_ref: demos_genie
+      schema_ref: genie_tcga_genetics
+      comment: Table created by bundle
+      create: true
+      data_map: []
+    table_three:
+      name: expression_profiles_umap
+      catalog_ref: demos_genie
+      schema_ref: genie_tcga_genetics
+      comment: Table created by bundle
+      create: true
+      data_map: []
+  genie_rooms:
+    01ef1200144c1b5a84a7713d70e093:
+      id: 01ef1200144c1b5a84a7713d70e093b0
+      create: false
+

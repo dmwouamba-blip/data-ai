@@ -1,0 +1,7 @@
+{
+  "name": "patient_residence",
+  "version": "1.0.0",
+  "classification": "restricted",
+  "owner": "<DCP_DATA_PRODUCT_OWNER>",
+  "breakingChangePolicy": "major version required"
+}

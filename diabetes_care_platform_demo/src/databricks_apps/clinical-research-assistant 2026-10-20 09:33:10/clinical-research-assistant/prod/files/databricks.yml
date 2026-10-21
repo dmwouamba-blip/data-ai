@@ -1,0 +1,23 @@
+bundle:
+  name: clinical-research-assistant
+sync:
+  exclude:
+  - src/dashboards/**/*.lvdash.json
+targets:
+  partner:
+    mode: production
+    default: true
+    workspace:
+      host: https://dbc-b964587f-dd18.cloud.databricks.com
+      root_path: /Workspace/Shared/.bundles/clinical-research-assistant/prod
+variables:
+  default_warehouse:
+    default: 11901928b04a6ab4
+    description: Default warehouse
+resources:
+  apps:
+    clinical-research-assistant:
+      name: clinical-research-assistant
+      source_code_path: ./src/clinical-research-assistant
+      resources: []
+

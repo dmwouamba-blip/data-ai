@@ -1,0 +1,586 @@
+# Databricks notebook source
+# MAGIC %md
+# MAGIC # TotalEnergies Data Processing & Transformation Pipeline
+# MAGIC 
+# MAGIC This notebook processes raw market data from the bronze layer and creates:
+# MAGIC - **Silver Layer**: Cleaned, validated, and enriched market data
+# MAGIC - **Gold Layer**: Business-ready aggregated data for analytics
+# MAGIC - **Cross-Market Analytics**: Unified views across global trading hubs
+# MAGIC 
+# MAGIC ## Key Transformations
+# MAGIC - Data quality enhancement and validation
+# MAGIC - Currency normalization and conversion
+# MAGIC - Time zone standardization across global markets
+# MAGIC - Cross-market spread calculations
+# MAGIC - Real-time position and risk aggregation
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Setup and Configuration
+
+# COMMAND ----------
+
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import *
+from pyspark.sql.types import *
+from delta.tables import *
+import json
+from datetime import datetime, timedelta
+
+# Unity Catalog Configuration
+catalog_name = "totalenergies"
+schema_name = "energy_market_intelligence"
+volume_name = "market_data"
+
+# Volume paths
+volume_base_path = f"/Volumes/{catalog_name}/{schema_name}/{volume_name}"
+silver_data_path = f"{volume_base_path}/silver/"
+gold_data_path = f"{volume_base_path}/gold/"
+
+# Currency exchange rates (for demo - in production this would be from live API)
+fx_rates = {
+    "EUR_USD": 1.08,
+    "GBP_USD": 1.26,
+    "NOK_USD": 0.093,
+    "SEK_USD": 0.092,
+    "DKK_USD": 0.145
+}
+
+print("Configuration loaded successfully")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Silver Layer: Data Cleaning and Enrichment
+
+# COMMAND ----------
+
+def create_silver_market_data():
+    """
+    Transform bronze market data to silver layer with:
+    - Data quality improvements
+    - Currency normalization
+    - Time zone standardization
+    - Price validation and outlier detection
+    """
+    
+    markets = ["epex_spot", "ice_endex", "nord_pool", "pjm", "eex"]
+    
+    for market in markets:
+        print(f"Processing {market} data...")
+        
+        # Read bronze data
+        bronze_df = spark.table(f"{catalog_name}.{schema_name}.bronze_market_prices_{market}")
+        
+        # Data cleaning and validation
+        silver_df = (bronze_df
+            .filter(col("price").isNotNull() & (col("price") > 0))
+            .filter(col("volume").isNotNull() & (col("volume") > 0))
+            .filter(col("timestamp").isNotNull())
+            
+            # Currency normalization to USD
+            .withColumn("price_usd", 
+                when(col("currency") == "USD", col("price"))
+                .when(col("currency") == "EUR", col("price") * lit(fx_rates["EUR_USD"]))
+                .when(col("currency") == "GBP", col("price") * lit(fx_rates["GBP_USD"]))
+                .when(col("currency") == "NOK", col("price") * lit(fx_rates["NOK_USD"]))
+                .when(col("currency") == "SEK", col("price") * lit(fx_rates["SEK_USD"]))
+                .when(col("currency") == "DKK", col("price") * lit(fx_rates["DKK_USD"]))
+                .otherwise(col("price")))
+            
+            # Time zone standardization to UTC
+            .withColumn("timestamp_utc", 
+                when(col("market") == "pjm", 
+                     from_utc_timestamp(col("timestamp"), "America/New_York"))
+                .otherwise(from_utc_timestamp(col("timestamp"), "Europe/Berlin")))
+            
+            # Price validation and outlier detection
+            .withColumn("is_outlier", 
+                when(col("price") > (col("price") * 3), True)
+                .when(col("price") < (col("price") * 0.1), True)
+                .otherwise(False))
+            
+            # Add moving averages for trend analysis
+            .withColumn("price_ma_1h", 
+                avg("price").over(
+                    Window.partitionBy("market")
+                    .orderBy("timestamp")
+                    .rowsBetween(-4, 0)))  # 4 periods = 1 hour (15min intervals)
+            
+            .withColumn("price_ma_24h", 
+                avg("price").over(
+                    Window.partitionBy("market")
+                    .orderBy("timestamp")
+                    .rowsBetween(-96, 0)))  # 96 periods = 24 hours
+            
+            # Calculate price volatility
+            .withColumn("price_volatility", 
+                stddev("price").over(
+                    Window.partitionBy("market")
+                    .orderBy("timestamp")
+                    .rowsBetween(-96, 0)))
+            
+            # Trading session identification
+            .withColumn("trading_session",
+                when(hour(col("timestamp")).between(6, 18), "Day")
+                .when(hour(col("timestamp")).between(19, 22), "Evening")
+                .otherwise("Night"))
+            
+            # Data quality score enhancement
+            .withColumn("enhanced_quality_score",
+                when(col("is_outlier") == True, 0.3)
+                .when(col("price_volatility") > (col("price") * 0.5), 0.7)
+                .when(col("volume") < 10, 0.8)
+                .otherwise(1.0))
+        )
+        
+        # Create silver table
+        (silver_df
+         .write
+         .mode("overwrite")
+         .option("mergeSchema", "true")
+         .saveAsTable(f"{catalog_name}.{schema_name}.silver_market_prices_{market}"))
+        
+        record_count = silver_df.count()
+        quality_records = silver_df.filter(col("enhanced_quality_score") == 1.0).count()
+        print(f"  Created silver table: {record_count:,} records ({quality_records/record_count*100:.1f}% high quality)")
+
+create_silver_market_data()
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Cross-Market Analysis
+
+# COMMAND ----------
+
+def create_unified_market_view():
+    """
+    Create a unified view combining all markets for cross-market analysis
+    """
+    
+    markets = ["epex_spot", "ice_endex", "nord_pool", "pjm", "eex"]
+    market_dfs = []
+    
+    for market in markets:
+        df = (spark.table(f"{catalog_name}.{schema_name}.silver_market_prices_{market}")
+              .select("timestamp_utc", "market", "price", "price_usd", "volume", 
+                     "currency", "product", "trading_session", "enhanced_quality_score"))
+        market_dfs.append(df)
+    
+    # Union all market data
+    unified_df = market_dfs[0]
+    for df in market_dfs[1:]:
+        unified_df = unified_df.union(df)
+    
+    # Add cross-market analytics
+    cross_market_df = (unified_df
+        .withColumn("global_avg_price", 
+            avg("price_usd").over(
+                Window.partitionBy("trading_session")
+                .orderBy("timestamp_utc")
+                .rowsBetween(-10, 0)))
+        
+        .withColumn("market_premium", 
+            col("price_usd") - col("global_avg_price"))
+        
+        .withColumn("relative_volume", 
+            col("volume") / sum("volume").over(
+                Window.partitionBy("trading_session", "timestamp_utc")))
+        
+        # Market correlation indicators
+        .withColumn("price_rank", 
+            row_number().over(
+                Window.partitionBy("timestamp_utc")
+                .orderBy(desc("price_usd"))))
+    )
+    
+    # Save unified market view
+    (cross_market_df
+     .write
+     .mode("overwrite")
+     .saveAsTable(f"{catalog_name}.{schema_name}.silver_unified_markets"))
+    
+    print(f"Created unified market view: {cross_market_df.count():,} records")
+
+create_unified_market_view()
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Arbitrage Opportunity Enhancement
+
+# COMMAND ----------
+
+def enhance_arbitrage_opportunities():
+    """
+    Enhance arbitrage opportunities with real-time validation and risk assessment
+    """
+    
+    # Read bronze arbitrage data
+    arbitrage_df = spark.table(f"{catalog_name}.{schema_name}.bronze_arbitrage_opportunities")
+    
+    # Get current market prices for validation
+    current_prices = (spark.table(f"{catalog_name}.{schema_name}.silver_unified_markets")
+                     .groupBy("market")
+                     .agg(
+                         max("timestamp_utc").alias("latest_timestamp"),
+                         last("price_usd").alias("current_price"),
+                         avg("price_volatility").alias("avg_volatility")
+                     ))
+    
+    # Enhance arbitrage opportunities
+    enhanced_arbitrage = (arbitrage_df
+        # Add risk scoring
+        .withColumn("risk_score",
+            when(col("confidence_score") > 0.9, 1)  # Low risk
+            .when(col("confidence_score") > 0.7, 2)  # Medium risk
+            .otherwise(3))  # High risk
+        
+        # Calculate potential ROI
+        .withColumn("roi_percentage", 
+            (col("profit_potential") / (col("volume_potential") * 50)) * 100)  # Assuming 50 USD/MWh base
+        
+        # Add execution priority
+        .withColumn("execution_priority",
+            when((col("profit_potential") > 1000) & (col("confidence_score") > 0.8), "High")
+            .when((col("profit_potential") > 500) & (col("confidence_score") > 0.6), "Medium")
+            .otherwise("Low"))
+        
+        # Add market conditions assessment
+        .withColumn("market_conditions",
+            when(hour(col("timestamp")).between(8, 18), "Active Trading")
+            .when(hour(col("timestamp")).between(19, 23), "Evening")
+            .otherwise("Overnight"))
+        
+        # Calculate time decay factor
+        .withColumn("time_since_detection", 
+            (unix_timestamp(current_timestamp()) - unix_timestamp(col("timestamp"))) / 60)  # minutes
+        
+        .withColumn("opportunity_decay", 
+            greatest(lit(0), lit(1) - (col("time_since_detection") / 30)))  # Decay over 30 minutes
+        
+        # Final opportunity score
+        .withColumn("opportunity_score", 
+            col("confidence_score") * col("opportunity_decay") * 
+            when(col("execution_priority") == "High", 1.2)
+            .when(col("execution_priority") == "Medium", 1.0)
+            .otherwise(0.8))
+    )
+    
+    # Save enhanced arbitrage opportunities
+    (enhanced_arbitrage
+     .write
+     .mode("overwrite")
+     .saveAsTable(f"{catalog_name}.{schema_name}.silver_arbitrage_opportunities"))
+    
+    print(f"Enhanced arbitrage opportunities: {enhanced_arbitrage.count():,} records")
+
+enhance_arbitrage_opportunities()
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Communication Intelligence Processing
+
+# COMMAND ----------
+
+def process_communication_intelligence():
+    """
+    Process communications to extract market-relevant intelligence
+    """
+    
+    # Read bronze communications
+    comm_df = spark.table(f"{catalog_name}.{schema_name}.bronze_communications")
+    
+    # Enhanced communication processing
+    enhanced_comm = (comm_df
+        # Extract market mentions from message text
+        .withColumn("mentioned_markets", 
+            array_distinct(
+                filter(
+                    array(lit("epex"), lit("ice"), lit("nord"), lit("pjm"), lit("eex")),
+                    lambda x: lower(col("message")).contains(x)
+                )
+            ))
+        
+        # Extract urgency indicators
+        .withColumn("urgency_score",
+            when(lower(col("message")).contains("urgent"), 0.9)
+            .when(lower(col("message")).contains("alert"), 0.8)
+            .when(lower(col("message")).contains("breaking"), 0.85)
+            .when(col("priority") == "high", 0.7)
+            .otherwise(0.3))
+        
+        # Extract price movement indicators
+        .withColumn("price_direction_signal",
+            when(lower(col("message")).rlike("(spike|surge|jump|soar)"), "UP")
+            .when(lower(col("message")).rlike("(drop|fall|crash|plunge)"), "DOWN")
+            .when(lower(col("message")).rlike("(volatile|swing|fluctuat)"), "VOLATILE")
+            .otherwise("NEUTRAL"))
+        
+        # Time-based relevance
+        .withColumn("message_age_hours", 
+            (unix_timestamp(current_timestamp()) - unix_timestamp(col("timestamp"))) / 3600)
+        
+        .withColumn("relevance_score",
+            greatest(lit(0), lit(1) - (col("message_age_hours") / 24)))  # Decay over 24 hours
+        
+        # Overall intelligence score
+        .withColumn("intelligence_score",
+            col("urgency_score") * col("relevance_score") * 
+            when(size(col("mentioned_markets")) > 0, 1.2).otherwise(1.0))
+        
+        # Hub coordination indicator
+        .withColumn("requires_coordination",
+            when((col("intelligence_score") > 0.7) & (size(col("mentioned_markets")) > 1), True)
+            .otherwise(False))
+    )
+    
+    # Save enhanced communications
+    (enhanced_comm
+     .write
+     .mode("overwrite")
+     .saveAsTable(f"{catalog_name}.{schema_name}.silver_communications"))
+    
+    print(f"Processed communications: {enhanced_comm.count():,} records")
+
+process_communication_intelligence()
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Gold Layer: Business-Ready Analytics
+
+# COMMAND ----------
+
+def create_gold_layer_analytics():
+    """
+    Create gold layer tables for business analytics and reporting
+    """
+    
+    # 1. Hourly Market Summary
+    hourly_summary = (spark.table(f"{catalog_name}.{schema_name}.silver_unified_markets")
+        .groupBy("market", "trading_session", 
+                date_trunc("hour", "timestamp_utc").alias("hour"))
+        .agg(
+            avg("price_usd").alias("avg_price_usd"),
+            min("price_usd").alias("min_price_usd"),
+            max("price_usd").alias("max_price_usd"),
+            sum("volume").alias("total_volume"),
+            stddev("price_usd").alias("price_volatility"),
+            count("*").alias("data_points"),
+            avg("enhanced_quality_score").alias("avg_quality_score")
+        )
+        .withColumn("price_range", col("max_price_usd") - col("min_price_usd"))
+        .withColumn("volume_weighted_price", 
+            sum(col("avg_price_usd") * col("total_volume")).over(
+                Window.partitionBy("hour")) / 
+            sum("total_volume").over(Window.partitionBy("hour")))
+    )
+    
+    (hourly_summary
+     .write
+     .mode("overwrite")
+     .saveAsTable(f"{catalog_name}.{schema_name}.gold_hourly_market_summary"))
+    
+    # 2. Trading Hub Performance
+    comm_df = spark.table(f"{catalog_name}.{schema_name}.silver_communications").alias("comm")
+    arb_df = spark.table(f"{catalog_name}.{schema_name}.silver_arbitrage_opportunities").alias("arb")
+    
+    hub_performance = (
+        comm_df
+        .join(
+            arb_df,
+            date_trunc("hour", comm_df.timestamp) == date_trunc("hour", arb_df.timestamp),
+            how="left"
+        )
+        .groupBy("hub", date_trunc("day", comm_df.timestamp).alias("trading_date"))
+        .agg(
+            count("message_id").alias("total_communications"),
+            sum(when(col("urgency_score") > 0.7, 1).otherwise(0)).alias("urgent_communications"),
+            sum("profit_potential").alias("total_profit_potential"),
+            avg("opportunity_score").alias("avg_opportunity_score"),
+            countDistinct("market_buy", "market_sell").alias("unique_arbitrage_pairs")
+        )
+        .withColumn("communication_efficiency", 
+            col("urgent_communications") / col("total_communications"))
+        .withColumn("profit_per_communication", 
+            col("total_profit_potential") / col("total_communications"))
+    )
+    
+    (hub_performance
+     .write
+     .mode("overwrite")
+     .saveAsTable(f"{catalog_name}.{schema_name}.gold_trading_hub_performance"))
+    
+    # 3. Cross-Market Arbitrage Dashboard
+    arbitrage_dashboard = (
+        spark.table(f"{catalog_name}.{schema_name}.silver_arbitrage_opportunities")
+        .filter(col("opportunity_score") > 0.5)
+        .groupBy("market_buy", "market_sell", 
+                date_trunc("hour", col("timestamp")).alias("hour"))
+        .agg(
+            count("*").alias("opportunity_count"),
+            avg("spread").alias("avg_spread"),
+            sum("profit_potential").alias("total_profit_potential"),
+            avg("confidence_score").alias("avg_confidence"),
+            avg("opportunity_score").alias("avg_opportunity_score")
+        )
+        .withColumn("market_pair", concat(col("market_buy"), lit(" -> "), col("market_sell")))
+        .withColumn("profitability_rank", 
+            row_number().over(
+                Window.partitionBy("hour")
+                .orderBy(desc("total_profit_potential"))))
+    )
+    
+    (arbitrage_dashboard
+     .write
+     .mode("overwrite")
+     .saveAsTable(f"{catalog_name}.{schema_name}.gold_arbitrage_dashboard"))
+    
+    # 4. Market Intelligence Summary
+    intelligence_summary = (
+        spark.table(f"{catalog_name}.{schema_name}.silver_communications")
+        .filter(col("intelligence_score") > 0.5)
+        .groupBy(date_trunc("hour", col("timestamp")).alias("hour"))
+        .agg(
+            count("*").alias("total_intel_messages"),
+            avg("intelligence_score").alias("avg_intelligence_score"),
+            sum(when(col("price_direction_signal") == "UP", 1).otherwise(0)).alias("bullish_signals"),
+            sum(when(col("price_direction_signal") == "DOWN", 1).otherwise(0)).alias("bearish_signals"),
+            sum(when(col("requires_coordination"), 1).otherwise(0)).alias("coordination_required"),
+            collect_set("hub").alias("active_hubs"),
+            size(collect_set("mentioned_markets")).alias("markets_mentioned")
+        )
+        .withColumn("market_sentiment", 
+            when(col("bullish_signals") > col("bearish_signals"), "Bullish")
+            .when(col("bearish_signals") > col("bullish_signals"), "Bearish")
+            .otherwise("Neutral"))
+        .withColumn("coordination_ratio", 
+            col("coordination_required") / col("total_intel_messages"))
+    )
+    
+    (intelligence_summary
+     .write
+     .mode("overwrite")
+     .saveAsTable(f"{catalog_name}.{schema_name}.gold_market_intelligence_summary"))
+    
+    print("Gold layer analytics tables created successfully:")
+    print("  - gold_hourly_market_summary")
+    print("  - gold_trading_hub_performance") 
+    print("  - gold_arbitrage_dashboard")
+    print("  - gold_market_intelligence_summary")
+
+create_gold_layer_analytics()
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Data Quality and Validation Report
+
+# COMMAND ----------
+
+print("=== TotalEnergies Data Processing Quality Report ===")
+
+# Silver layer validation
+silver_tables = [
+    "silver_market_prices_epex_spot",
+    "silver_market_prices_ice_endex", 
+    "silver_market_prices_nord_pool",
+    "silver_market_prices_pjm",
+    "silver_market_prices_eex",
+    "silver_unified_markets",
+    "silver_arbitrage_opportunities",
+    "silver_communications"
+]
+
+print("\n📊 Silver Layer Data Quality:")
+for table in silver_tables:
+    try:
+        df = spark.table(f"energy_market_intelligence.{table}")
+        count = df.count()
+        
+        if "market_prices" in table:
+            quality_avg = df.agg(avg("enhanced_quality_score")).collect()[0][0]
+            print(f"  {table}: {count:,} records (avg quality: {quality_avg:.2f})")
+        else:
+            print(f"  {table}: {count:,} records")
+            
+    except Exception as e:
+        print(f"  {table}: Error - {str(e)}")
+
+# Gold layer validation
+gold_tables = [
+    "gold_hourly_market_summary",
+    "gold_trading_hub_performance",
+    "gold_arbitrage_dashboard", 
+    "gold_market_intelligence_summary"
+]
+
+print("\n🏆 Gold Layer Business Analytics:")
+for table in gold_tables:
+    try:
+        df = spark.table(f"energy_market_intelligence.{table}")
+        count = df.count()
+        print(f"  {table}: {count:,} records")
+    except Exception as e:
+        print(f"  {table}: Error - {str(e)}")
+
+# Cross-market analytics summary
+try:
+    unified_df = spark.table("energy_market_intelligence.silver_unified_markets")
+    
+    market_summary = (unified_df
+        .groupBy("market")
+        .agg(
+            count("*").alias("records"),
+            avg("price_usd").alias("avg_price"),
+            avg("market_premium").alias("avg_premium")
+        )
+        .collect())
+    
+    print("\n🌍 Cross-Market Summary (USD):")
+    for row in market_summary:
+        print(f"  {row['market']}: {row['records']:,} records, "
+              f"avg price: ${row['avg_price']:.2f}, "
+              f"premium: ${row['avg_premium']:.2f}")
+        
+except Exception as e:
+    print(f"Cross-market summary error: {str(e)}")
+
+print(f"\n✅ Data processing completed at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Summary and Next Steps
+
+# COMMAND ----------
+
+print("=== TotalEnergies Data Processing Pipeline Summary ===")
+print("\n✅ Completed Transformations:")
+print("  - Bronze → Silver: Data cleaning and enrichment")
+print("  - Cross-market unification and currency normalization")
+print("  - Arbitrage opportunity enhancement with risk scoring")
+print("  - Communication intelligence extraction")
+print("  - Silver → Gold: Business-ready analytics aggregation")
+
+print("\n📈 Key Business Insights Created:")
+print("  - Hourly market performance across all global exchanges")
+print("  - Trading hub efficiency and coordination metrics")
+print("  - Real-time arbitrage opportunity rankings")
+print("  - Market sentiment and intelligence scoring")
+
+print("\n🔄 Data Pipeline Architecture:")
+print("  - Bronze Layer: Raw ingested data")
+print("  - Silver Layer: Cleaned, validated, enriched data")
+print("  - Gold Layer: Business-ready aggregated analytics")
+print("  - Real-time processing with Delta Lake ACID compliance")
+
+print("\n🚀 Ready for:")
+print("  - ML model training for predictive analytics")
+print("  - Real-time dashboard and alerting system")
+print("  - Advanced cross-market arbitrage detection")
+print("  - Global trading hub optimization")

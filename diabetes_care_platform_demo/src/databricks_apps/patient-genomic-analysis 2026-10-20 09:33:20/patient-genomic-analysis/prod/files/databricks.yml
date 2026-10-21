@@ -1,0 +1,61 @@
+bundle:
+  name: patient-genomic-analysis
+sync:
+  exclude:
+  - src/dashboards/**/*.lvdash.json
+targets:
+  partner:
+    mode: production
+    default: true
+    workspace:
+      host: https://dbc-b964587f-dd18.cloud.databricks.com
+      root_path: /Workspace/Shared/.bundles/patient-genomic-analysis/prod
+variables:
+  default_warehouse:
+    default: 11901928b04a6ab4
+    description: Default warehouse
+  01ef1200144c1b5a84a7713d70e093_genie_room_id:
+    description: Genie space
+    default: 01ef1200144c1b5a84a7713d70e093b0
+resources:
+  catalogs:
+    demos_genie:
+      name: demos_genie
+      comment: Catalog created by Databricks Asset Bundles
+      options: {}
+      properties: {}
+      lifecycle:
+        prevent_destroy: false
+  schemas:
+    genie_tcga_genetics:
+      name: genie_tcga_genetics
+      catalog_name: ${resources.catalogs.demos_genie.name}
+      comment: Schema created by Databricks Asset Bundles
+      properties: {}
+      lifecycle:
+        prevent_destroy: false
+  dashboards:
+    '[demos] HLS - The Cancer Genome Atlas (TCGA) Data Exploration':
+      warehouse_id: ${var.default_warehouse}
+      display_name: '[Demos] Hls   The Cancer Genome Atlas (Tcga) Data Exploration'
+      file_path: src/dashboards/[demos]-HLS---The-Cancer-Genome-Atlas-(TCGA)-Data-Exploration/dashboard.lvdash.json
+  jobs:
+    create_tables:
+      name: create_tables
+      tasks:
+      - task_key: demographics
+        sql_task:
+          warehouse_id: ${var.default_warehouse}
+          file:
+            path: src/tables/table_one/create.sql
+      - task_key: diagnoses
+        sql_task:
+          warehouse_id: ${var.default_warehouse}
+          file:
+            path: src/tables/table_two/create.sql
+      - task_key: expression_profiles_umap
+        sql_task:
+          warehouse_id: ${var.default_warehouse}
+          file:
+            path: src/tables/table_three/create.sql
+

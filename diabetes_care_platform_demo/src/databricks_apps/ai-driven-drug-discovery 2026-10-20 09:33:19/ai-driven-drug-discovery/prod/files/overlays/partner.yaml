@@ -1,0 +1,61 @@
+host: https://dbc-b964587f-dd18.cloud.databricks.com
+name: ai-driven-drug-discovery
+root_path: /Workspace/Shared/.bundles/ai-driven-drug-discovery/prod
+variables:
+  default_warehouse:
+    default: 11901928b04a6ab4
+    description: Default warehouse
+resources:
+  catalogs:
+    # If you are not able to create a catalog,
+    # change create to false for demos_genie and use the default one for all child resources;
+    # change all catalog_ref: demos_genie to catalog_ref: default.
+
+    demos_genie:
+      name: demos_genie
+      create: true
+  schemas:
+    hls_ai_drug_discovery:
+      name: hls_ai_drug_discovery
+      catalog_ref: demos_genie
+      create: true
+  apps: {}
+  dashboards:
+    HLS___AI_Driven_Drug_Discovery:
+      display_name: Hls   Ai Driven Drug Discovery
+      file_path: src/dashboards/HLS - AI Driven Drug Discovery/dashboard.lvdash.json
+      warehouse_ref: default_warehouse
+      template_map:
+        catalog_1: demos_genie
+        schema_1: hls_ai_drug_discovery
+        table_1: proteinclassification_tiny
+        table_2: tinysample_organism_info_scientificnsimple
+        table_3: tinysample_organism_protein_research_info
+      name: HLS - AI Driven Drug Discovery
+  tables:
+    table_one:
+      name: proteinclassification_tiny
+      catalog_ref: demos_genie
+      schema_ref: hls_ai_drug_discovery
+      comment: Table created by bundle
+      create: true
+      data_map: []
+    table_two:
+      name: tinysample_organism_info_scientificnsimple
+      catalog_ref: demos_genie
+      schema_ref: hls_ai_drug_discovery
+      comment: Table created by bundle
+      create: true
+      data_map: []
+    table_three:
+      name: tinysample_organism_protein_research_info
+      catalog_ref: demos_genie
+      schema_ref: hls_ai_drug_discovery
+      comment: Table created by bundle
+      create: true
+      data_map: []
+  genie_rooms:
+    01f015879ea712a7970ba1f36373bc:
+      id: 01f015879ea712a7970ba1f36373bc47
+      create: false
+

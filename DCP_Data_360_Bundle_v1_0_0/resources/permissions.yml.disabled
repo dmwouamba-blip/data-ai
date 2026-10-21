@@ -1,0 +1,6 @@
+resources:
+  jobs:
+    dcp_pipeline:
+      permissions:
+        - {level: CAN_MANAGE_RUN, group_name: <DCP_OPERATIONS_GROUP>}
+        - {level: CAN_VIEW, group_name: <DCP_AUDIT_GROUP>}

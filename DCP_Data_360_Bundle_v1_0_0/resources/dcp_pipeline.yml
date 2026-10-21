@@ -1,0 +1,231 @@
+resources:
+  jobs:
+    dcp_pipeline:
+      name: dcp-data-360-${bundle.target}
+
+      description: >
+        DCP Data 360 pipeline:
+        bootstrap Unity Catalog objects,
+        ingest Bronze events,
+        transform Bronze to Silver,
+        and publish Serving views.
+
+      # ================================================================
+      # JOB PARAMETERS
+      #
+      # Environment-specific defaults come from databricks.yml:
+      #
+      # DEV:
+      #   catalog = dcp_dev
+      #   synthetic_enabled = true
+      #
+      # PROD:
+      #   catalog = dcp_prod
+      #   synthetic_enabled = false
+      # ================================================================
+      parameters:
+        - name: catalog
+          default: ${var.catalog}
+
+        - name: synthetic_enabled
+          default: ${var.synthetic_enabled}
+
+        - name: synthetic_seed
+          default: ${var.synthetic_seed}
+
+        - name: reference_ts
+          default: ${var.reference_ts}
+
+      # ================================================================
+      # SERVERLESS ENVIRONMENT
+      #
+      # All Python tasks use the same environment.
+      # No additional pip dependencies are currently required.
+      # ================================================================
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "6"
+            dependencies: []
+
+      # ================================================================
+      # TASKS
+      # ================================================================
+      tasks:
+
+        # --------------------------------------------------------------
+        # 1. BOOTSTRAP
+        #
+        # Creates:
+        #   <catalog>
+        #
+        # Schemas:
+        #   bronze
+        #   silver
+        #   gold
+        #   serving
+        #   monitoring
+        #   quarantine
+        #
+        # Base tables:
+        #   bronze.events
+        #   silver.patient_residence
+        #   silver.nutrition_event
+        #   silver.glucose_reading
+        #   silver.nutrition_trend
+        # --------------------------------------------------------------
+        - task_key: bootstrap
+
+          description: >
+            Create the DCP Unity Catalog catalog,
+            schemas, and base Delta tables.
+
+          environment_key: default
+
+          spark_python_task:
+            python_file: ../src/bootstrap.py
+            parameters:
+              - "--catalog"
+              - "{{job.parameters.catalog}}"
+
+
+        # --------------------------------------------------------------
+        # 2. INGEST BRONZE
+        #
+        # Depends on:
+        #   bootstrap
+        #
+        # Writes:
+        #   <catalog>.bronze.events
+        #
+        # Current synthetic event types:
+        #   RESIDENCE
+        #   NUTRITION
+        #   GLUCOSE
+        #   TREND
+        # --------------------------------------------------------------
+        - task_key: ingest_bronze
+
+          description: >
+            Generate and ingest DCP source events
+            into the Bronze event store.
+
+          depends_on:
+            - task_key: bootstrap
+
+          environment_key: default
+
+          spark_python_task:
+            python_file: ../src/ingest_bronze.py
+            parameters:
+              - "--catalog"
+              - "{{job.parameters.catalog}}"
+
+              - "--synthetic-enabled"
+              - "{{job.parameters.synthetic_enabled}}"
+
+              - "--synthetic-seed"
+              - "{{job.parameters.synthetic_seed}}"
+
+              - "--reference-ts"
+              - "{{job.parameters.reference_ts}}"
+
+
+        # --------------------------------------------------------------
+        # 3. BRONZE -> SILVER
+        #
+        # Depends on:
+        #   ingest_bronze
+        #
+        # Reads:
+        #   <catalog>.bronze.events
+        #
+        # Writes:
+        #   silver.patient_residence
+        #   silver.nutrition_event
+        #   silver.glucose_reading
+        #   silver.nutrition_trend
+        # --------------------------------------------------------------
+        - task_key: bronze_to_silver
+
+          description: >
+            Parse Bronze event payloads,
+            validate required fields,
+            and publish typed Silver datasets.
+
+          depends_on:
+            - task_key: ingest_bronze
+
+          environment_key: default
+
+          spark_python_task:
+            python_file: ../src/bronze_to_silver.py
+            parameters:
+              - "--catalog"
+              - "{{job.parameters.catalog}}"
+
+        # --------------------------------------------------------------
+        # 4. BUILD GOLD
+        #
+        # Depends on:
+        #   bronze_to_silver
+        #
+        # Reads validated Silver datasets:
+        #   silver.patient_residence
+        #   silver.glucose_reading
+        #   silver.nutrition_event
+        #   silver.nutrition_trend
+        #
+        # Builds business-ready Gold data products:
+        #   gold.patient_360
+        #   gold.patient_glucose_summary
+        #   gold.patient_nutrition_summary
+        #   gold.geographic_nutrition_trend
+        #
+        # Gold contains enriched and aggregated datasets intended
+        # for downstream consumer and Serving use cases.
+        # --------------------------------------------------------------
+        - task_key: build_gold
+
+          description: >
+            Build business-ready DCP Gold data products
+            from validated Silver datasets.
+
+          depends_on:
+            - task_key: bronze_to_silver
+
+          environment_key: default
+
+          spark_python_task:
+            python_file: ../src/build_gold.py
+            parameters:
+              - "--catalog"
+              - "{{job.parameters.catalog}}"
+        # --------------------------------------------------------------
+        # 4. PUBLISH SERVING
+        #
+        # Depends on:
+        #   bronze_to_silver
+        #
+        # Creates:
+        #   serving.v_patient_selector
+        #   serving.v_patient_cities
+        #   serving.v_glucose_timeline
+        #   serving.v_nutrition_comparison
+        #   serving.v_source_health
+        # --------------------------------------------------------------
+        - task_key: publish_serving
+
+          description: >
+            Publish consumer-facing DCP Serving views.
+
+          depends_on:
+            - task_key: bronze_to_silver
+
+          environment_key: default
+
+          spark_python_task:
+            python_file: ../src/publish_serving.py
+            parameters:
+              - "--catalog"
+              - "{{job.parameters.catalog}}"

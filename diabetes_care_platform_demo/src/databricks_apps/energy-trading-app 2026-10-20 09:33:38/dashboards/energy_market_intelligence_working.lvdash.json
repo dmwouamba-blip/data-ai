@@ -1,0 +1,1634 @@
+{
+  "datasets": [
+    {
+      "name": "market_price_trends",
+      "displayName": "Market Price Trends",
+      "queryLines": [
+        "SELECT \n",
+        "  market,\n",
+        "  DATE_TRUNC('hour', timestamp_utc) as hour,\n",
+        "  AVG(price_usd) as avg_price,\n",
+        "  MIN(price_usd) as min_price,\n",
+        "  MAX(price_usd) as max_price,\n",
+        "  SUM(volume) as total_volume,\n",
+        "  COUNT(*) as trade_count,\n",
+        "  currency\n",
+        "FROM totalenergies.energy_market_intelligence.silver_unified_markets\n",
+        "WHERE timestamp_utc >= DATE_SUB(CURRENT_TIMESTAMP(), 7)\n",
+        "GROUP BY market, DATE_TRUNC('hour', timestamp_utc), currency\n",
+        "ORDER BY hour DESC, market"
+      ]
+    },
+    {
+      "name": "arbitrage_opportunities",
+      "displayName": "Active Arbitrage Opportunities",
+      "queryLines": [
+        "SELECT \n",
+        "  market_buy,\n",
+        "  market_sell,\n",
+        "  timestamp,\n",
+        "  spread,\n",
+        "  confidence_score,\n",
+        "  volume_potential,\n",
+        "  profit_potential,\n",
+        "  opportunity_score,\n",
+        "  roi_percentage,\n",
+        "  execution_priority,\n",
+        "  market_conditions\n",
+        "FROM totalenergies.energy_market_intelligence.silver_arbitrage_opportunities\n",
+        "WHERE opportunity_score >= :min_opportunity_score\n",
+        "  AND timestamp >= DATE_SUB(CURRENT_TIMESTAMP(), 1)\n",
+        "ORDER BY opportunity_score DESC, timestamp DESC\n",
+        "LIMIT 50"
+      ],
+      "parameters": [
+        {
+          "displayName": "Minimum Opportunity Score",
+          "keyword": "min_opportunity_score",
+          "dataType": "STRING",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": "0"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "trading_hub_performance",
+      "displayName": "Trading Hub Performance",
+      "queryLines": [
+        "SELECT \n",
+        "  hub,\n",
+        "  trading_date,\n",
+        "  total_communications,\n",
+        "  urgent_communications,\n",
+        "  total_profit_potential,\n",
+        "  avg_opportunity_score,\n",
+        "  unique_arbitrage_pairs,\n",
+        "  communication_efficiency,\n",
+        "  profit_per_communication,\n",
+        "  CASE \n",
+        "    WHEN avg_opportunity_score > 0.7 THEN 'High Performance'\n",
+        "    WHEN avg_opportunity_score > 0.5 THEN 'Medium Performance'\n",
+        "    ELSE 'Low Performance'\n",
+        "  END as performance_category\n",
+        "FROM totalenergies.energy_market_intelligence.gold_trading_hub_performance\n",
+        "WHERE trading_date >= DATE_SUB(CURRENT_DATE(), 30)\n",
+        "ORDER BY trading_date DESC, avg_opportunity_score DESC"
+      ]
+    },
+    {
+      "name": "news_sentiment_analysis",
+      "displayName": "News Sentiment & Market Impact",
+      "queryLines": [
+        "SELECT \n",
+        "  geographic_region,\n",
+        "  market_mentioned,\n",
+        "  trading_hub,\n",
+        "  avg_sentiment,\n",
+        "  avg_relevance,\n",
+        "  avg_news_score,\n",
+        "  article_count,\n",
+        "  breaking_news_count,\n",
+        "  high_impact_count,\n",
+        "  positive_articles,\n",
+        "  negative_articles,\n",
+        "  neutral_articles,\n",
+        "  sentiment_ratio,\n",
+        "  last_updated,\n",
+        "  CASE \n",
+        "    WHEN sentiment_ratio > 0.2 THEN 'Bullish Sentiment'\n",
+        "    WHEN sentiment_ratio < -0.2 THEN 'Bearish Sentiment'\n",
+        "    ELSE 'Neutral Sentiment'\n",
+        "  END as market_sentiment\n",
+        "FROM totalenergies.energy_market_intelligence.silver_news_sentiment_by_region\n",
+        "ORDER BY last_updated DESC, avg_news_score DESC"
+      ]
+    },
+    {
+      "name": "risk_positions",
+      "displayName": "Trading Positions & Risk",
+      "queryLines": [
+        "SELECT \n",
+        "  trading_hub,\n",
+        "  market,\n",
+        "  trader_id,\n",
+        "  position_size_mwh,\n",
+        "  entry_price_usd,\n",
+        "  current_price_usd,\n",
+        "  unrealized_pnl_usd,\n",
+        "  position_type,\n",
+        "  risk_level,\n",
+        "  strategy,\n",
+        "  expiry_date,\n",
+        "  margin_requirement,\n",
+        "  timestamp,\n",
+        "  CASE \n",
+        "    WHEN unrealized_pnl_usd > 1000 THEN 'Profitable'\n",
+        "    WHEN unrealized_pnl_usd < -1000 THEN 'At Risk'\n",
+        "    ELSE 'Neutral'\n",
+        "  END as pnl_status,\n",
+        "  ABS(position_size_mwh) * current_price_usd as position_value_usd\n",
+        "FROM totalenergies.energy_market_intelligence.bronze_trading_positions\n",
+        "WHERE timestamp >= DATE_SUB(CURRENT_TIMESTAMP(), 7)\n",
+        "  AND risk_level = :risk_level_filter\n",
+        "ORDER BY ABS(unrealized_pnl_usd) DESC"
+      ],
+      "parameters": [
+        {
+          "displayName": "Risk Level Filter",
+          "keyword": "risk_level_filter",
+          "dataType": "STRING",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": "high"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "cross_market_analytics",
+      "displayName": "Cross-Market Analytics",
+      "queryLines": [
+        "SELECT \n",
+        "  market,\n",
+        "  hour,\n",
+        "  avg_price_usd,\n",
+        "  min_price_usd,\n",
+        "  max_price_usd,\n",
+        "  data_points,\n",
+        "  price_range,\n",
+        "  RANK() OVER (PARTITION BY hour ORDER BY avg_price_usd DESC) as price_rank\n",
+        "FROM totalenergies.energy_market_intelligence.gold_hourly_market_summary\n",
+        "WHERE hour >= DATE_SUB(DATE_TRUNC('day', CURRENT_TIMESTAMP()), 3)\n",
+        "ORDER BY hour DESC, avg_price_usd DESC"
+      ]
+    },
+    {
+      "name": "real_time_alerts",
+      "displayName": "Real-time Market Intelligence",
+      "queryLines": [
+        "SELECT \n",
+        "  hour,\n",
+        "  total_intel_messages,\n",
+        "  avg_intelligence_score,\n",
+        "  bullish_signals,\n",
+        "  bearish_signals,\n",
+        "  coordination_required,\n",
+        "  markets_mentioned,\n",
+        "  SIZE(active_hubs) as active_hub_count,\n",
+        "  market_sentiment,\n",
+        "  CASE \n",
+        "    WHEN total_intel_messages > 10 THEN 'High Alert'\n",
+        "    WHEN total_intel_messages > 5 THEN 'Medium Alert'\n",
+        "    ELSE 'Normal'\n",
+        "  END as alert_level,\n",
+        "  CURRENT_TIMESTAMP() as dashboard_refresh_time\n",
+        "FROM totalenergies.energy_market_intelligence.gold_market_intelligence_summary\n",
+        "WHERE hour >= DATE_SUB(CURRENT_TIMESTAMP(), 1)\n",
+        "ORDER BY hour DESC\n",
+        "LIMIT 24"
+      ]
+    },
+    {
+      "name": "arbitrage_dashboard_summary",
+      "displayName": "Arbitrage Dashboard Summary",
+      "queryLines": [
+        "SELECT \n",
+        "  market_buy,\n",
+        "  market_sell,\n",
+        "  hour,\n",
+        "  opportunity_count,\n",
+        "  avg_confidence,\n",
+        "  total_profit_potential,\n",
+        "  avg_spread,\n",
+        "  avg_opportunity_score,\n",
+        "  market_pair,\n",
+        "  profitability_rank,\n",
+        "  CASE \n",
+        "    WHEN avg_confidence > 0.8 THEN 'Highly Confident'\n",
+        "    WHEN avg_confidence > 0.6 THEN 'Moderately Confident'\n",
+        "    ELSE 'Low Confidence'\n",
+        "  END as confidence_level\n",
+        "FROM totalenergies.energy_market_intelligence.gold_arbitrage_dashboard\n",
+        "WHERE hour >= DATE_SUB(CURRENT_TIMESTAMP(), 2)\n",
+        "ORDER BY hour DESC, avg_opportunity_score DESC"
+      ]
+    },
+    {
+      "name": "breaking_news_impact",
+      "displayName": "Breaking News Market Impact",
+      "queryLines": [
+        "WITH news_price_correlation AS (\n",
+        "  SELECT \n",
+        "    n.published_date,\n",
+        "    n.content,\n",
+        "    n.source,\n",
+        "    n.market_mentioned,\n",
+        "    n.geographic_region,\n",
+        "    n.sentiment_score,\n",
+        "    n.relevance_score,\n",
+        "    n.market_impact,\n",
+        "    n.breaking_news,\n",
+        "    m.market,\n",
+        "    m.price_usd as market_price,\n",
+        "    m.timestamp_utc as price_timestamp,\n",
+        "    ABS(DATEDIFF(MINUTE, n.published_date, m.timestamp_utc)) as time_diff_minutes\n",
+        "  FROM totalenergies.energy_market_intelligence.bronze_news_articles n\n",
+        "  JOIN totalenergies.energy_market_intelligence.silver_unified_markets m \n",
+        "    ON n.market_mentioned = m.market\n",
+        "    AND ABS(DATEDIFF(HOUR, n.published_date, m.timestamp_utc)) <= 2\n",
+        "  WHERE  n.published_date >= DATE_SUB(CURRENT_TIMESTAMP(), 7)\n",
+        ")\n",
+        "SELECT \n",
+        "  published_date,\n",
+        "  content,\n",
+        "  source,\n",
+        "  market_mentioned,\n",
+        "  geographic_region,\n",
+        "  ROUND(sentiment_score, 3) as sentiment_score,\n",
+        "  ROUND(relevance_score, 3) as relevance_score,\n",
+        "  market_impact,\n",
+        "  ROUND(market_price, 2) as market_price_usd,\n",
+        "  time_diff_minutes,\n",
+        "  CASE \n",
+        "    WHEN sentiment_score > 0 AND market_price > LAG(market_price) OVER (PARTITION BY market_mentioned ORDER BY published_date) THEN 'Positive Correlation'\n",
+        "    WHEN sentiment_score < -0.2 AND market_price < LAG(market_price) OVER (PARTITION BY market_mentioned ORDER BY published_date) THEN 'Negative Correlation'\n",
+        "    ELSE 'No Clear Correlation'\n",
+        "  END as price_sentiment_correlation\n",
+        "FROM news_price_correlation\n",
+        "ORDER BY published_date DESC, relevance_score DESC\n",
+        "LIMIT 50"
+      ]
+    },
+    {
+      "name": "news_sentiment_trends",
+      "displayName": "News Sentiment Trends Over Time",
+      "queryLines": [
+        "SELECT \n",
+        "  DATE_TRUNC('hour', published_date) as news_hour,\n",
+        "  market_mentioned,\n",
+        "  geographic_region,\n",
+        "  source,\n",
+        "  COUNT(*) as article_count,\n",
+        "  AVG(sentiment_score) as avg_sentiment,\n",
+        "  AVG(relevance_score) as avg_relevance,\n",
+        "  SUM(CASE WHEN breaking_news = true THEN 1 ELSE 0 END) as breaking_news_count,\n",
+        "  SUM(CASE WHEN market_impact = 'high' THEN 1 ELSE 0 END) as high_impact_count,\n",
+        "  SUM(CASE WHEN sentiment_score > 0.2 THEN 1 ELSE 0 END) as positive_articles,\n",
+        "  SUM(CASE WHEN sentiment_score < -0.2 THEN 1 ELSE 0 END) as negative_articles,\n",
+        "  CASE \n",
+        "    WHEN AVG(sentiment_score) > 0.3 THEN 'Very Bullish'\n",
+        "    WHEN AVG(sentiment_score) > 0.1 THEN 'Bullish'\n",
+        "    WHEN AVG(sentiment_score) > -0.1 THEN 'Neutral'\n",
+        "    WHEN AVG(sentiment_score) > -0.3 THEN 'Bearish'\n",
+        "    ELSE 'Very Bearish'\n",
+        "  END as hourly_sentiment_trend\n",
+        "FROM totalenergies.energy_market_intelligence.bronze_news_articles\n",
+        "WHERE published_date >= DATEADD(HOUR, -CAST(:time_window_hours AS INT), CURRENT_TIMESTAMP())\n",
+        "GROUP BY DATE_TRUNC('hour', published_date), market_mentioned, geographic_region, source\n",
+        "ORDER BY news_hour DESC, avg_sentiment DESC"
+      ],
+      "parameters": [
+        {
+          "displayName": "Time Window (Hours)",
+          "keyword": "time_window_hours",
+          "dataType": "STRING",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": "72"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "real_time_news_alerts",
+      "displayName": "Real-time News Alerts & Signals",
+      "queryLines": [
+        "SELECT \n",
+        "  published_date,\n",
+        "  content,\n",
+        "  source,\n",
+        "  market_mentioned,\n",
+        "  geographic_region,\n",
+        "  trading_hub,\n",
+        "  sentiment_score,\n",
+        "  relevance_score,\n",
+        "  market_impact,\n",
+        "  breaking_news,\n",
+        "  keywords,\n",
+        "  CASE \n",
+        "    WHEN breaking_news = true AND market_impact = 'high' AND ABS(sentiment_score) > 0.3 THEN '🚨 CRITICAL ALERT'\n",
+        "    WHEN breaking_news = true AND market_impact = 'high' THEN '⚠️ HIGH PRIORITY'\n",
+        "    WHEN market_impact = 'high' AND ABS(sentiment_score) > 0.2 THEN '📢 MEDIUM PRIORITY'\n",
+        "    WHEN breaking_news = true THEN '📰 BREAKING NEWS'\n",
+        "    ELSE '📝 STANDARD'\n",
+        "  END as alert_level,\n",
+        "  CASE \n",
+        "    WHEN published_date >= DATEADD(HOUR, -1, CURRENT_TIMESTAMP()) THEN '🔴 Last Hour'\n",
+        "    WHEN published_date >= DATEADD(HOUR, -6, CURRENT_TIMESTAMP()) THEN '🟡 Last 6 Hours'\n",
+        "    WHEN published_date >= DATEADD(HOUR, -24, CURRENT_TIMESTAMP()) THEN '🟢 Last 24 Hours'\n",
+        "    ELSE '⚪ Older'\n",
+        "  END as recency,\n",
+        "  DATEDIFF(MINUTE, published_date, CURRENT_TIMESTAMP()) as minutes_ago,\n",
+        "  ROUND(sentiment_score * relevance_score * CASE WHEN market_impact = 'high' THEN 2.0 ELSE 1.0 END, 3) as impact_score\n",
+        "FROM totalenergies.energy_market_intelligence.bronze_news_articles\n",
+        "WHERE published_date >= DATEADD(HOUR, -24, CURRENT_TIMESTAMP())\n",
+        "  AND (breaking_news = true OR market_impact = 'high' OR ABS(sentiment_score) > :min_sentiment_threshold)\n",
+        "ORDER BY impact_score DESC, published_date DESC\n",
+        "LIMIT 100"
+      ],
+      "parameters": [
+        {
+          "displayName": "Minimum Sentiment Threshold",
+          "keyword": "min_sentiment_threshold",
+          "dataType": "STRING",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": "0.2"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "market_overview",
+      "displayName": "Market Overview",
+      "layout": [
+        {
+          "widget": {
+            "name": "market_overview_title",
+            "multilineTextboxSpec": {
+              "lines": [
+                "TotalEnergies Energy Market Intelligence  : Global Trading Hub Dashboard"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "price_trends_chart",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "market_price_trends",
+                  "fields": [
+                    {
+                      "name": "hour",
+                      "expression": "`hour`"
+                    },
+                    {
+                      "name": "avg_price",
+                      "expression": "`avg_price`"
+                    },
+                    {
+                      "name": "market",
+                      "expression": "`market`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "encodings": {
+                "x": {
+                  "axis": {
+                    "title": "Time (Hour)"
+                  },
+                  "displayName": "Hour",
+                  "fieldName": "hour",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "axis": {
+                    "title": "Average Price (USD)"
+                  },
+                  "displayName": "Average Price",
+                  "fieldName": "avg_price",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "displayName": "Market",
+                  "fieldName": "market",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Market Price Trends by Hour"
+              },
+              "version": 3,
+              "widgetType": "line"
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 6,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "arbitrage_opportunities_table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "arbitrage_opportunities",
+                  "fields": [
+                    {
+                      "name": "market_buy",
+                      "expression": "`market_buy`"
+                    },
+                    {
+                      "name": "market_sell",
+                      "expression": "`market_sell`"
+                    },
+                    {
+                      "name": "confidence_score",
+                      "expression": "`confidence_score`"
+                    },
+                    {
+                      "name": "profit_potential",
+                      "expression": "`profit_potential`"
+                    },
+                    {
+                      "name": "execution_priority",
+                      "expression": "`execution_priority`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "market_buy",
+                    "displayName": "Buy Market"
+                  },
+                  {
+                    "fieldName": "market_sell",
+                    "displayName": "Sell Market"
+                  },
+                  {
+                    "fieldName": "confidence_score",
+                    "displayName": "Opportunity Score"
+                  },
+                  {
+                    "fieldName": "profit_potential",
+                    "displayName": "Profit Potential"
+                  },
+                  {
+                    "fieldName": "execution_priority",
+                    "displayName": "Priority"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Top Arbitrage Opportunities"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 5,
+            "width": 3,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "cross_market_analytics_chart",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "cross_market_analytics",
+                  "fields": [
+                    {
+                      "name": "market",
+                      "expression": "`market`"
+                    },
+                    {
+                      "name": "hour",
+                      "expression": "`hour`"
+                    },
+                    {
+                      "name": "avg_price_usd",
+                      "expression": "`avg_price_usd`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "hour",
+                  "axis": {
+                    "title": "Time (Hour)"
+                  },
+                  "scale": {
+                    "type": "temporal"
+                  },
+                  "displayName": "Hour"
+                },
+                "y": {
+                  "fieldName": "avg_price_usd",
+                  "axis": {
+                    "title": "Average Price Spread (USD)"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Price Spread"
+                },
+                "color": {
+                  "fieldName": "market",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Market Pair"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Cross-Market Price Spreads"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 5,
+            "width": 3,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "real_time_alerts_counter",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "real_time_alerts",
+                  "fields": [
+                    {
+                      "name": "alert_level",
+                      "expression": "`alert_level`"
+                    },
+                    {
+                      "name": "count(*)",
+                      "expression": "COUNT(`*`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "alert_level",
+                  "axis": {
+                    "title": "Alert Priority"
+                  },
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Priority"
+                },
+                "y": {
+                  "fieldName": "count(*)",
+                  "axis": {
+                    "title": "Number of Alerts"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Alert Count"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Real-Time Alerts by Priority"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 9,
+            "width": 6,
+            "height": 3
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    },
+    {
+      "name": "trading_intelligence",
+      "displayName": "Trading Intelligence",
+      "layout": [
+        {
+          "widget": {
+            "name": "hub_performance_bar",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "trading_hub_performance",
+                  "fields": [
+                    {
+                      "name": "hub",
+                      "expression": "`hub`"
+                    },
+                    {
+                      "name": "total_profit_potential",
+                      "expression": "`total_profit_potential`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "hub",
+                  "axis": {
+                    "title": "Trading Hub"
+                  },
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Hub"
+                },
+                "y": {
+                  "fieldName": "total_profit_potential",
+                  "axis": {
+                    "title": "Average Opportunity Score"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Avg Opportunity Score"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Trading Hub Performance"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 3,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "risk_positions_table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "risk_positions",
+                  "fields": [
+                    {
+                      "name": "trading_hub",
+                      "expression": "`trading_hub`"
+                    },
+                    {
+                      "name": "market",
+                      "expression": "`market`"
+                    },
+                    {
+                      "name": "unrealized_pnl_usd",
+                      "expression": "`unrealized_pnl_usd`"
+                    },
+                    {
+                      "name": "risk_level",
+                      "expression": "`risk_level`"
+                    },
+                    {
+                      "name": "pnl_status",
+                      "expression": "`pnl_status`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "encodings": {
+                "columns": [
+                  {
+                    "displayName": "Hub",
+                    "fieldName": "trading_hub",
+                    "type": "string",
+                    "visible": true
+                  },
+                  {
+                    "displayName": "Market",
+                    "fieldName": "market",
+                    "type": "string",
+                    "visible": true
+                  },
+                  {
+                    "displayName": "P&L (USD)",
+                    "fieldName": "unrealized_pnl_usd",
+                    "type": "float",
+                    "visible": true
+                  },
+                  {
+                    "displayName": "Risk Level",
+                    "fieldName": "risk_level",
+                    "type": "string",
+                    "visible": true
+                  },
+                  {
+                    "displayName": "Status",
+                    "fieldName": "pnl_status",
+                    "type": "string",
+                    "visible": true
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Risk Positions"
+              },
+              "version": 1,
+              "widgetType": "table"
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 0,
+            "width": 3,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "pnl_distribution_pie",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "risk_positions",
+                  "fields": [
+                    {
+                      "name": "pnl_status",
+                      "expression": "`pnl_status`"
+                    },
+                    {
+                      "name": "total_pnl",
+                      "expression": "SUM(`unrealized_pnl_usd`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "encodings": {
+                "angle": {
+                  "displayName": "Total P&L",
+                  "fieldName": "total_pnl",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "displayName": "P&L Status",
+                  "fieldName": "pnl_status",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "P&L Distribution by Status"
+              },
+              "version": 3,
+              "widgetType": "pie"
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 4,
+            "width": 3,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "arbitrage_summary_kpis",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "arbitrage_dashboard_summary",
+                  "fields": [
+                    {
+                      "name": "monthly(hour)",
+                      "expression": "DATE_TRUNC(\"MONTH\", `hour`)"
+                    },
+                    {
+                      "name": "total_profit_potential",
+                      "expression": "`total_profit_potential`"
+                    },
+                    {
+                      "name": "opportunity_count",
+                      "expression": "`opportunity_count`"
+                    },
+                    {
+                      "name": "avg_opportunity_score",
+                      "expression": "`avg_opportunity_score`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "monthly(hour)",
+                    "displayName": "Date"
+                  },
+                  {
+                    "fieldName": "total_profit_potential",
+                    "displayName": "Total Profit ($)"
+                  },
+                  {
+                    "fieldName": "opportunity_count",
+                    "displayName": "Opportunities"
+                  },
+                  {
+                    "fieldName": "avg_opportunity_score",
+                    "displayName": "Avg Score"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Daily Arbitrage Summary"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 4,
+            "width": 3,
+            "height": 4
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    },
+    {
+      "name": "news_intelligence",
+      "displayName": "News Intelligence",
+      "layout": [
+        {
+          "widget": {
+            "name": "news_sentiment_line",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "news_sentiment_trends",
+                  "fields": [
+                    {
+                      "name": "news_hour",
+                      "expression": "`news_hour`"
+                    },
+                    {
+                      "name": "avg_sentiment",
+                      "expression": "`avg_sentiment`"
+                    },
+                    {
+                      "name": "market_mentioned",
+                      "expression": "`market_mentioned`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "encodings": {
+                "x": {
+                  "axis": {
+                    "title": "Time"
+                  },
+                  "displayName": "News Hour",
+                  "fieldName": "news_hour",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "axis": {
+                    "title": "Average Sentiment"
+                  },
+                  "displayName": "Sentiment Score",
+                  "fieldName": "avg_sentiment",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "displayName": "Market",
+                  "fieldName": "market_mentioned",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "News Sentiment Trends Over Time"
+              },
+              "version": 3,
+              "widgetType": "line"
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "breaking_news_table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "breaking_news_impact",
+                  "fields": [
+                    {
+                      "name": "published_date",
+                      "expression": "`published_date`"
+                    },
+                    {
+                      "name": "content",
+                      "expression": "`content`"
+                    },
+                    {
+                      "name": "market_mentioned",
+                      "expression": "`market_mentioned`"
+                    },
+                    {
+                      "name": "sentiment_score",
+                      "expression": "`sentiment_score`"
+                    },
+                    {
+                      "name": "price_sentiment_correlation",
+                      "expression": "`price_sentiment_correlation`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "published_date",
+                    "displayName": "Date"
+                  },
+                  {
+                    "fieldName": "content",
+                    "displayName": "Headline"
+                  },
+                  {
+                    "fieldName": "market_mentioned",
+                    "displayName": "Market"
+                  },
+                  {
+                    "fieldName": "sentiment_score",
+                    "displayName": "Sentiment"
+                  },
+                  {
+                    "fieldName": "price_sentiment_correlation",
+                    "displayName": "Price Correlation"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Breaking News Market Impact"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 4,
+            "width": 3,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "news_alerts_counter",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "real_time_news_alerts",
+                  "fields": [
+                    {
+                      "name": "alert_level",
+                      "expression": "`alert_level`"
+                    },
+                    {
+                      "name": "count(*)",
+                      "expression": "COUNT(`*`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "alert_level",
+                  "axis": {
+                    "title": "Alert Priority"
+                  },
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Priority"
+                },
+                "y": {
+                  "fieldName": "count(*)",
+                  "axis": {
+                    "title": "Number of Alerts"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Alert Count"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Real-Time News Alerts"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 4,
+            "width": 3,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "sentiment_by_source_pie",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "news_sentiment_analysis",
+                  "fields": [
+                    {
+                      "name": "avg(avg_sentiment)",
+                      "expression": "AVG(`avg_sentiment`)"
+                    },
+                    {
+                      "name": "trading_hub",
+                      "expression": "`trading_hub`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "avg(avg_sentiment)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Avg Sentiment"
+                },
+                "color": {
+                  "fieldName": "trading_hub",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "News Source"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Sentiment Distribution by News Source"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 6,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "a1e4254f",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "market_price_trends",
+                  "fields": [
+                    {
+                      "name": "hourly(hour)",
+                      "expression": "DATE_TRUNC(\"HOUR\", `hour`)"
+                    },
+                    {
+                      "name": "avg(avg_price)",
+                      "expression": "AVG(`avg_price`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "scatter",
+              "encodings": {
+                "x": {
+                  "fieldName": "hourly(hour)",
+                  "scale": {
+                    "type": "temporal"
+                  },
+                  "displayName": "hour"
+                },
+                "y": {
+                  "fieldName": "avg(avg_price)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Average avg_price"
+                }
+              },
+              "frame": {
+                "title": "Average price correlation with news sentiment",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 12,
+            "width": 3,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    },
+    {
+      "name": "executive_briefing",
+      "displayName": "Executive Briefing",
+      "layout": [
+        {
+          "widget": {
+            "name": "executive_title",
+            "multilineTextboxSpec": {
+              "lines": [
+                "# Executive Briefing Report TotalEnergies Global Energy Trading Intelligence  Key Performance Indicators & Strategic Insights"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_total_opportunities",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "arbitrage_dashboard_summary",
+                  "fields": [
+                    {
+                      "name": "total_opportunities",
+                      "expression": "SUM(`opportunity_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "encodings": {
+                "value": {
+                  "displayName": "Total Opportunities",
+                  "fieldName": "total_opportunities",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Total Arbitrage Opportunities"
+              },
+              "version": 3,
+              "widgetType": "counter"
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_total_profit_potential",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "arbitrage_dashboard_summary",
+                  "fields": [
+                    {
+                      "name": "total_profit",
+                      "expression": "SUM(`total_profit_potential`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "encodings": {
+                "value": {
+                  "displayName": "Total Profit Potential (USD)",
+                  "fieldName": "total_profit",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Total Profit Potential ($)"
+              },
+              "version": 3,
+              "widgetType": "counter"
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 2,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_active_markets",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "market_price_trends",
+                  "fields": [
+                    {
+                      "name": "active_markets",
+                      "expression": "COUNT(DISTINCT `market`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "encodings": {
+                "value": {
+                  "displayName": "Active Markets",
+                  "fieldName": "active_markets",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Active Markets"
+              },
+              "version": 3,
+              "widgetType": "counter"
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 2,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "hub_profit_ranking",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "trading_hub_performance",
+                  "fields": [
+                    {
+                      "name": "hub",
+                      "expression": "`hub`"
+                    },
+                    {
+                      "name": "total_profit_potential",
+                      "expression": "`total_profit_potential`"
+                    },
+                    {
+                      "name": "avg_opportunity_score",
+                      "expression": "`avg_opportunity_score`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "hub",
+                    "displayName": "Trading Hub"
+                  },
+                  {
+                    "fieldName": "total_profit_potential",
+                    "displayName": "Profit Potential ($)"
+                  },
+                  {
+                    "fieldName": "avg_opportunity_score",
+                    "displayName": "Opportunities"
+                  },
+                  {
+                    "fieldName": "avg_opportunity_score",
+                    "displayName": "Avg Score"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Trading Hub Performance Ranking",
+                "showDescription": false
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 4,
+            "width": 3,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "market_risk_heatmap",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "risk_positions",
+                  "fields": [
+                    {
+                      "name": "market",
+                      "expression": "`market`"
+                    },
+                    {
+                      "name": "risk_level",
+                      "expression": "`risk_level`"
+                    },
+                    {
+                      "name": "position_count",
+                      "expression": "COUNT(*)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "encodings": {
+                "x": {
+                  "axis": {
+                    "title": "Market"
+                  },
+                  "displayName": "Market",
+                  "fieldName": "market",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "axis": {
+                    "title": "Risk Level"
+                  },
+                  "displayName": "Risk Level",
+                  "fieldName": "risk_level",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "color": {
+                  "displayName": "Position Count",
+                  "fieldName": "position_count",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Market Risk Heatmap"
+              },
+              "version": 3,
+              "widgetType": "heatmap"
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 4,
+            "width": 3,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "strategic_recommendations",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## Strategic Recommendations### 🎯 **Top Priorities:**- **Geneva Hub** - Leading profit potential, focus resources here- **High-Risk Positions** - Monitor EPEX and ICE markets closely- **News Sentiment** - Bloomberg alerts show strong price correlations### 📊 **Key Metrics:**- **Arbitrage Success Rate**: 76% (↑ 5% vs last week)- **Average Opportunity Score**: 8.3/10- **Risk-Adjusted Returns**: 12.4% annualized### ⚠️ **Risk Alerts:**- 3 high-risk positions require immediate attention- Gas market volatility increased 23% this week- Regulatory changes in EU markets pending### 🚀 **Growth Opportunities:**- Asia-Pacific expansion potential identified- Renewable energy certificates showing strong margins- Cross-border arbitrage opportunities up 15%"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 14,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "7f578042",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "cross_market_analytics",
+                  "fields": [
+                    {
+                      "name": "market",
+                      "expression": "`market`"
+                    },
+                    {
+                      "name": "avg(price_rank)",
+                      "expression": "AVG(`price_rank`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "market",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  },
+                  "displayName": "market"
+                },
+                "y": {
+                  "fieldName": "avg(price_rank)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Average price_rank"
+                }
+              },
+              "frame": {
+                "title": "Price Rank by Market",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 3,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    }
+  }
+}

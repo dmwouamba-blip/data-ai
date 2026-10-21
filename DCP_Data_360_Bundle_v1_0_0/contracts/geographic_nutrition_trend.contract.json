@@ -1,0 +1,22 @@
+{
+  "name": "geographic_nutrition_trend",
+  "version": "1.0.0",
+  "classification": "restricted",
+  "owner": "<DCP_DATA_PRODUCT_OWNER>",
+  "breakingChangePolicy": "major version required",
+
+  "schema": {
+    "trend_id": "string",
+    "geography_level": "string",
+    "city_id": "string",
+    "country_code": "string",
+    "metric": "string",
+    "metric_value": "double",
+    "period_start": "date",
+    "period_end": "date",
+    "source_org": "string",
+    "source_version": "string",
+    "synthetic_flag": "boolean",
+    "run_id": "string"
+  }
+}

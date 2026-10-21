@@ -1,0 +1,23 @@
+host: https://dbc-b964587f-dd18.cloud.databricks.com
+name: clinical-research-assistant
+root_path: /Workspace/Shared/.bundles/clinical-research-assistant/prod
+variables:
+  default_warehouse:
+    default: 11901928b04a6ab4
+    description: Default warehouse
+  bundle_root_path:
+    default: /Workspace/Shared/.bundles/clinical-research-assistant/prod
+    description: Workspace root path for bundle files (parquet data, etc.).
+resources:
+  catalogs: {}
+  schemas: {}
+  apps:
+    clinical-research-assistant:
+      resources: []
+      name: clinical-research-assistant
+      source_code_path: ./src/clinical-research-assistant
+      create: true
+  dashboards: {}
+  tables: {}
+  genie_rooms: {}
+

@@ -1,0 +1,21 @@
+[project]
+name = "clinical-research-assistant"
+version = "0.1.0"
+description = "Clinical Research Assistant – overlay-based Databricks bundle with databricks.yml generator"
+requires-python = ">=3.10"
+dependencies = [
+    "pyyaml>=6.0",
+    "python-dotenv>=1.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+packages = ["databricks_yml_generator"]
+
+# Run the overlay-to-databricks.yml generator: e.g. generate --env sandbox
+[project.scripts]
+generate = "databricks_yml_generator.main:main"
+deploy-bundle = "deploy:main"

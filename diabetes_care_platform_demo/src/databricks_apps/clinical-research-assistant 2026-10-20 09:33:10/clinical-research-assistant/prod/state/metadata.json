@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "config": {
+    "bundle": {
+      "name": "clinical-research-assistant",
+      "target": "partner",
+      "mode": "production",
+      "git": {
+        "branch": "main",
+        "bundle_root_path": "bundles/clinical-research-assistant"
+      }
+    },
+    "workspace": {
+      "file_path": "/Workspace/Shared/.bundles/clinical-research-assistant/prod/files"
+    },
+    "resources": {},
+    "presets": {
+      "source_linked_deployment": false
+    }
+  },
+  "extra": {}
+}

@@ -1,0 +1,22 @@
+resources:
+  apps:
+    dcp_app:
+      name: dcp-data-360-${bundle.target}
+
+      description: >
+        DCP Data 360 Diabetes Care Platform
+
+      source_code_path: ../app
+
+      resources:
+        - name: sql_warehouse
+          sql_warehouse:
+            id: ${var.warehouse_id}
+            permission: CAN_USE
+
+      permissions:
+        - level: CAN_USE
+          group_name: "<DCP_APP_USERS_GROUP>"
+
+        - level: CAN_MANAGE
+          service_principal_name: "${var.runtime_sp}"

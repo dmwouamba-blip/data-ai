@@ -1,0 +1,14 @@
+command:
+  - python
+  - backend/main.py
+
+env:
+  - name: DATABRICKS_WAREHOUSE_ID
+    valueFrom: sql_warehouse
+
+  - name: DCP_CATALOG
+    value: "dcp_dev"
+
+  - name: DCP_SERVING_SCHEMA
+    value: "serving"
+    valueFrom: sql_warehouse

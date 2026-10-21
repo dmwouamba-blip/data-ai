@@ -1,0 +1,15 @@
+{
+ "state_version": 2,
+ "cli_version": "0.296.0",
+ "lineage": "ffd9d8e1-ed98-4a6c-a3c1-1c20309ba663",
+ "serial": 3,
+ "state": {
+  "resources.apps.clinical-research-assistant": {
+   "__id__": "clinical-research-assistant",
+   "state": {
+    "description": "",
+    "name": "clinical-research-assistant"
+   }
+  }
+ }
+}

@@ -1,0 +1,2 @@
+# Security and privacy
+Health, residence, consent and nutrition data are sensitive. Store city identifiers rather than precise addresses in analytics. Patient and city selectors are UX filters, not authorization. Apply least privilege, patient-cohort authorization where required, auditable access, purpose limitation, data minimization, lawful-basis confirmation, retention and regional residency controls before PROD.

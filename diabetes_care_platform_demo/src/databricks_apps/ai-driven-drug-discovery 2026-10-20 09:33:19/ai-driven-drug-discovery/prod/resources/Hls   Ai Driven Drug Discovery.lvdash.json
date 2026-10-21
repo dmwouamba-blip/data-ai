@@ -1,0 +1,2857 @@
+{
+  "datasets": [
+    {
+      "name": "8b9ee44d",
+      "displayName": "Protein Types Distribution with Percentages Chart",
+      "queryLines": [
+        "-- What types of proteins does this dataset contain? What is their corresponding percentage relative to the existing data and provide a chart for the output.\n",
+        "SELECT\n",
+        "  label,\n",
+        "  COUNT(*) AS count,\n",
+        "  ROUND((COUNT(*) * 100.0 / SUM(COUNT(*)) OVER()), 2) AS percentage\n",
+        "FROM\n",
+        "  demos_genie.hls_ai_drug_discovery.proteinclassification_tiny\n",
+        "GROUP BY\n",
+        "  label"
+      ]
+    },
+    {
+      "name": "45854566",
+      "displayName": "Soluble Protein Molecular Weight Categories Count",
+      "queryLines": [
+        "SELECT\n",
+        "  CASE\n",
+        "    WHEN Molecular_Weight BETWEEN 0\n",
+        "    AND 9999 THEN '0-9999'\n",
+        "    WHEN Molecular_Weight BETWEEN 10000\n",
+        "    AND 19999 THEN '10000-19999'\n",
+        "    WHEN Molecular_Weight BETWEEN 20000\n",
+        "    AND 29999 THEN '20000-29999'\n",
+        "    WHEN Molecular_Weight BETWEEN 30000\n",
+        "    AND 39999 THEN '30000-39999'\n",
+        "    WHEN Molecular_Weight BETWEEN 40000\n",
+        "    AND 49999 THEN '40000-49999'\n",
+        "    WHEN Molecular_Weight BETWEEN 50000\n",
+        "    AND 59999 THEN '50000-59999'\n",
+        "    WHEN Molecular_Weight BETWEEN 60000\n",
+        "    AND 69999 THEN '60000-69999'\n",
+        "    WHEN Molecular_Weight BETWEEN 70000\n",
+        "    AND 79999 THEN '70000-79999'\n",
+        "    WHEN Molecular_Weight BETWEEN 80000\n",
+        "    AND 89999 THEN '80000-89999'\n",
+        "    WHEN Molecular_Weight >= 90000 THEN '90000+'\n",
+        "  END AS Weight_Bin,\n",
+        "  COUNT(*) AS Count\n",
+        "FROM\n",
+        "  demos_genie.hls_ai_drug_discovery.proteinclassification_tiny\n",
+        "WHERE\n",
+        "  label ILIKE '%soluble%'\n",
+        "GROUP BY\n",
+        "  Weight_Bin\n",
+        "ORDER BY\n",
+        "  Weight_Bin"
+      ]
+    },
+    {
+      "name": "ae25a8db",
+      "displayName": "Membrane Protein Molecular Weight Count",
+      "queryLines": [
+        "SELECT\n",
+        "  CASE\n",
+        "    WHEN Molecular_Weight BETWEEN 0\n",
+        "    AND 9999 THEN '0-9999'\n",
+        "    WHEN Molecular_Weight BETWEEN 10000\n",
+        "    AND 19999 THEN '10000-19999'\n",
+        "    WHEN Molecular_Weight BETWEEN 20000\n",
+        "    AND 29999 THEN '20000-29999'\n",
+        "    WHEN Molecular_Weight BETWEEN 30000\n",
+        "    AND 39999 THEN '30000-39999'\n",
+        "    WHEN Molecular_Weight BETWEEN 40000\n",
+        "    AND 49999 THEN '40000-49999'\n",
+        "    WHEN Molecular_Weight BETWEEN 50000\n",
+        "    AND 59999 THEN '50000-59999'\n",
+        "    WHEN Molecular_Weight BETWEEN 60000\n",
+        "    AND 69999 THEN '60000-69999'\n",
+        "    WHEN Molecular_Weight BETWEEN 70000\n",
+        "    AND 79999 THEN '70000-79999'\n",
+        "    WHEN Molecular_Weight BETWEEN 80000\n",
+        "    AND 89999 THEN '80000-89999'\n",
+        "    WHEN Molecular_Weight >= 90000 THEN '90000+'\n",
+        "  END AS Weight_Bin,\n",
+        "  COUNT(*) AS Count\n",
+        "FROM\n",
+        "  demos_genie.hls_ai_drug_discovery.proteinclassification_tiny\n",
+        "WHERE\n",
+        "  label ILIKE '%membrane%'\n",
+        "GROUP BY\n",
+        "  Weight_Bin\n",
+        "ORDER BY\n",
+        "  Weight_Bin"
+      ]
+    },
+    {
+      "name": "9058df3a",
+      "displayName": "High Confidence (p>0.85) Protein Classification Percentages",
+      "queryLines": [
+        "SELECT\n",
+        "  label,\n",
+        "  COUNT(*) AS count,\n",
+        "  ROUND((COUNT(*) * 100.0 / SUM(COUNT(*)) OVER()), 2) AS percentage\n",
+        "FROM\n",
+        "  demos_genie.hls_ai_drug_discovery.proteinclassification_tiny\n",
+        "WHERE\n",
+        "  score > 0.85\n",
+        "GROUP BY\n",
+        "  label"
+      ]
+    },
+    {
+      "name": "c8c54f3d",
+      "displayName": "Organism Distribution of High-Confidence Membrane Proteins",
+      "queryLines": [
+        "SELECT\n",
+        "  OrganismName,\n",
+        "  -- COUNT(*) AS Count\n",
+        "  COUNT(DISTINCT ProteinName) AS Protein_Count\n",
+        "FROM\n",
+        "  demos_genie.hls_ai_drug_discovery.proteinclassification_tiny\n",
+        "WHERE\n",
+        "  label ILIKE '%membrane%'\n",
+        "  -- :label ILIKE '%' || :label || '%' --'%membrane%'\n",
+        "  AND score > 0.85\n",
+        "GROUP BY\n",
+        "  OrganismName\n",
+        "ORDER BY\n",
+        "  Protein_Count DESC"
+      ]
+    },
+    {
+      "name": "5c0167ed",
+      "displayName": "High Confidence Protein Classifications with Organism Insights",
+      "queryLines": [
+        "SELECT\n",
+        "  p.OrganismName,\n",
+        "  o.Organism_SimpleTerm,\n",
+        "  o.Organism_Definition,\n",
+        "  p.label,\n",
+        "  COUNT(DISTINCT p.ProteinName) AS Protein_Count,\n",
+        "  collect_set(p.ProteinName) AS Distinct_Protein_Names,\n",
+        "  o.SimpleTermDict \n",
+        "FROM\n",
+        "  demos_genie.hls_ai_drug_discovery.proteinclassification_tiny p\n",
+        "JOIN\n",
+        "  demos_genie.hls_ai_drug_discovery.tinysample_organism_info_scientificnsimple o \n",
+        "  ON p.OrganismName = o.OrganismName\n",
+        "WHERE\n",
+        "  p.score > 0.85\n",
+        "GROUP BY\n",
+        "  p.OrganismName,\n",
+        "  o.SimpleTermDict,\n",
+        "  p.label,\n",
+        "  o.Organism_SimpleTerm,\n",
+        "  o.Organism_Definition\n",
+        "ORDER BY\n",
+        "  p.OrganismName,\n",
+        "  p.label"
+      ]
+    },
+    {
+      "name": "00ac960e",
+      "displayName": "Protein Classification Diversity Across Organisms",
+      "queryLines": [
+        "SELECT\n",
+        "  p.ProteinName,\n",
+        "  COUNT(DISTINCT o.SimpleTermDict) AS TypeCount,\n",
+        "  ARRAY_AGG(DISTINCT o.SimpleTermDict) AS SimpleTerms,\n",
+        "  ARRAY_AGG(DISTINCT p.OrganismName) AS OrganismNames\n",
+        "FROM\n",
+        "  demos_genie.hls_ai_drug_discovery.proteinclassification_tiny p\n",
+        "  JOIN demos_genie.hls_ai_drug_discovery.tinysample_organism_info_scientificnsimple o ON p.OrganismName = o.OrganismName\n",
+        "GROUP BY\n",
+        "  p.ProteinName\n",
+        "  -- p.label\n",
+        "HAVING\n",
+        "  COUNT(DISTINCT o.SimpleTermDict) > 1\n",
+        "ORDER BY\n",
+        "  TypeCount DESC"
+      ]
+    },
+    {
+      "name": "e256576d",
+      "displayName": "Comparative Analysis of Protein Types in Select Organisms",
+      "queryLines": [
+        "-- Comparative Analysis of Protein Types in Select Organisms\n",
+        "SELECT\n",
+        "  p.ProteinName,\n",
+        "  p.label AS ProteinType,\n",
+        "  p.GeneName,\n",
+        "  p.Sequence,\n",
+        "  p.Molecular_Weight,\n",
+        "  p.OrganismName,\n",
+        "  o.Organism_SimpleTerm\n",
+        "FROM\n",
+        "  demos_genie.hls_ai_drug_discovery.proteinclassification_tiny p\n",
+        "  JOIN demos_genie.hls_ai_drug_discovery.tinysample_organism_info_scientificnsimple o \n",
+        "  ON p.OrganismName = o.OrganismName\n",
+        "-- WHERE\n",
+        "--   (COALESCE(:Organism_SimpleTerm, '') = '' OR o.Organism_SimpleTerm ILIKE '%' || :Organism_SimpleTerm || '%')"
+      ]
+    },
+    {
+      "name": "704b4384",
+      "displayName": "Organism Counts for High-Confidence Soluble Proteins",
+      "queryLines": [
+        "SELECT\n",
+        "  OrganismName,\n",
+        "  -- COUNT(*) AS Count\n",
+        "  COUNT(DISTINCT ProteinName) AS Protein_Count\n",
+        "FROM\n",
+        "  demos_genie.hls_ai_drug_discovery.proteinclassification_tiny\n",
+        "WHERE\n",
+        "  label ILIKE '%soluble%'\n",
+        "  -- :label ILIKE '%' || :label || '%' \n",
+        "  AND score > 0.85\n",
+        "GROUP BY\n",
+        "  OrganismName\n",
+        "ORDER BY\n",
+        "  Protein_Count DESC"
+      ]
+    },
+    {
+      "name": "d26479ea",
+      "displayName": "Membrane/Soluble Protein Research Insights and Drug Discovery Potential",
+      "queryLines": [
+        "SELECT\n",
+        "  OrganismName,\n",
+        "  Organism_SimpleTerm,\n",
+        "  ProteinName,\n",
+        "  -- ai_query(\n",
+        "  --   'az_openai_gpt4o', -- deployed external endpoint on e2-demo-west-ws\n",
+        "  --   CONCAT('You are well-versed in membrane proteins and drug discovery research. Please be brief. Provide a dictionary of responses in the format {\"key\": \"response\"} to the following keys \"information\", \"recent_research\" and highlight \"under_researched_areas\" that hold promise for drug discovery for the given \"protein name\": ', ProteinName, ' Output just the dictionary {\"information\": \"response\", \"recent_research\": \"response\", \"under_researched_areas\": \"response\"}. Do not include \"```json\" strings in output')\n",
+        "  -- ) AS researchDict,\n",
+        "  demos_genie.hls_ai_drug_discovery.get_protein_research_info(ProteinName) AS researchDict, -- using the registered SQL_function here\n",
+        "  GET_JSON_OBJECT(researchDict, '$.information') AS information,\n",
+        "  GET_JSON_OBJECT(researchDict, '$.recent_research') AS recent_research,\n",
+        "  GET_JSON_OBJECT(researchDict, '$.under_researched_areas') AS under_researched_areas,\n",
+        "  ProteinType,\n",
+        "  ProteinClassificationScore\n",
+        "\n",
+        "FROM \n",
+        "(\n",
+        "  SELECT\n",
+        "    p.ProteinName,\n",
+        "    p.label AS ProteinType,\n",
+        "    p.score AS ProteinClassificationScore,\n",
+        "    p.GeneName,\n",
+        "    p.Sequence,\n",
+        "    p.Molecular_Weight,\n",
+        "    p.OrganismName,\n",
+        "    o.Organism_SimpleTerm\n",
+        "\n",
+        "  FROM\n",
+        "    demos_genie.hls_ai_drug_discovery.proteinclassification_tiny p\n",
+        "    JOIN demos_genie.hls_ai_drug_discovery.tinysample_organism_info_scientificNsimple o ON p.OrganismName = o.OrganismName\n",
+        "\n",
+        "-- Takes a while to process -- so we will use all values and filter instead except for the p.score/ProteinClassificationScore\n",
+        "\n",
+        "--   WHERE\n",
+        "--     p.score > 0.85\n",
+        "--   AND\n",
+        "--     o.Organism_SimpleTerm ILIKE '%human%'\n",
+        "-- );\n",
+        "\n",
+        "   WHERE \n",
+        "      p.score > :ProteinClassificationScore \n",
+        "   AND \n",
+        "      o.Organism_SimpleTerm ILIKE '%' || :Organism_SimpleTerm || '%'\n",
+        "      -- (:Organism_SimpleTerm = '*' OR o.Organism_SimpleTerm ILIKE '%' || COALESCE(:Organism_SimpleTerm, '') || '%')   \n",
+        ");"
+      ],
+      "parameters": [
+        {
+          "displayName": "ProteinClassificationScore",
+          "keyword": "ProteinClassificationScore",
+          "dataType": "STRING",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": "0.85"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Organism_SimpleTerm",
+          "keyword": "Organism_SimpleTerm",
+          "dataType": "STRING",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": "human"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ebefdafa",
+      "displayName": "proteinclassification_tiny",
+      "queryLines": [
+        "SELECT * FROM demos_genie.hls_ai_drug_discovery.proteinclassification_tiny"
+      ]
+    },
+    {
+      "name": "baea7edb",
+      "displayName": "proteinclassification_organism_info_llm2simpleterms2",
+      "queryLines": [
+        "SELECT * FROM demos_genie.hls_ai_drug_discovery.tinysample_organism_info_scientificnsimple"
+      ]
+    },
+    {
+      "name": "82e85554",
+      "displayName": "tinysample_organism_protein_research_info",
+      "queryLines": [
+        "SELECT * FROM demos_genie.hls_ai_drug_discovery.tinysample_organism_protein_research_info\n",
+        "ORDER BY OrganismName"
+      ]
+    },
+    {
+      "name": "48d8662f",
+      "displayName": "Human vs Frog Protein Comparison",
+      "queryLines": [
+        "SELECT \n",
+        "  o.Organism_SimpleTerm,\n",
+        "  p.OrganismName,\n",
+        "  p.ProteinName,\n",
+        "  p.label AS ProteinType,\n",
+        "  p.score AS ClassificationScore,\n",
+        "  p.GeneName,\n",
+        "  p.Molecular_Weight,\n",
+        "  p.Sequence\n",
+        "FROM demos_genie.hls_ai_drug_discovery.proteinclassification_tiny p\n",
+        "JOIN demos_genie.hls_ai_drug_discovery.tinysample_organism_info_scientificnsimple o \n",
+        "  ON p.OrganismName = o.OrganismName\n",
+        "WHERE o.Organism_SimpleTerm IN ('human', 'frog')\n",
+        "ORDER BY o.Organism_SimpleTerm, p.ProteinType"
+      ]
+    },
+    {
+      "name": "64cd72e9",
+      "displayName": "Human vs Frog Summary Statistics",
+      "queryLines": [
+        "SELECT \n",
+        "  o.Organism_SimpleTerm,\n",
+        "  p.label AS ProteinType,\n",
+        "  COUNT(DISTINCT p.ProteinName) AS Protein_Count,\n",
+        "  ROUND(AVG(p.Molecular_Weight), 2) AS Avg_Molecular_Weight,\n",
+        "  ROUND(MIN(p.Molecular_Weight), 2) AS Min_Molecular_Weight,\n",
+        "  ROUND(MAX(p.Molecular_Weight), 2) AS Max_Molecular_Weight,\n",
+        "  ROUND(AVG(p.score), 3) AS Avg_Classification_Score\n",
+        "FROM demos_genie.hls_ai_drug_discovery.proteinclassification_tiny p\n",
+        "JOIN demos_genie.hls_ai_drug_discovery.tinysample_organism_info_scientificnsimple o \n",
+        "  ON p.OrganismName = o.OrganismName\n",
+        "WHERE o.Organism_SimpleTerm IN ('Human', 'African clawed frog', 'Western clawed frog')\n",
+        "GROUP BY o.Organism_SimpleTerm, p.label\n",
+        "ORDER BY o.Organism_SimpleTerm, p.label"
+      ]
+    },
+    {
+      "name": "6ce25827",
+      "displayName": "Human vs Bacteria Summary Statistics",
+      "queryLines": [
+        "SELECT \n",
+        "  CASE \n",
+        "    WHEN o.Organism_SimpleTerm = 'Human' THEN 'Human'\n",
+        "    ELSE 'Bacteria'\n",
+        "  END AS Organism_Category,\n",
+        "  p.label AS ProteinType,\n",
+        "  COUNT(DISTINCT p.ProteinName) AS Protein_Count,\n",
+        "  ROUND(AVG(p.Molecular_Weight), 2) AS Avg_Molecular_Weight,\n",
+        "  ROUND(MIN(p.Molecular_Weight), 2) AS Min_Molecular_Weight,\n",
+        "  ROUND(MAX(p.Molecular_Weight), 2) AS Max_Molecular_Weight,\n",
+        "  ROUND(AVG(p.score), 3) AS Avg_Classification_Score\n",
+        "FROM demos_genie.hls_ai_drug_discovery.proteinclassification_tiny p\n",
+        "JOIN demos_genie.hls_ai_drug_discovery.tinysample_organism_info_scientificnsimple o \n",
+        "  ON p.OrganismName = o.OrganismName\n",
+        "WHERE o.Organism_SimpleTerm = 'Human' \n",
+        "   OR o.Organism_SimpleTerm LIKE '%bacteria%' \n",
+        "   OR o.Organism_SimpleTerm LIKE '%Bacteria%'\n",
+        "GROUP BY \n",
+        "  CASE \n",
+        "    WHEN o.Organism_SimpleTerm = 'Human' THEN 'Human'\n",
+        "    ELSE 'Bacteria'\n",
+        "  END,\n",
+        "  p.label\n",
+        "ORDER BY Organism_Category, p.label"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "777ee611",
+      "displayName": "Dashboard",
+      "layout": [
+        {
+          "widget": {
+            "name": "d401b490",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8b9ee44d",
+                  "fields": [
+                    {
+                      "name": "percentage",
+                      "expression": "`percentage`"
+                    },
+                    {
+                      "name": "label",
+                      "expression": "`label`"
+                    },
+                    {
+                      "name": "count",
+                      "expression": "`count`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "percentage",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "percentage"
+                },
+                "color": {
+                  "fieldName": "label",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "Soluble",
+                        "color": "#d4d4d4"
+                      },
+                      {
+                        "value": "Membrane",
+                        "color": "#464444"
+                      }
+                    ]
+                  },
+                  "displayName": "label"
+                },
+                "label": {
+                  "show": true
+                },
+                "extra": [
+                  {
+                    "fieldName": "count",
+                    "displayName": "count"
+                  }
+                ]
+              },
+              "frame": {
+                "title": "Protein Types Distribution Across Dataset",
+                "showTitle": true,
+                "showDescription": false
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 6,
+            "height": 7
+          }
+        },
+        {
+          "widget": {
+            "name": "41a9e9b8",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "45854566",
+                  "fields": [
+                    {
+                      "name": "sum(Count)",
+                      "expression": "SUM(`Count`)"
+                    },
+                    {
+                      "name": "Weight_Bin",
+                      "expression": "`Weight_Bin`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "Weight_Bin",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Weight_Bin"
+                },
+                "y": {
+                  "fieldName": "sum(Count)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Sum of Count"
+                },
+                "color": {
+                  "fieldName": "sum(Count)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Sum of Count"
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "showDescription": false,
+                "title": "Distribution of Soluble Protein Molecular Weights",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 17,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "28839ad2",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ae25a8db",
+                  "fields": [
+                    {
+                      "name": "sum(Count)",
+                      "expression": "SUM(`Count`)"
+                    },
+                    {
+                      "name": "Weight_Bin",
+                      "expression": "`Weight_Bin`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "Weight_Bin",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Weight_Bin"
+                },
+                "y": {
+                  "fieldName": "sum(Count)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Sum of Count"
+                },
+                "color": {
+                  "fieldName": "sum(Count)",
+                  "scale": {
+                    "type": "quantitative",
+                    "colorRamp": {
+                      "mode": "custom-sequential",
+                      "colors": {
+                        "start": "#ffecc4",
+                        "end": "#FFAB00"
+                      }
+                    },
+                    "reverse": false
+                  },
+                  "displayName": "Sum of Count"
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "showDescription": false,
+                "title": "Distribution of Membrane Protein Molecular Weights"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 17,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "2ea78ab5",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "9058df3a",
+                  "fields": [
+                    {
+                      "name": "percentage",
+                      "expression": "`percentage`"
+                    },
+                    {
+                      "name": "label",
+                      "expression": "`label`"
+                    },
+                    {
+                      "name": "sum(count)",
+                      "expression": "SUM(`count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "percentage",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "percentage"
+                },
+                "color": {
+                  "fieldName": "label",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "Soluble",
+                        "color": "#07559d"
+                      }
+                    ]
+                  },
+                  "displayName": "label"
+                },
+                "label": {
+                  "show": true
+                },
+                "extra": [
+                  {
+                    "fieldName": "sum(count)",
+                    "displayName": "Sum of count"
+                  }
+                ]
+              },
+              "frame": {
+                "showDescription": false,
+                "title": "High Confidence (>0.85) Protein Type Classification Percentages",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 8,
+            "width": 6,
+            "height": 7
+          }
+        },
+        {
+          "widget": {
+            "name": "cfe9194f",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c8c54f3d",
+                  "fields": [
+                    {
+                      "name": "sum(Protein_Count)",
+                      "expression": "SUM(`Protein_Count`)"
+                    },
+                    {
+                      "name": "Protein_Count",
+                      "expression": "`Protein_Count`"
+                    },
+                    {
+                      "name": "OrganismName",
+                      "expression": "`OrganismName`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "Protein_Count",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Protein_Count"
+                },
+                "y": {
+                  "fieldName": "OrganismName",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "OrganismName"
+                },
+                "color": {
+                  "fieldName": "sum(Protein_Count)",
+                  "scale": {
+                    "type": "quantitative",
+                    "colorRamp": {
+                      "mode": "custom-sequential",
+                      "colors": {
+                        "start": "#ffeac1",
+                        "end": "#FFAB00"
+                      }
+                    }
+                  },
+                  "displayName": "Sum of Protein_Count"
+                },
+                "label": {
+                  "show": false
+                }
+              },
+              "frame": {
+                "title": "Organism and Associated Frequency of High-Confidence Membrane Transporter Proteins",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 26,
+            "width": 6,
+            "height": 15
+          }
+        },
+        {
+          "widget": {
+            "name": "f9b5f160",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "5c0167ed",
+                  "fields": [
+                    {
+                      "name": "label",
+                      "expression": "`label`"
+                    },
+                    {
+                      "name": "Organism_SimpleTerm",
+                      "expression": "`Organism_SimpleTerm`"
+                    },
+                    {
+                      "name": "Distinct_Protein_Names",
+                      "expression": "`Distinct_Protein_Names`"
+                    },
+                    {
+                      "name": "Protein_Count",
+                      "expression": "`Protein_Count`"
+                    },
+                    {
+                      "name": "OrganismName",
+                      "expression": "`OrganismName`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "Protein_Count",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Protein_Count"
+                },
+                "y": {
+                  "fieldName": "OrganismName",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "OrganismName"
+                },
+                "color": {
+                  "fieldName": "label",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "Membrane",
+                        "color": "#FF3621"
+                      },
+                      {
+                        "value": "Soluble",
+                        "color": "#919191"
+                      }
+                    ]
+                  },
+                  "displayName": "label"
+                },
+                "label": {
+                  "show": true
+                },
+                "extra": [
+                  {
+                    "fieldName": "Organism_SimpleTerm",
+                    "displayName": "Organism_SimpleTerm"
+                  },
+                  {
+                    "fieldName": "Distinct_Protein_Names",
+                    "displayName": "Distinct_Protein_Names"
+                  }
+                ]
+              },
+              "frame": {
+                "title": "Common Organism and Associated Protein Type Counts",
+                "showTitle": true,
+                "showDescription": false
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 43,
+            "width": 12,
+            "height": 16
+          }
+        },
+        {
+          "widget": {
+            "name": "15b0746e",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "00ac960e",
+                  "fields": [
+                    {
+                      "name": "ProteinName",
+                      "expression": "`ProteinName`"
+                    },
+                    {
+                      "name": "TypeCount",
+                      "expression": "`TypeCount`"
+                    },
+                    {
+                      "name": "SimpleTerms",
+                      "expression": "`SimpleTerms`"
+                    },
+                    {
+                      "name": "OrganismNames",
+                      "expression": "`OrganismNames`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 1,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "ProteinName",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100000,
+                    "title": "ProteinName",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "ProteinName"
+                  },
+                  {
+                    "fieldName": "TypeCount",
+                    "numberFormat": "0",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "integer",
+                    "displayAs": "number",
+                    "visible": true,
+                    "order": 100001,
+                    "title": "TypeCount",
+                    "allowSearch": false,
+                    "alignContent": "right",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "TypeCount"
+                  },
+                  {
+                    "fieldName": "SimpleTerms",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "complex",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100002,
+                    "title": "SimpleTerms",
+                    "allowSearch": true,
+                    "alignContent": "left",
+                    "allowHTML": true,
+                    "highlightLinks": true,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "cellFormat": {
+                      "default": {
+                        "foregroundColor": null
+                      },
+                      "rules": []
+                    },
+                    "displayName": "SimpleTerms"
+                  },
+                  {
+                    "fieldName": "OrganismNames",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "complex",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100003,
+                    "title": "OrganismNames",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "OrganismNames"
+                  }
+                ]
+              },
+              "invisibleColumns": [],
+              "allowHTMLByDefault": false,
+              "itemsPerPage": 25,
+              "paginationSize": "default",
+              "condensed": true,
+              "withRowNumber": false,
+              "frame": {
+                "title": "Commonly Observed Protein Classification Diversity Across Organisms",
+                "showTitle": true,
+                "showDescription": false
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 61,
+            "width": 12,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "5ae1b7cf",
+            "multilineTextboxSpec": {
+              "lines": [
+                "### 2.4 Interactive Exploratory Analyses  using `Organism_SimpleTerm`\n",
+                "- With the help of preprocessing our proteins data using [`databricks-meta-llama-3-1-70b-instruct` within an `ai_query()` to covert `scientific2simple` terms](https://e2-demo-west.cloud.databricks.com/editor/notebooks/1625373258635024?o=2556758628403379) we can more easily use an Organism's  *layman term* to explore its associated `ProteinType`, `GeneName`, `Sequence`, `Molecular_Weight`\n",
+                "- Within the `Organism_SimpleTerm` Search box below: Filter by e.g. `human`, `mouse`, `fly`, `fungus`, `frog`, `zebrafish` to explore an Organism's protein information."
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 69,
+            "width": 12,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "557cf24a",
+            "multilineTextboxSpec": {
+              "lines": [
+                "### 2.2 Association between Protein Classification & Distinct Types \n",
+                "- For each Organism, it would be interesting to find out how many distinct proteins and their corresponding subtypes are associated with sufficiently high classification confidence (scores).\n"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 41,
+            "width": 12,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "a0bc69e4",
+            "multilineTextboxSpec": {
+              "lines": [
+                "### 1.2 Distributions\n",
+                "- What is the distribution of molecular weights for water soluble / membrane proteins "
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 15,
+            "width": 12,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "9f1cc292",
+            "multilineTextboxSpec": {
+              "lines": [
+                "### 1.1 General Overview \n",
+                "- What types of proteins does this dataset contain? \n",
+                "- What is their corresponding percentage relative to the existing data? \n",
+                "- Do these change with  proteins classified with high confidences? "
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 6,
+            "width": 12,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "3da1aa27",
+            "multilineTextboxSpec": {
+              "lines": [
+                "### 2.3 Comparative Assessments \n",
+                "- Understanding diversity of organisms associated with protein shared by more than a single organism can be helpful. \n",
+                "- We can explore using terms that are similar or part of the `simple_term` in the `SimpleTerms` array. "
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 59,
+            "width": 12,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "33e85c8b",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "704b4384",
+                  "fields": [
+                    {
+                      "name": "sum(Protein_Count)",
+                      "expression": "SUM(`Protein_Count`)"
+                    },
+                    {
+                      "name": "Protein_Count",
+                      "expression": "`Protein_Count`"
+                    },
+                    {
+                      "name": "OrganismName",
+                      "expression": "`OrganismName`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "Protein_Count",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Protein_Count"
+                },
+                "y": {
+                  "fieldName": "OrganismName",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "OrganismName"
+                },
+                "color": {
+                  "fieldName": "sum(Protein_Count)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Sum of Protein_Count"
+                },
+                "label": {
+                  "show": false
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Organism and Associated Frequency of High-Confidence Soluble Proteins"
+              },
+              "mark": {
+                "colors": [
+                  "#919191",
+                  "#FFAB00",
+                  "#00A972",
+                  "#FF3621",
+                  "#8BCAE7",
+                  "#AB4057",
+                  "#99DDB4",
+                  "#FCA4A1",
+                  "#919191",
+                  "#BF7080"
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 26,
+            "width": 6,
+            "height": 15
+          }
+        },
+        {
+          "widget": {
+            "name": "b5e4c836",
+            "multilineTextboxSpec": {
+              "lines": [
+                "### 2.1 Comparative Frequency \n",
+                "- Frequency counts of soluble / membrane transporter proteins associated with an Organism"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 24,
+            "width": 12,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "57510eaa",
+            "multilineTextboxSpec": {
+              "lines": [
+                "### 3.1 Interactively explore under-researched areas for particular proteins of interest        \n",
+                "These EDA discoveries can help yeild actionable insights:    \n",
+                "- We can further use [ai_query](https://docs.databricks.com/en/sql/language-manual/functions/ai_query.html) to leverage the external `azure-openai-gpt-4o` model to assist in [getting information about recent_research and highlight under_researched areas](https://e2-demo-west.cloud.databricks.com/editor/notebooks/1625373258636712?o=2556758628403379#command/1625373258638171) for particular protein of interest with particularly high classification confidence. \n",
+                "- The `ai_query()` can also be registered to Unity Catalog as a SQL_function and called within a separate query as is done here."
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 85,
+            "width": 12,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "0cb9cfd7",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "e256576d",
+                  "fields": [
+                    {
+                      "name": "Organism_SimpleTerm",
+                      "expression": "`Organism_SimpleTerm`"
+                    },
+                    {
+                      "name": "OrganismName",
+                      "expression": "`OrganismName`"
+                    },
+                    {
+                      "name": "ProteinName",
+                      "expression": "`ProteinName`"
+                    },
+                    {
+                      "name": "ProteinType",
+                      "expression": "`ProteinType`"
+                    },
+                    {
+                      "name": "GeneName",
+                      "expression": "`GeneName`"
+                    },
+                    {
+                      "name": "Sequence",
+                      "expression": "`Sequence`"
+                    },
+                    {
+                      "name": "Molecular_Weight",
+                      "expression": "`Molecular_Weight`"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`Organism_SimpleTerm` IN (`Organism_SimpleTerm`) OR TRUE"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 1,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "Organism_SimpleTerm",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 0,
+                    "title": "Organism_SimpleTerm",
+                    "allowSearch": true,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "description": "Filter by Organism's SimpleTerm",
+                    "displayName": "Organism_SimpleTerm"
+                  },
+                  {
+                    "fieldName": "OrganismName",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 1,
+                    "title": "OrganismName",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "OrganismName"
+                  },
+                  {
+                    "fieldName": "ProteinName",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 2,
+                    "title": "ProteinName",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "ProteinName"
+                  },
+                  {
+                    "fieldName": "ProteinType",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 3,
+                    "title": "ProteinType",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "ProteinType"
+                  },
+                  {
+                    "fieldName": "GeneName",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 4,
+                    "title": "GeneName",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "GeneName"
+                  },
+                  {
+                    "fieldName": "Sequence",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 5,
+                    "title": "Sequence",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "Sequence"
+                  },
+                  {
+                    "fieldName": "Molecular_Weight",
+                    "numberFormat": "0.00",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "float",
+                    "displayAs": "number",
+                    "visible": true,
+                    "order": 6,
+                    "title": "Molecular_Weight",
+                    "allowSearch": false,
+                    "alignContent": "right",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "Molecular_Weight"
+                  }
+                ]
+              },
+              "invisibleColumns": [],
+              "allowHTMLByDefault": false,
+              "itemsPerPage": 20,
+              "paginationSize": "default",
+              "condensed": true,
+              "withRowNumber": true,
+              "frame": {
+                "showTitle": true,
+                "showDescription": true,
+                "title": "Comparative Analysis of Protein Types in Select Organisms",
+                "description": ""
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 71,
+            "width": 12,
+            "height": 13
+          }
+        },
+        {
+          "widget": {
+            "name": "e41fca42",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "d26479ea",
+                  "fields": [
+                    {
+                      "name": "Organism_SimpleTerm",
+                      "expression": "`Organism_SimpleTerm`"
+                    },
+                    {
+                      "name": "ProteinName",
+                      "expression": "`ProteinName`"
+                    },
+                    {
+                      "name": "information",
+                      "expression": "`information`"
+                    },
+                    {
+                      "name": "recent_research",
+                      "expression": "`recent_research`"
+                    },
+                    {
+                      "name": "under_researched_areas",
+                      "expression": "`under_researched_areas`"
+                    },
+                    {
+                      "name": "ProteinType",
+                      "expression": "`ProteinType`"
+                    },
+                    {
+                      "name": "ProteinClassificationScore",
+                      "expression": "`ProteinClassificationScore`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 1,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "Organism_SimpleTerm",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 0,
+                    "title": "Organism_SimpleTerm",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "Organism_SimpleTerm"
+                  },
+                  {
+                    "fieldName": "ProteinName",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 2,
+                    "title": "ProteinName",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "ProteinName"
+                  },
+                  {
+                    "fieldName": "information",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 4,
+                    "title": "information",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "information"
+                  },
+                  {
+                    "fieldName": "recent_research",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 5,
+                    "title": "recent_research",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "recent_research"
+                  },
+                  {
+                    "fieldName": "under_researched_areas",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 6,
+                    "title": "under_researched_areas",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "under_researched_areas"
+                  },
+                  {
+                    "fieldName": "ProteinType",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 7,
+                    "title": "ProteinType",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "ProteinType"
+                  },
+                  {
+                    "fieldName": "ProteinClassificationScore",
+                    "numberFormat": "0.00",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "float",
+                    "displayAs": "number",
+                    "visible": true,
+                    "order": 8,
+                    "title": "ProteinClassificationScore",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "ProteinClassificationScore"
+                  }
+                ]
+              },
+              "invisibleColumns": [
+                {
+                  "booleanValues": [
+                    "false",
+                    "true"
+                  ],
+                  "imageUrlTemplate": "{{ @ }}",
+                  "imageTitleTemplate": "{{ @ }}",
+                  "imageWidth": "",
+                  "imageHeight": "",
+                  "linkUrlTemplate": "{{ @ }}",
+                  "linkTextTemplate": "{{ @ }}",
+                  "linkTitleTemplate": "{{ @ }}",
+                  "linkOpenInNewTab": true,
+                  "name": "OrganismName",
+                  "type": "string",
+                  "displayAs": "string",
+                  "order": 1,
+                  "title": "OrganismName",
+                  "allowSearch": false,
+                  "alignContent": "left",
+                  "allowHTML": false,
+                  "highlightLinks": false,
+                  "useMonospaceFont": false,
+                  "preserveWhitespace": false
+                },
+                {
+                  "booleanValues": [
+                    "false",
+                    "true"
+                  ],
+                  "imageUrlTemplate": "{{ @ }}",
+                  "imageTitleTemplate": "{{ @ }}",
+                  "imageWidth": "",
+                  "imageHeight": "",
+                  "linkUrlTemplate": "{{ @ }}",
+                  "linkTextTemplate": "{{ @ }}",
+                  "linkTitleTemplate": "{{ @ }}",
+                  "linkOpenInNewTab": true,
+                  "name": "researchDict",
+                  "type": "string",
+                  "displayAs": "string",
+                  "order": 3,
+                  "title": "researchDict",
+                  "allowSearch": false,
+                  "alignContent": "left",
+                  "allowHTML": false,
+                  "highlightLinks": false,
+                  "useMonospaceFont": false,
+                  "preserveWhitespace": false
+                }
+              ],
+              "allowHTMLByDefault": false,
+              "itemsPerPage": 25,
+              "paginationSize": "default",
+              "condensed": true,
+              "withRowNumber": true,
+              "frame": {
+                "showTitle": true,
+                "showDescription": false,
+                "description": "",
+                "title": "Membrane/Soluble Protein Research Insights and Drug Discovery Potential (Ad-hoc)"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 91,
+            "width": 12,
+            "height": 10
+          }
+        },
+        {
+          "widget": {
+            "name": "b8acf331",
+            "queries": [
+              {
+                "name": "parameter_dashboards/01efc7181c8a1509ae71b5e4af24b29c/datasets/01efc71834b0110d823141d4e8b25fea_Organism_SimpleTerm",
+                "query": {
+                  "datasetName": "d26479ea",
+                  "parameters": [
+                    {
+                      "name": "Organism_SimpleTerm",
+                      "keyword": "Organism_SimpleTerm"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "parameterName": "Organism_SimpleTerm",
+                    "queryName": "parameter_dashboards/01efc7181c8a1509ae71b5e4af24b29c/datasets/01efc71834b0110d823141d4e8b25fea_Organism_SimpleTerm"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "",
+                "showDescription": false,
+                "description": ""
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 88,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "2a3e96fd",
+            "queries": [
+              {
+                "name": "parameter_dashboards/01efc7181c8a1509ae71b5e4af24b29c/datasets/01efc71834b0110d823141d4e8b25fea_ProteinClassificationScore",
+                "query": {
+                  "datasetName": "d26479ea",
+                  "parameters": [
+                    {
+                      "name": "ProteinClassificationScore",
+                      "keyword": "ProteinClassificationScore"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "parameterName": "ProteinClassificationScore",
+                    "queryName": "parameter_dashboards/01efc7181c8a1509ae71b5e4af24b29c/datasets/01efc71834b0110d823141d4e8b25fea_ProteinClassificationScore"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "showDescription": false,
+                "description": ""
+              }
+            }
+          },
+          "position": {
+            "x": 10,
+            "y": 88,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "ef271410",
+            "multilineTextboxSpec": {
+              "lines": [
+                "### 3.1.1 *Ad-hoc queries* parameterized by `Organism_SimpleTerm` and desired `ProteinClassificationScore` \n",
+                "- Use the Options on the RHS to specify Organisms of interest by `Organism_SimpleTerm` and desired `ProteinClassificationScore` thresholds.\n",
+                "- Depending on pay-per-token, concurrency, or endpoint throughput deployment limits the query could take a while. \n",
+                "- Suggested `Organism_SimpleTerm` to try e.g. `human`, `mouse`, `fly`, `fungus`, `frog`, `zebrafish`, `bird`"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 88,
+            "width": 8,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "d1f3d01a",
+            "multilineTextboxSpec": {
+              "lines": [
+                "### 3.1.2 Pre-computed protein-related research info with UC-registered `get_protein_research_info` SQL_function\n",
+                "- Use the Options below to filter Organisms of interest by `Organism_SimpleTerm` and desired `ProteinClassificationScore` thresholds.\n",
+                "- Because we have [precomputed the research related info.](https://e2-demo-west.cloud.databricks.com/editor/notebooks/1625373258636712?o=2556758628403379#command/1625373258641277) the exploration will be faster than the above example [3.1.1]\n",
+                "- Multiple `Organism_SimpleTerm` can be included"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 101,
+            "width": 12,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "fcd8ad17",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "82e85554",
+                  "fields": [
+                    {
+                      "name": "OrganismName",
+                      "expression": "`OrganismName`"
+                    },
+                    {
+                      "name": "Organism_SimpleTerm",
+                      "expression": "`Organism_SimpleTerm`"
+                    },
+                    {
+                      "name": "ProteinName",
+                      "expression": "`ProteinName`"
+                    },
+                    {
+                      "name": "information",
+                      "expression": "`information`"
+                    },
+                    {
+                      "name": "recent_research",
+                      "expression": "`recent_research`"
+                    },
+                    {
+                      "name": "under_researched_areas",
+                      "expression": "`under_researched_areas`"
+                    },
+                    {
+                      "name": "ProteinType",
+                      "expression": "`ProteinType`"
+                    },
+                    {
+                      "name": "ProteinClassificationScore",
+                      "expression": "`ProteinClassificationScore`"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`ProteinClassificationScore` IN (`ProteinClassificationScore`) OR TRUE"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 1,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "OrganismName",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100000,
+                    "title": "OrganismName",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "OrganismName"
+                  },
+                  {
+                    "fieldName": "Organism_SimpleTerm",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100001,
+                    "title": "Organism_SimpleTerm",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "Organism_SimpleTerm"
+                  },
+                  {
+                    "fieldName": "ProteinName",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100002,
+                    "title": "ProteinName",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "ProteinName"
+                  },
+                  {
+                    "fieldName": "information",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100004,
+                    "title": "information",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "information"
+                  },
+                  {
+                    "fieldName": "recent_research",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100005,
+                    "title": "recent_research",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "recent_research"
+                  },
+                  {
+                    "fieldName": "under_researched_areas",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100006,
+                    "title": "under_researched_areas",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "under_researched_areas"
+                  },
+                  {
+                    "fieldName": "ProteinType",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100007,
+                    "title": "ProteinType",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "ProteinType"
+                  },
+                  {
+                    "fieldName": "ProteinClassificationScore",
+                    "numberFormat": "0.00",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "float",
+                    "displayAs": "number",
+                    "visible": true,
+                    "order": 100008,
+                    "title": "ProteinClassificationScore",
+                    "allowSearch": true,
+                    "alignContent": "right",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "ProteinClassificationScore"
+                  }
+                ]
+              },
+              "invisibleColumns": [
+                {
+                  "booleanValues": [
+                    "false",
+                    "true"
+                  ],
+                  "imageUrlTemplate": "{{ @ }}",
+                  "imageTitleTemplate": "{{ @ }}",
+                  "imageWidth": "",
+                  "imageHeight": "",
+                  "linkUrlTemplate": "{{ @ }}",
+                  "linkTextTemplate": "{{ @ }}",
+                  "linkTitleTemplate": "{{ @ }}",
+                  "linkOpenInNewTab": true,
+                  "name": "researchDict",
+                  "type": "string",
+                  "displayAs": "string",
+                  "order": 100003,
+                  "title": "researchDict",
+                  "allowSearch": false,
+                  "alignContent": "left",
+                  "allowHTML": false,
+                  "highlightLinks": false,
+                  "useMonospaceFont": false,
+                  "preserveWhitespace": false
+                }
+              ],
+              "allowHTMLByDefault": false,
+              "itemsPerPage": 25,
+              "paginationSize": "default",
+              "condensed": true,
+              "withRowNumber": false,
+              "frame": {
+                "showTitle": true,
+                "showDescription": false,
+                "title": "Membrane/Soluble Protein Research Insights and Drug Discovery Potential (pre-computed)",
+                "description": ""
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 106,
+            "width": 12,
+            "height": 10
+          }
+        },
+        {
+          "widget": {
+            "name": "6eeb772c",
+            "queries": [
+              {
+                "name": "dashboards/01efc7181c8a1509ae71b5e4af24b29c/datasets/01efc8d15fc217fa8100cff05dc5458f_Organism_SimpleTerm",
+                "query": {
+                  "datasetName": "82e85554",
+                  "fields": [
+                    {
+                      "name": "Organism_SimpleTerm",
+                      "expression": "`Organism_SimpleTerm`"
+                    },
+                    {
+                      "name": "Organism_SimpleTerm_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "Organism_SimpleTerm",
+                    "displayName": "Organism_SimpleTerm",
+                    "queryName": "dashboards/01efc7181c8a1509ae71b5e4af24b29c/datasets/01efc8d15fc217fa8100cff05dc5458f_Organism_SimpleTerm"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "showDescription": true,
+                "description": ""
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 103,
+            "width": 4,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "90ccd770",
+            "queries": [
+              {
+                "name": "dashboards/01efc7181c8a1509ae71b5e4af24b29c/datasets/01efc8d15fc217fa8100cff05dc5458f_ProteinClassificationScore",
+                "query": {
+                  "datasetName": "82e85554",
+                  "fields": [
+                    {
+                      "name": "min(ProteinClassificationScore)",
+                      "expression": "MIN(`ProteinClassificationScore`)"
+                    },
+                    {
+                      "name": "max(ProteinClassificationScore)",
+                      "expression": "MAX(`ProteinClassificationScore`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "range-slider",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "ProteinClassificationScore",
+                    "displayName": "ProteinClassificationScore",
+                    "queryName": "dashboards/01efc7181c8a1509ae71b5e4af24b29c/datasets/01efc8d15fc217fa8100cff05dc5458f_ProteinClassificationScore"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "",
+                "showDescription": true,
+                "description": ""
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 103,
+            "width": 4,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "096c0e8e",
+            "queries": [
+              {
+                "name": "dashboards/01efc7181c8a1509ae71b5e4af24b29c/datasets/01efc8d15fc217fa8100cff05dc5458f_ProteinType",
+                "query": {
+                  "datasetName": "82e85554",
+                  "fields": [
+                    {
+                      "name": "ProteinType",
+                      "expression": "`ProteinType`"
+                    },
+                    {
+                      "name": "ProteinType_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "ProteinType",
+                    "displayName": "ProteinType",
+                    "queryName": "dashboards/01efc7181c8a1509ae71b5e4af24b29c/datasets/01efc8d15fc217fa8100cff05dc5458f_ProteinType"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "showDescription": true
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 103,
+            "width": 4,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "8eb9c6d9",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## 1. Summary Statistics "
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 5,
+            "width": 12,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "ec9ef966",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## 2. Exploratory Data Analyses (EDA)"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 23,
+            "width": 12,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "7d337aca",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## 3. Protein Insights"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 84,
+            "width": 12,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "d7a677d7",
+            "multilineTextboxSpec": {
+              "lines": [
+                "![Tracking Image](https://ppxrzfxige.execute-api.us-west-2.amazonaws.com/v1/analytics?category=aibi&notebook=aibi_hls_drug_discovery&demo_name=aibi_hls_drug_discovery&event=DASHBOARD_VIEW)"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 116,
+            "width": 12,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "2f81bcb1",
+            "multilineTextboxSpec": {
+              "lines": [
+                "# AI-Driven Drug Discovery\n",
+                "\n",
+                "---\n",
+                "\n",
+                "#### Note:\n",
+                "This dashboard is formulated in the following format:\n",
+                "- Section Name\n",
+                "    -- Questions that we look to answer with AI/BI in our data\n",
+                "\n",
+                "---\n",
+                "\n",
+                "#### Background\n",
+                "We utilize the Databricks Intelligence Platform and its AI capabilities to investigate traditionally under-researched areas of study for potential life-saving patient treatments. Pharmaceutical organizations large and small would benefit from infusing their research with data & AI. As you will see in the following sections, not only are clinical results clearer with Databricks, but they are also immediately actionable through the platform. "
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "human_frog_header",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## 4. Human vs Frog Protein Comparison\n",
+                "Comparative analysis of protein characteristics between human and frog organisms, including counts, molecular weights, and classification scores."
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 117,
+            "width": 12,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "human_frog_table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "64cd72e9",
+                  "fields": [
+                    {
+                      "name": "Organism_SimpleTerm",
+                      "expression": "`Organism_SimpleTerm`"
+                    },
+                    {
+                      "name": "ProteinType",
+                      "expression": "`ProteinType`"
+                    },
+                    {
+                      "name": "Protein_Count",
+                      "expression": "`Protein_Count`"
+                    },
+                    {
+                      "name": "Avg_Molecular_Weight",
+                      "expression": "`Avg_Molecular_Weight`"
+                    },
+                    {
+                      "name": "Min_Molecular_Weight",
+                      "expression": "`Min_Molecular_Weight`"
+                    },
+                    {
+                      "name": "Max_Molecular_Weight",
+                      "expression": "`Max_Molecular_Weight`"
+                    },
+                    {
+                      "name": "Avg_Classification_Score",
+                      "expression": "`Avg_Classification_Score`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Human vs Frog Summary Statistics",
+                "showTitle": true
+              },
+              "rowsPerPage": 25,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "Organism_SimpleTerm",
+                    "displayName": "Organism"
+                  },
+                  {
+                    "fieldName": "ProteinType",
+                    "displayName": "Protein Type"
+                  },
+                  {
+                    "fieldName": "Protein_Count",
+                    "displayName": "Protein Count"
+                  },
+                  {
+                    "fieldName": "Avg_Molecular_Weight",
+                    "displayName": "Avg Molecular Weight"
+                  },
+                  {
+                    "fieldName": "Min_Molecular_Weight",
+                    "displayName": "Min Molecular Weight"
+                  },
+                  {
+                    "fieldName": "Max_Molecular_Weight",
+                    "displayName": "Max Molecular Weight"
+                  },
+                  {
+                    "fieldName": "Avg_Classification_Score",
+                    "displayName": "Avg Classification Score"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 119,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "human_frog_count_chart",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "64cd72e9",
+                  "fields": [
+                    {
+                      "name": "ProteinType",
+                      "expression": "`ProteinType`"
+                    },
+                    {
+                      "name": "Organism_SimpleTerm",
+                      "expression": "`Organism_SimpleTerm`"
+                    },
+                    {
+                      "name": "Protein_Count",
+                      "expression": "`Protein_Count`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Protein Count Comparison: Human vs Frog",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "Organism_SimpleTerm",
+                  "displayName": "Organism",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "Protein_Count",
+                  "displayName": "Protein Count",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "ProteinType",
+                  "displayName": "Protein Type",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "Membrane",
+                        "color": "#FF3621"
+                      },
+                      {
+                        "value": "Soluble",
+                        "color": "#07559d"
+                      }
+                    ]
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 125,
+            "width": 6,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "human_frog_weight_chart",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "64cd72e9",
+                  "fields": [
+                    {
+                      "name": "ProteinType",
+                      "expression": "`ProteinType`"
+                    },
+                    {
+                      "name": "Organism_SimpleTerm",
+                      "expression": "`Organism_SimpleTerm`"
+                    },
+                    {
+                      "name": "Avg_Molecular_Weight",
+                      "expression": "`Avg_Molecular_Weight`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Average Molecular Weight: Human vs Frog",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "Organism_SimpleTerm",
+                  "displayName": "Organism",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "Avg_Molecular_Weight",
+                  "displayName": "Avg Molecular Weight",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "ProteinType",
+                  "displayName": "Protein Type",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "Membrane",
+                        "color": "#FF3621"
+                      },
+                      {
+                        "value": "Soluble",
+                        "color": "#07559d"
+                      }
+                    ]
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 125,
+            "width": 6,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "human_bacteria_header",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## 5. Human vs Bacteria Protein Comparison\n",
+                "Comparative analysis of protein characteristics between human and bacterial organisms, aggregating all bacteria types for a comprehensive comparison."
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 133,
+            "width": 12,
+            "height": 2
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "ebd53e24",
+      "displayName": "Introduction",
+      "layout": [
+        {
+          "widget": {
+            "name": "be9376a8",
+            "multilineTextboxSpec": {
+              "lines": [
+                "# AI-Driven Drug Discovery\n",
+                "Protein Classification Data Exploration AI/BI Genie Space  with GenAI-backed AI-Queries to Help Focus Downstream Drug Discovery Efforts   \n",
+                "      \n",
+                "#### OVERVIEW: \n",
+                "The Life Sciences and Pharmaceutical research and development cycle — which encompasses the discovery, preclinical testing, and early clinical trial phases — is notoriously lengthy, spanning on average ~10-15 years, with a significant portion of drug candidates failing during clinical trials. It is anticipated that the use of Generative AI (GenAI) and Transformer Models will help expedite this process, e.g., by analyzing vast datasets to identify promising drug candidates, predict their efficacy, and optimize molecular structures, leading to faster identification of potential drugs and reducing the time and cost of development. ([ref](https://www.mckinsey.com/industries/life-sciences/our-insights/generative-ai-in-the-pharmaceutical-industry-moving-from-hype-to-reality#/))\n",
+                "\n",
+                "#### GOAL: \n",
+                "**We provide an example of how GenAI can be leveraged to discover more about protein properties and whether there are candidate proteins that are under-researched in areas that show promise for potential drug discovery**.   \n",
+                "This [AI/BI Dashboard](https://docs.databricks.com/en/dashboards/index.html) and the [enabled](https://docs.databricks.com/en/dashboards/index.html#enable-a-genie-space-from-your-dashboard) [Genie Space](https://e2-demo-west.cloud.databricks.com/genie/rooms/01efc9fc59e2146eab09fc4e6a4b9a5a) allows you to explore the corresponding protein datasets and \"***Ask Genie***\" (*see dashboard top-left-corner*). You can also refer to [additional Example Queries](https://e2-demo-west.cloud.databricks.com/editor/notebooks/1625373258643555?o=2556758628403379) to *Ask Genie*.\n",
+                "\n",
+                "\n",
+                "#### [DATA & PROCESSING](https://e2-demo-west.cloud.databricks.com/browse/folders/4420661094443359?o=2556758628403379): \n",
+                "\n",
+                "To make sense of the *alphabet soup* in our sample of protein sequences, we derive `proteinclassification_tiny`, which contains various columns related to *protein* `classification` (with corresponding `labels` and `scores` as well as protein information), by   \n",
+                "   - i) pre-processing the [FASTA protein sequence data](https://www.uniprot.org/help/downloads) using a [Protein Data Processing](https://e2-demo-west.cloud.databricks.com/pipelines/00b4ca96-c5b4-470a-937f-14cb2660ff90/updates/0977eef3-490a-4eac-8a31-ee128fff8d62?o=2556758628403379) [Delta Live Tables](https://www.databricks.com/product/delta-live-tables) pipeline to help extract protein information e.g. *identifiers*, *sequences*, *names*, *organism information*, *gene names*, *protein existence*, and *molecular weight*;    \n",
+                "   - ii) perform **[protein sequence classification](https://e2-demo-west.cloud.databricks.com/editor/notebooks/3667893373920805?o=2556758628403379)** using [a hybrid approach that combines Protein Language Model, e.g., ProtBERT-BFD and a Classifier, e.g., CNN](https://pubmed.ncbi.nlm.nih.gov/37497772/) to provide enhanced identification of [`membrane transport proteins`](https://www.nature.com/articles/s41598-017-17216-1) (cf. `water soluble` proteins). We can then sift out protein classification at a suitably high (adjustable) classification confidence threshold      \n",
+                "---        \n",
+                "Additional post-processing with GenAI in [`ai-query()`](https://docs.databricks.com/en/sql/language-manual/functions/ai_query.html) yielded the following 2 datasets, which can potentially help in downstream drug discovery processes.\n",
+                "   - `tinysample_organism_info_scientificNsimple`: contains scientific (`OrganismName`), layman (`Organism_SimpleTerm`), and corresponding `Organism_Definition` information about the different organisms found in the `proteinclassification_tiny` table. It is derived with [ai_query](https://e2-demo-west.cloud.databricks.com/editor/notebooks/1625373258635024?o=2556758628403379#command/1625373258638832) using the pay-per-token [Foundational Model API](https://docs.databricks.com/en/machine-learning/foundation-models/index.html) `databricks-meta-llama-3-1-70b-instruct` [model endpoint](https://docs.databricks.com/en/machine-learning/model-serving/index.html) and making [batch interferencing](https://e2-demo-west.cloud.databricks.com/editor/notebooks/1625373258635024?o=2556758628403379#command/1625373258638913) with the `ai_query()` registered as a [User Defined Function in Unity Catalog](https://docs.databricks.com/en/udf/unity-catalog.html).     \n",
+                "---\n",
+                "   - `tinysample_organism_protein_research_info`: contains research information about organisms and their associated proteins, including `recent research` and `under-researched areas` of these proteins that show potential promise for drug discovery. These research insights are derived with the help of [using `Azure OpenAI GPT-4o` served as an External Model Endpoint](https://e2-demo-west.cloud.databricks.com/editor/notebooks/1625373258636712?o=2556758628403379) and [queried as an External Model using `ai-query()`](https://docs.databricks.com/en/large-language-models/ai-query-external-model.html). For more efficient exploration, the queries for our `tinysample` of proteins are [preprocessed in bulk](https://e2-demo-west.cloud.databricks.com/editor/notebooks/1625373258636712?o=2556758628403379%3Fparent%3Dfolders%2F1625373258638091#command/1625373258641291).      \n",
+                "\n",
+                "These tables are found within the demo workspace [Unity Catalog](https://docs.databricks.com/en/catalogs/index.html) and [Schema](https://docs.databricks.com/en/schemas/index.html#what-is-a-schema): [`demos_genie.hls_ai_drug_discovery`](https://e2-demo-west.cloud.databricks.com/explore/data/demos_genie/hls_ai_drug_discovery?o=2556758628403379) and are connected primarily through the `OrganismName`.        \n",
+                "\n",
+                "The following diagram illustrates the flow of processes involved and the [Databricks Intelligent Platform](https://www.databricks.com/resources/demos/tours/horizontal/introducing-databricks-intelligence-platform) features utilized (in red):    \n",
+                "\n",
+                "---   \n",
+                "![workflow diagram](https://e2-demo-west.cloud.databricks.com/ajax-api/2.0/fs/files/Volumes/demos_genie/hls_ai_drug_discovery/imgs/AI-Drug-Discovery-Page2.png) \n",
+                "---   \n",
+                "\n",
+                "\n",
+                "\n",
+                "#### DOWNSTREAM EXAMPLE USE CASE : \n",
+                "- In section section `3.1` we provide an example of how we can leverage GenAI models (that were trained with real-world research knowledge or fine-tuned to research-relevant publications, e.g., [OpenAI-GPT-4o]((https://openai.com/index/gpt-4o-system-card/) ) to help us to zoom in on under-researched areas for those membrane/soluble proteins that were confidently classified and further investigate their potential therapeutic candidacy. \n",
+                "\n",
+                "#### FUTURE USE CASE:\n",
+                "We envision being able to pick candidate proteins to visualize their 3D structure and explore their properties interactively, all on our Data Intelligence Platform. The hope is to use Deep Learning models (e.g., [AlphaFold](https://www.nature.com/articles/s41586-021-03819-2), [RFdiffusion](https://www.nature.com/articles/s41586-023-06415-8), including other relevant Life Sciences GenAI/Transformer models, etc.) trained or fine-tuned to predict protein function and structure ([ref](https://deepmind.google/discover/blog/alphafold-reveals-the-structure-of-the-protein-universe/)), and potentially simulate new proteins or ways to interact with protein properties ([ref](https://www.ipd.uw.edu/software/)) *in silico* ([ref](https://www.nature.com/articles/s41586-024-07601-y)).  To this end, a *work-in-progress* endeavor by the HLS SSA team is to develop capabilities around `Protein Folding` and a suite of discovery tools within `Genesis WorkBench` for Life Sciences R&D. "
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 30
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "genieSpace": {
+      "isEnabled": true,
+      "enablementMode": "ENABLED"
+    },
+    "applyModeEnabled": false
+  }
+}

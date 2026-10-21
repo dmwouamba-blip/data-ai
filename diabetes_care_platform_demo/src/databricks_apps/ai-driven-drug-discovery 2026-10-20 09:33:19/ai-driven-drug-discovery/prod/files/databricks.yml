@@ -1,0 +1,61 @@
+bundle:
+  name: ai-driven-drug-discovery
+sync:
+  exclude:
+  - src/dashboards/**/*.lvdash.json
+targets:
+  partner:
+    mode: production
+    default: true
+    workspace:
+      host: https://dbc-b964587f-dd18.cloud.databricks.com
+      root_path: /Workspace/Shared/.bundles/ai-driven-drug-discovery/prod
+variables:
+  default_warehouse:
+    default: 11901928b04a6ab4
+    description: Default warehouse
+  01f015879ea712a7970ba1f36373bc_genie_room_id:
+    description: Genie space
+    default: 01f015879ea712a7970ba1f36373bc47
+resources:
+  catalogs:
+    demos_genie:
+      name: demos_genie
+      comment: Catalog created by Databricks Asset Bundles
+      options: {}
+      properties: {}
+      lifecycle:
+        prevent_destroy: false
+  schemas:
+    hls_ai_drug_discovery:
+      name: hls_ai_drug_discovery
+      catalog_name: ${resources.catalogs.demos_genie.name}
+      comment: Schema created by Databricks Asset Bundles
+      properties: {}
+      lifecycle:
+        prevent_destroy: false
+  dashboards:
+    HLS - AI Driven Drug Discovery:
+      warehouse_id: ${var.default_warehouse}
+      display_name: Hls   Ai Driven Drug Discovery
+      file_path: src/dashboards/HLS---AI-Driven-Drug-Discovery/dashboard.lvdash.json
+  jobs:
+    create_tables:
+      name: create_tables
+      tasks:
+      - task_key: proteinclassification_tiny
+        sql_task:
+          warehouse_id: ${var.default_warehouse}
+          file:
+            path: src/tables/table_one/create.sql
+      - task_key: tinysample_organism_info_scientificnsimple
+        sql_task:
+          warehouse_id: ${var.default_warehouse}
+          file:
+            path: src/tables/table_two/create.sql
+      - task_key: tinysample_organism_protein_research_info
+        sql_task:
+          warehouse_id: ${var.default_warehouse}
+          file:
+            path: src/tables/table_three/create.sql
+

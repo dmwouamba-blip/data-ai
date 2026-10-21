@@ -19,13 +19,19 @@ targets:
   dev:
     mode: development
     default: true
+   
+    workspace:
+      host: https://dbc-963397db-4198.cloud.databricks.com
 
+  test:
+    mode: test
+    
     workspace:
       host: https://dbc-963397db-4198.cloud.databricks.com
 
   prod:
     mode: production
-
+   
     workspace:
       host: https://dbc-963397db-4198.cloud.databricks.com
       root_path: /Users/d.m.wouamba@gmail.com/.bundle/${bundle.name}/${bundle.target}

@@ -1,0 +1,84 @@
+bundle:
+  name: dcp-data-360
+
+include:
+  - resources/*.yml
+
+
+variables:
+
+  catalog:
+    description: DCP Unity Catalog catalog
+
+  schema:
+    description: Default schema
+    default: default
+
+  runtime_sp:
+    description: Runtime service principal application ID
+
+  warehouse_id:
+    description: SQL warehouse ID
+
+  operations_email:
+    description: Operations notification address
+
+  synthetic_enabled:
+    description: Enable synthetic DCP data generation
+    default: "false"
+
+  synthetic_seed:
+    description: Deterministic synthetic data seed
+    default: "42"
+
+  reference_ts:
+    description: Reference timestamp for synthetic data
+
+
+targets:
+
+  # ====================================================================
+  # DEVELOPMENT
+  # ====================================================================
+  dev:
+    default: true
+    mode: development
+
+    workspace:
+      host: https://dbc-963397db-4198.cloud.databricks.com
+
+    variables:
+      catalog: dcp_dev
+      schema: default
+
+      runtime_sp: "<DEV_RUNTIME_SERVICE_PRINCIPAL_APPLICATION_ID>"
+
+      warehouse_id: "14a44df798367483"
+      operations_email: "d.m.wouamba@gmail.com"
+
+      synthetic_enabled: "true"
+      synthetic_seed: "42"
+      reference_ts: "2026-10-07 08:00:00"
+
+
+  # ====================================================================
+  # PRODUCTION
+  # ====================================================================
+  prod:
+    mode: production
+
+    workspace:
+      host: "<PROD_WORKSPACE_HOST>"
+
+    variables:
+      catalog: dcp_prod
+      schema: default
+
+      runtime_sp: "<PROD_RUNTIME_SERVICE_PRINCIPAL_APPLICATION_ID>"
+
+      warehouse_id: "<PROD_WAREHOUSE_ID>"
+      operations_email: "<PROD_OPERATIONS_EMAIL>"
+
+      synthetic_enabled: "false"
+      synthetic_seed: "42"
+      reference_ts: "2026-10-07 08:00:00"
